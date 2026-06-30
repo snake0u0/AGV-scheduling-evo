@@ -1,0 +1,7 @@
+method,mean_tardiness,makespan,throughput,agv_util,vs_base_pct,rule
+baseline NV+EDD,370.93,1114.38,0.45,0.91,0.0,NV+EDD
+B1 best-classical,371.17,1121.41,0.45,0.91,-0.06,NV+M_LWR
+B2 GP-joint,370.03,1111.8,0.45,0.91,0.24,"AGV[207-char nested tree] M[long tree] (GP, uninterpretable)"
+P joint-LLM,364.55,1093.61,0.46,0.92,1.72,AGV[-travel_time / (abs(slack) + 1)] M[-slack / (proc_time + 1) + job_wait / (remaining_ops + 1)]
+B5 machine-only-LLM,367.71,1094.88,0.46,0.92,0.87,M[-slack / (proc_time + 1)] (AGV=NV)
+B6 AGV-only-LLM,370.93,1114.38,0.45,0.91,0.0,AGV[-travel_time] (M=EDD)

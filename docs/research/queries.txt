@@ -1,0 +1,21 @@
+# AHD / LLM heuristic design lineage
+LLM automatic heuristic design
+evolution of heuristics large language model
+FunSearch program search heuristic discovery
+large language model dispatching rule generation scheduling
+LLM hyper-heuristic combinatorial optimization
+language model evolve heuristic optimization
+# quality-diversity / GP rule generation
+quality diversity MAP-Elites scheduling heuristic
+genetic programming dispatching rule job shop
+hyper-heuristic dynamic scheduling
+# AGV / AMR scheduling
+AGV scheduling dispatching rule
+automated guided vehicle scheduling reinforcement learning
+multi-AGV task allocation scheduling optimization
+autonomous mobile robot fleet scheduling warehouse
+AGV dynamic dispatching real-time
+# dynamic FJSP context (DSevolve domain)
+dynamic flexible job shop scheduling dispatching rule
+real-time adaptive dispatching rule selection disruption
+deep reinforcement learning dynamic scheduling dispatching

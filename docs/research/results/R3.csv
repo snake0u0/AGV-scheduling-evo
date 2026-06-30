@@ -1,0 +1,7 @@
+method,mean_tardiness,makespan,throughput,agv_util,vs_base_pct,rule
+baseline NV+EDD,60.08,572.61,0.16,0.94,0.0,NV+EDD
+B1 best-classical,60.08,572.61,0.16,0.94,0.0,NV+M_EDD
+B2 GP-joint,64.68,573.46,0.16,0.95,-7.66,"AGV[((((travel_time - 0.100) * (((travel_time - 0.100) * (congestion / battery_soc)) / battery_soc)) - task_wait) * (min((max(0.500, slack) + (-1.000 + congestion)), min(-0.300, min(0.500, 2.000))) - battery_soc))] M[min(2.000, (min(downstream_load, -0.500) / job_wait))]"
+P joint-LLM,59.07,569.48,0.16,0.95,1.68,AGV[(-1.000)*travel_time + (-0.300)*downstream_load] M[(-1.000)*slack]
+B5 machine-only-LLM,59.21,570.98,0.16,0.94,1.45,M[(-1.029)*slack + (-0.721)*remaining_proc] (AGV=NV)
+B6 AGV-only-LLM,59.07,569.48,0.16,0.95,1.68,AGV[(-1.000)*travel_time + (-0.300)*downstream_load] (M=EDD)

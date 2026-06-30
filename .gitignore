@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# secrets
+.env
+
+# copyrighted paper PDFs (do not redistribute)
+docs/research/pdfs/
+
+# OS / editor
+.DS_Store
