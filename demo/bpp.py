@@ -28,19 +28,31 @@ TRAIN = list(range(0, 12))
 VALID = list(range(12, 16))
 TEST = list(range(20, 24))
 
-# FunSearch starts from Best-Fit. Baselines expressed as heuristic programs.
-BEST_FIT = "def heuristic(item, bins):\n    return -(bins - item)"        # tightest feasible bin
-WORST_FIT = "def heuristic(item, bins):\n    return bins"                  # loosest bin
+# FunSearch starts from Best-Fit. Baselines expressed as heuristic programs (with docstrings, as in the paper).
+BEST_FIT = ('def heuristic(item, bins):\n'
+            '    """Best-Fit: prefer the bin with the least remaining capacity that still fits."""\n'
+            '    return -(bins - item)')
+WORST_FIT = ('def heuristic(item, bins):\n'
+             '    """Worst-Fit: prefer the bin with the most remaining capacity."""\n'
+             '    return bins')
 
 _SYSTEM = """You improve a Python heuristic for ONLINE BIN PACKING (bin capacity = 1.0).
-Signature: def heuristic(item, bins):
-  - item: float, the size of the incoming item.
-  - bins: a numpy array of the remaining capacities of the bins that CAN still fit the item.
-  - return: a numpy array of scores, one per bin (same length). The item is placed in the bin
-    with the HIGHEST score. Goal: minimize the total number of bins used.
+
+The packing skeleton (FIXED, you do not change it) is:
+    for item in items:
+        cand = [remaining capacity of each open bin that still fits item] + [1.0]  # last = a FRESH empty bin
+        scores = heuristic(item, np.array(cand))
+        place item in cand[argmax(scores)]      # if that is the last (fresh) entry, a NEW bin is opened
+
+So `bins` passed to your heuristic is a numpy array of candidate remaining-capacities whose LAST element
+is always a fresh empty bin (capacity 1.0). Your heuristic can therefore CHOOSE to open a new bin (leaving
+more space) instead of squeezing the item into a tight existing bin.
+
+def heuristic(item, bins):  -> return a numpy array of scores (same length as bins); highest score wins.
+Goal: MINIMIZE the total number of bins used.
 You may use numpy as np and the builtins min, max, abs, len, range, sum. No imports, no I/O.
-Explore NON-OBVIOUS scoring (nonlinear in bins and item) — the best heuristics do not always pick
-the tightest bin. Keep the function short."""
+Explore NON-OBVIOUS scoring (nonlinear in bins and item) — the best heuristics do NOT always pick the
+tightest bin; sometimes leaving a bin's residual capacity un-tiny (or opening a fresh bin) packs better."""
 
 
 def gen_items(n, seed):
@@ -70,20 +82,24 @@ def compile_heuristic(code):
 
 
 def pack(items, fn):
-    """Online packing: item -> highest-scoring feasible bin, else open a new bin. Returns #bins."""
+    """Online packing (FunSearch skeleton). Candidates for each item = the open bins that still fit
+    PLUS one fresh empty bin (capacity CAP) as the LAST element, so the heuristic may CHOOSE to open
+    a new bin. Item -> highest-scoring candidate. Returns #bins used."""
     bins = []
     for it in items:
-        valid = [i for i, r in enumerate(bins) if r + 1e-9 >= it]
-        if not valid:
-            bins.append(CAP - it)
-            continue
-        arr = np.array([bins[i] for i in valid])
+        idxs = [i for i, r in enumerate(bins) if r + 1e-9 >= it]
+        caps = np.array([bins[i] for i in idxs] + [CAP])     # last entry = a fresh empty bin
         try:
-            scores = np.asarray(fn(it, arr), dtype=float)
+            scores = np.asarray(fn(it, caps), dtype=float)
+            if scores.shape != caps.shape:
+                raise ValueError
             j = int(np.argmax(scores))
         except Exception:
-            j = int(np.argmin(arr))          # fallback: best-fit
-        bins[valid[j]] -= it
+            j = int(np.argmin(caps[:-1])) if idxs else len(caps) - 1   # fallback: best-fit / open new
+        if j == len(caps) - 1:
+            bins.append(CAP - it)            # heuristic chose to open a new bin
+        else:
+            bins[idxs[j]] -= it
     return len(bins)
 
 
@@ -115,7 +131,7 @@ class MockBPP:
 
 class LLMBPP:
     def __init__(self):
-        self.cli = ClaudeCliLLM(model=MODEL)
+        self.cli = ClaudeCliLLM(model=MODEL, timeout=300)   # Sonnet verbose replies can exceed 180s
     def vary(self, elites, k):
         shown = "\n\n".join(f"# version v{i}  (excess over LB = {fit*100:.2f}%)\n{code}"
                             for i, (code, fit) in enumerate(elites[:2]))
