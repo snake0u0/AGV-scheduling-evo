@@ -1,158 +1,175 @@
-"""DEMO — LLM-based evolutionary heuristic search on the canonical easy benchmark:
-Online Bin Packing (OBP), the FunSearch/EoH flagship problem.
+"""DEMO — FunSearch-style LLM program search on Online Bin Packing (OBP).
 
-SAME methodology as the AGV project (LLM proposes a scoring expression -> evaluate ->
-evolve with fitness + reflection), on a simple, well-understood problem so the method is
-easy to demonstrate and defend. Reuses the project's machinery:
-  - sim.rule.policy_from_expr  (compile an expression string into score(features)->float)
-  - ahd.llm.ClaudeCliLLM       (logged-in `claude` CLI proposer; no API key) + _valid/_extract_json
+Faithful (simplified) reproduction of the bin-packing experiment in FunSearch
+(Romera-Paredes et al., Nature 2024, "Mathematical discoveries from program search with LLMs"):
+the LLM evolves a Python PROGRAM (a `heuristic(item, bins)` numpy function), not a single-line
+expression. Items are packed online into the bin with the highest heuristic score among bins that
+still fit; objective = fraction of EXCESS bins over the lower bound (lower is better). Evolution
+starts from Best-Fit, exactly as in the paper.
 
-Heuristic evolved: score(item, remaining, capacity, num_bins) evaluated for each OPEN bin
-that can still fit the item; the item goes to the highest-scoring feasible bin, else a new
-bin is opened. Objective: minimize the number of bins (lower is better).
+Simplifications vs the paper (see docs/reports report for the full comparison):
+  - simple elite pool + best-shot prompt, NOT the island model / programs database
+  - ~10 LLM samples, NOT ~1e6; single instance size for evolution
+  - model = logged-in `claude` CLI (Haiku by default here), NOT Codey/PaLM2
 
 Run:  python -m demo.bpp            (uses claude if available, else a mock proposer)
       DEMO_LLM=0 python -m demo.bpp (force mock, free)
 """
-import os, sys, json, random, statistics
+import os, sys, re, math, random, statistics
+import numpy as np
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from sim.rule import policy_from_expr
-from ahd.llm import ClaudeCliLLM, _extract_json, _valid, cli_available
+from ahd.llm import ClaudeCliLLM, cli_available
 
 CAP = 1.0
-FEATURES = {"item", "remaining", "capacity", "num_bins"}
-# classical seeds expressible in the grammar
-SEEDS = [
-    "-remaining",                 # Best-Fit  (tightest bin)
-    "remaining",                  # Worst-Fit (loosest bin)
-    "-(remaining - item)",        # Best-Fit gap
-    "-remaining + 0.1*item",      # BF variant
-]
-TRAIN = list(range(0, 16))
-VALID = list(range(16, 20))
+MODEL = os.environ.get("DEMO_MODEL", "haiku")     # FunSearch used Codey; here Haiku via the CLI
+N_TRAIN_ITEMS = 200
+N_TEST_ITEMS = 500                                 # larger -> tests generalization (FunSearch-style)
+TRAIN = list(range(0, 12))
+VALID = list(range(12, 16))
 TEST = list(range(20, 24))
 
-_SYSTEM = """You design a priority rule for ONLINE BIN PACKING (bin capacity=1.0).
-Items arrive one at a time; each must be placed immediately. For each OPEN bin that can still
-fit the item, your rule scores it; the item goes to the HIGHEST-scoring feasible bin. If no open
-bin fits, a NEW bin is opened. Goal: MINIMIZE the total number of bins used.
-Score features (all numeric): item (its size), remaining (that bin's remaining capacity),
-capacity (=1.0), num_bins (bins opened so far).
-GRAMMAR: only those names, numeric constants, + - * / ** %, parentheses, and min(), max(), abs().
-One line, no other names. Guard divisions (e.g. / (remaining - item + 0.01)). Keep it short."""
+# FunSearch starts from Best-Fit. Baselines expressed as heuristic programs.
+BEST_FIT = "def heuristic(item, bins):\n    return -(bins - item)"        # tightest feasible bin
+WORST_FIT = "def heuristic(item, bins):\n    return bins"                  # loosest bin
+
+_SYSTEM = """You improve a Python heuristic for ONLINE BIN PACKING (bin capacity = 1.0).
+Signature: def heuristic(item, bins):
+  - item: float, the size of the incoming item.
+  - bins: a numpy array of the remaining capacities of the bins that CAN still fit the item.
+  - return: a numpy array of scores, one per bin (same length). The item is placed in the bin
+    with the HIGHEST score. Goal: minimize the total number of bins used.
+You may use numpy as np and the builtins min, max, abs, len, range, sum. No imports, no I/O.
+Explore NON-OBVIOUS scoring (nonlinear in bins and item) — the best heuristics do not always pick
+the tightest bin. Keep the function short."""
 
 
 def gen_items(n, seed):
-    # Weibull-distributed items (FunSearch-standard OBP benchmark family): skewed, many small
-    # items + a few large -> Best-Fit is no longer near-optimal, leaving headroom to improve.
+    """Weibull-distributed items (FunSearch benchmark family): skewed, many small + few large."""
     rng = random.Random(seed)
     items = []
     while len(items) < n:
-        v = rng.weibullvariate(0.28, 3.0)      # scale, shape -> mean ~0.25, right-skewed
+        v = rng.weibullvariate(0.28, 3.0)
         if 0.02 < v <= 1.0:
             items.append(round(v, 3))
     return items
 
 
-def pack(items, score_fn):
-    """Greedy online packing under score_fn; returns number of bins used."""
-    bins = []  # remaining capacities
+def compile_heuristic(code):
+    """Safely exec an LLM `heuristic` program; return the callable or None if invalid."""
+    g = {"__builtins__": {}, "np": np, "min": min, "max": max, "abs": abs,
+         "len": len, "range": range, "sum": sum}
+    try:
+        exec(code, g)
+        fn = g["heuristic"]
+        s = np.asarray(fn(0.3, np.array([0.4, 0.9, 0.55])), dtype=float)   # smoke-test
+        if s.shape != (3,) or not np.all(np.isfinite(s)):
+            return None
+        return fn
+    except Exception:
+        return None
+
+
+def pack(items, fn):
+    """Online packing: item -> highest-scoring feasible bin, else open a new bin. Returns #bins."""
+    bins = []
     for it in items:
-        best_i, best_s = -1, -1e18
-        for i, r in enumerate(bins):
-            if r + 1e-9 >= it:
-                try:
-                    s = score_fn({"item": it, "remaining": r, "capacity": CAP, "num_bins": len(bins)})
-                    s = s if isinstance(s, (int, float)) else -1e18
-                except Exception:
-                    s = -1e18
-                if s > best_s:
-                    best_s, best_i = s, i
-        if best_i >= 0:
-            bins[best_i] -= it
-        else:
+        valid = [i for i, r in enumerate(bins) if r + 1e-9 >= it]
+        if not valid:
             bins.append(CAP - it)
+            continue
+        arr = np.array([bins[i] for i in valid])
+        try:
+            scores = np.asarray(fn(it, arr), dtype=float)
+            j = int(np.argmax(scores))
+        except Exception:
+            j = int(np.argmin(arr))          # fallback: best-fit
+        bins[valid[j]] -= it
     return len(bins)
 
 
-def fitness(expr, seeds, n_items=200):
-    """Mean bins-used / lower-bound over instances (>=1; lower is better)."""
-    fn = policy_from_expr(expr)
-    ratios = []
+def fitness(code, seeds, n_items):
+    """Mean fraction of EXCESS bins over the lower bound (sum/cap); lower is better."""
+    fn = compile_heuristic(code)
+    if fn is None:
+        return 9.99
+    exs = []
     for s in seeds:
         items = gen_items(n_items, s)
-        lb = max(1.0, sum(items) / CAP)
-        ratios.append(pack(items, fn) / lb)
-    return statistics.mean(ratios)
+        lb = sum(items) / CAP
+        exs.append(pack(items, fn) / lb - 1.0)
+    return statistics.mean(exs)
 
 
-# ---- proposers (same interface style as the AGV loop) ----
 class MockBPP:
     def __init__(self, seed=0):
         self.rng = random.Random(seed)
     def vary(self, elites, k):
-        kids = []
+        out = []
         for _ in range(k):
-            base = self.rng.choice([e for e, _ in elites])
-            tweak = self.rng.choice([" + 0.1*item", " - 0.1*item", " * (1 + 0.05*num_bins)",
-                                     " / (remaining - item + 0.01)"])
-            kids.append(f"({base}){tweak}")
-        return kids
+            base = self.rng.choice([c for c, _ in elites])
+            # trivial structural tweak (mock only): scale the score
+            out.append(base.replace("return ", "return (1.0 + 0.01*item) * (", 1) + ")"
+                       if "return (" not in base else base)
+        return out
 
 
 class LLMBPP:
     def __init__(self):
-        self.cli = ClaudeCliLLM()
+        self.cli = ClaudeCliLLM(model=MODEL)
     def vary(self, elites, k):
-        ranked = "\n".join(f"{i+1}. bins/LB={fit:.3f}  score = {e}" for i, (e, fit) in enumerate(elites))
-        prompt = (f"Current best rules, ranked best first (bins/LB, lower is better):\n{ranked}\n\n"
-                  f"First reflect in one sentence on what the better rules do, then propose {k} NEW "
-                  f"score expressions predicted to use FEWER bins. Explore nonlinear forms. "
-                  f'Return ONLY single-line JSON: {{"reflection":"...","offspring":["<expr>", ...]}} '
-                  f"with exactly {k} expressions.")
+        shown = "\n\n".join(f"# version v{i}  (excess over LB = {fit*100:.2f}%)\n{code}"
+                            for i, (code, fit) in enumerate(elites[:2]))
+        prompt = (f"{shown}\n\n# The versions above are prior heuristics (lower excess is better).\n"
+                  f"Write {k} IMPROVED, DIFFERENT versions of `heuristic` that use FEWER bins.\n"
+                  f"Output ONLY the {k} complete functions, each starting with a line "
+                  f"'def heuristic(item, bins):', separated by a line '===NEXT==='. No prose, no markdown.")
         text = self.cli._complete(_SYSTEM + "\n\n" + prompt)
-        try:
-            return list(_extract_json(text)["offspring"])
-        except Exception:
-            return []
+        return self._parse(text)
+    def _parse(self, text):
+        text = re.sub(r"```(?:python)?", "", text)
+        out = []
+        for block in text.split("===NEXT==="):
+            i = block.find("def heuristic")
+            if i >= 0:
+                out.append(block[i:].strip())
+        return out
     def usage(self):
         return self.cli.usage()
 
 
-def evolve_bpp(proposer, seeds, gens=8, pop=12, elite=4, n_items=200, verbose=True):
-    pool = SEEDS[:]
-    scored = [(e, fitness(e, seeds, n_items)) for e in pool]
+def evolve_bpp(proposer, seeds, gens, pop=8, elite=3, n_items=N_TRAIN_ITEMS, verbose=True):
+    pool = [BEST_FIT]                                  # start from Best-Fit (as in FunSearch)
+    scored = [(c, fitness(c, seeds, n_items)) for c in pool]
     for g in range(gens):
         scored.sort(key=lambda x: x[1])
-        elites = scored[:elite]
-        kids = [e for e in proposer.vary(elites, pop - elite) if _valid(e, FEATURES)]
-        while len(kids) < pop - elite:
-            kids.append(elites[len(kids) % len(elites)][0])
-        scored = elites + [(e, fitness(e, seeds, n_items)) for e in kids]
+        elites = scored[:elite] if len(scored) >= 1 else scored
+        kids = [c for c in proposer.vary(elites, pop) if compile_heuristic(c) is not None]
+        scored = elites + [(c, fitness(c, seeds, n_items)) for c in kids]
         if verbose:
             b = min(scored, key=lambda x: x[1])
-            print(f"gen {g:>2}: best bins/LB = {b[1]:.4f}   {b[0]}")
+            print(f"gen {g:>2}: best excess = {b[1]*100:.3f}%   ({len(kids)} valid kids)")
     scored.sort(key=lambda x: x[1])
-    return [e for e, _ in scored[:elite]]
+    return [c for c, _ in scored[:elite]]
 
 
 def main():
     use_llm = cli_available() and os.environ.get("DEMO_LLM") != "0"
     proposer = LLMBPP() if use_llm else MockBPP()
-    tag = "CLAUDE-CLI" if use_llm else "MOCK"
-    print(f"OBP demo | proposer={tag} | {len(TRAIN)} train / {len(VALID)} valid / {len(TEST)} test instances\n")
+    tag = f"CLAUDE-CLI/{MODEL}" if use_llm else "MOCK"
+    print(f"OBP (FunSearch-style program search) | proposer={tag} | "
+          f"train {len(TRAIN)}x{N_TRAIN_ITEMS} items / test {len(TEST)}x{N_TEST_ITEMS} items\n")
 
-    bf = fitness("-remaining", TEST)                       # Best-Fit baseline
-    wf = fitness("remaining", TEST)                        # Worst-Fit baseline
-    print(f"baseline Best-Fit  bins/LB(test) = {bf:.4f}")
-    print(f"baseline Worst-Fit bins/LB(test) = {wf:.4f}\n")
+    bf = fitness(BEST_FIT, TEST, N_TEST_ITEMS)
+    wf = fitness(WORST_FIT, TEST, N_TEST_ITEMS)
+    print(f"baseline Best-Fit  excess(test) = {bf*100:.3f}%")
+    print(f"baseline Worst-Fit excess(test) = {wf*100:.3f}%\n")
 
     elites = evolve_bpp(proposer, TRAIN, gens=int(os.environ.get("DEMO_GEN", "10")))
-    sel = min(elites, key=lambda e: fitness(e, VALID))     # select on valid
-    ev = fitness(sel, TEST)                                # report on test
-    print(f"\nevolved rule (best on valid) | bins/LB(test) = {ev:.4f}  "
-          f"({(bf - ev) / bf * 100:+.1f}% vs Best-Fit)")
-    print(f"  rule: {sel}")
+    sel = min(elites, key=lambda c: fitness(c, VALID, N_TRAIN_ITEMS))    # select on valid
+    ev = fitness(sel, TEST, N_TEST_ITEMS)                                # report on test (larger size)
+    print(f"\nevolved heuristic (best on valid) | excess(test) = {ev*100:.3f}%  "
+          f"({(bf - ev) / bf * 100:+.1f}% relative to Best-Fit)")
+    print("--- program ---\n" + sel + "\n---------------")
     if use_llm:
         print(proposer.usage())
 
