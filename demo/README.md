@@ -15,7 +15,8 @@ DEMO_EVOLVE=1 DEMO_MODEL=sonnet DEMO_GEN=10 python -m demo.bpp  # LLM으로 prio
 DEMO_LLM=0 python -m demo.bpp                                   # mock (LLM 없이 루프만)
 ```
 
-## 핵심 결과 (excess over lower bound, 낮을수록 좋음)
+## 핵심 결과
+숫자 = **초과율**(실제 사용한 상자 수가 이론상 최소치보다 몇 % 더 썼는지). **낮을수록 좋음.**
 | heuristic | OR3 | Weibull 5k |
 |---|---|---|
 | Best-Fit | 5.37% | 3.98% |

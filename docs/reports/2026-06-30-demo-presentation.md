@@ -1,144 +1,160 @@
-# 발표용 정리 — FunSearch식 LLM 프로그램 탐색 데모 (Online Bin Packing)
+# 발표용 정리 — LLM으로 규칙(휴리스틱)을 자동 진화시키는 데모: 온라인 빈 패킹
 
-작성 2026-06-30. 교수님 발표용 종합 문서. 코드=`demo/bpp.py`, 데이터=`demo/funsearch_data.json`.
-원논문: Romera-Paredes et al., *Mathematical discoveries from program search with LLMs*, Nature 625 (2024).
-원 저장소: github.com/google-deepmind/funsearch.
+작성 2026-06-30. 이 문서는 교수님 발표용입니다.
+FunSearch 논문(Google DeepMind, *Mathematical discoveries from program search with LLMs*, Nature 2024)의
+방법을 그대로 재현하고, 그 위에서 우리 LLM으로 규칙을 자동 진화시킨 데모를 정리했습니다.
+코드: `demo/bpp.py`, 데이터: `demo/funsearch_data.json`, 원 저장소: github.com/google-deepmind/funsearch.
+
+---
+## 0. 먼저 용어 (이 문서에서 쓰는 말)
+- **온라인 빈 패킹(bin packing)**: 크기가 제각각인 물건을 용량이 정해진 상자(bin)에 담되, **쓰는 상자 개수를 최소화**하는 문제. "온라인"은 물건이 하나씩 도착하고, 도착하는 즉시 어느 상자에 넣을지 정해야 한다는 뜻(나중에 다시 못 옮김).
+- **규칙(휴리스틱, `priority` 함수)**: "이 물건을 어느 상자에 넣을까"를 상자마다 점수로 매기는 함수. 점수가 가장 높은 상자에 넣는다. **우리가 자동으로 개선(진화)시키는 대상.**
+- **뼈대 프로그램(skeleton)**: 전체 알고리즘의 틀. 이 중 `priority` 부분만 LLM이 바꾸고, 나머지(물건을 순서대로 담는 반복문·채점)는 **고정**.
+- **자동 채점기(evaluator)**: 어떤 규칙이 상자를 몇 개 썼는지 실제로 담아보고 계산해 점수를 매기는 부분.
+- **초과율(excess)**: 성능 지표. **(실제 사용한 상자 수 − 이론상 최소 상자 수) ÷ 이론상 최소 상자 수.** **낮을수록 좋음.** 예) 최소 100개면 충분한데 105개를 썼다면 초과율은 5%.
+- **Best-Fit**: 고전적 기본 규칙. "물건이 들어갈 수 있는 상자들 중 **남는 공간이 가장 작은(가장 딱 맞는)** 상자에 넣기." 단순하지만 꽤 강력해서, 우리가 넘어야 할 기준선(baseline)입니다.
 
 ---
 ## 1. 한눈에 (무엇을 만들었나)
-- FunSearch의 **온라인 빈패킹 실험**을, 그들의 **실제 평가기·골격·데이터로** 재현하고, 그 위에서 **우리 LLM(claude CLI)이 규칙(Python 함수)을 진화**시키는 데모.
-- **검증**: 우리 harness가 논문 **Table 1을 소수점까지 재현** → 평가 파이프라인이 FunSearch와 동일함을 입증.
-- **우리 결과**: LLM(Sonnet)이 Best-Fit에서 출발해 10세대 만에 Best-Fit을 능가하는 해석가능 규칙을 진화.
+1. FunSearch가 공개한 **실제 채점기·뼈대 프로그램·데이터를 그대로 가져와** 그들의 빈 패킹 실험을 재현했습니다.
+2. 그 위에서 **우리 LLM(claude)이 규칙(`priority` 함수)을 스스로 더 좋게 고쳐 나가도록** 진화시켰습니다.
+3. 결과 두 가지:
+   - **검증**: 우리 채점기가 **논문 표(Table 1)의 숫자를 그대로 재현** → 우리 실험 환경이 논문과 동일함을 확인.
+   - **성과**: 우리 LLM(Sonnet 모델)이 Best-Fit에서 출발해 **10세대 만에 Best-Fit보다 좋은 규칙**을 찾았습니다.
 
 ---
-## 2. 아키텍처 (전체 루프)
+## 2. 전체 구조 (어떻게 도는가)
 ```
-   ┌──────────────────────────── 진화 루프 (1세대) ────────────────────────────┐
-   │                                                                            │
-   │   ① Programs DB(elite pool)                                                │
-   │        │  best-shot: 상위 2개 프로그램 + 각 excess%                          │
-   │        ▼                                                                    │
-   │   ② SAMPLER  ── 프롬프트 ──▶  LLM(claude CLI, Sonnet)  ── k개 priority 함수 ─┐│
-   │        ▲                                                                   ││
-   │        │                                                                   ▼│
-   │   ④ 점수와 함께 DB에 저장                                          ③ EVALUATOR │
-   │        │                                                    (compile→online_ │
-   │        └──────── (elite 재선정, 하위 폐기) ◀──── excess% ────  binpack→count) │
-   └────────────────────────────────────────────────────────────────────────────┘
-   반복 N세대 → 최종: valid로 elite 선택 → test로 보고
+   ┌───────────────────────── 한 세대(generation) ─────────────────────────┐
+   │  ① 잘된 규칙 보관함        ── 상위 2개 규칙 + 각 성적 ──▶  ② LLM에게 요청  │
+   │     (좋은 규칙만 저장)                                    "이보다 상자를   │
+   │        ▲                                                  덜 쓰는 개선판을"│
+   │        │ 좋은 것만 남기고 나머지 버림                            │          │
+   │        │                                                       ▼          │
+   │  ④ 점수와 함께 보관함에 저장  ◀── 각 규칙의 초과율 ──  ③ 자동 채점기        │
+   │                                                    (실제로 담아보고 상자 셈)│
+   └────────────────────────────────────────────────────────────────────────┘
+   위 과정을 10세대 반복 → 마지막에 검증용 문제로 최고 규칙을 고르고, 시험용 문제로 성능 보고
 ```
-- **진화 대상 = `priority` 함수 하나.** 나머지(패킹 루프·평가·argmax)는 **고정 골격**.
-- FunSearch 핵심 아이디어: **해가 아니라 "해를 만드는 프로그램"을 탐색**하고, **검증 가능한 evaluator**로 선택 → 해석가능·환각내성·스케일.
+**말로 풀면:**
+1. 지금까지 찾은 규칙 중 **성적이 좋은 상위 2개**를 꺼냅니다.
+2. 이걸 LLM에게 보여주며 **"이보다 상자를 덜 쓰는 개선판을 만들어 줘"** 라고 요청합니다.
+3. LLM이 내놓은 규칙들을 **자동 채점기로 평가**합니다(실제로 물건을 담아 보고 상자 수를 셈).
+4. **좋은 규칙만 보관함에 남기고** 나머지는 버립니다. → 이 과정을 세대마다 반복.
+
+핵심 아이디어는 **"답 자체가 아니라, 답을 만드는 규칙(프로그램)을 탐색"** 하고 **자동 채점기로 검증해서 고른다**는 것입니다. 그래서 결과가 (숫자 뭉치가 아니라) 사람이 읽을 수 있는 짧은 코드이고, 채점기로 검증돼 있어 믿을 수 있습니다. LLM이 바꾸는 것은 오직 `priority` 함수 한 개이며, 나머지 뼈대는 고정입니다.
 
 ---
-## 3. 입력 / 출력 (Input / Output)
-**Input**
-- 문제 인스턴스: `items`(도착 아이템 크기 리스트) + `capacity`(bin 용량). 데이터셋 = FunSearch 실제 **OR3**(20인스턴스, 용량 150, 500 items) + **Weibull 5k**(5인스턴스, 용량 100, 5000 items).
-- 초기 프로그램(skeleton) = Best-Fit `priority` (§5.1).
+## 3. 입력과 출력
+**입력(Input)**
+- 문제 인스턴스: **도착하는 물건들의 크기 목록** + **상자 용량**.
+- 데이터셋은 FunSearch가 쓴 실제 표준 데이터 2종을 그대로 사용:
+  - **OR3**: 문제 20개, 상자 용량 150, 문제당 물건 500개(정수 크기, 현실 벤치마크 계열).
+  - **Weibull 5k**: 문제 5개, 상자 용량 100, 문제당 물건 5,000개(Weibull 분포, 실제 스케줄링에 가까움).
+- **시작 규칙**: Best-Fit(§5.1).
 
-**Output**
-- 진화된 `priority` **Python 함수**(§5.4) + 성능 지표 **excess%**(= (사용 bin 수 − 하한)/하한, 낮을수록 좋음).
+**출력(Output)**
+- LLM이 진화시킨 **`priority` 함수(짧은 파이썬 코드)**(§5.4)와 그 **성능(초과율 %)**.
 
 ---
 ## 4. 결과
-### 4.1 검증 — 논문 Table 1 재현 (우리 평가기 == FunSearch)
-| heuristic (그들 evaluator + 데이터) | OR3 | Weibull 5k |
-|---|---|---|
-| Best-Fit | 5.37% | 3.98% |
-| Worst-Fit | 148.51% | 151.53% |
-| FunSearch OR-discovered | **3.11%** | 3.03% |
-| FunSearch Weibull-discovered | 12.77% | **0.68%** |
-| **Ours: LLM-evolved (Sonnet, OR3)** | **4.20%** | **2.87%** |
+### 4.1 검증 — 논문 표를 그대로 재현 (우리 채점기 = FunSearch 채점기)
+아래는 여러 규칙을 **FunSearch의 실제 채점기·데이터**로 돌린 결과입니다. 숫자는 초과율(낮을수록 좋음).
 
-- 굵은 FunSearch 수치가 논문 Table 1과 **정확히 일치** → harness 동일 검증.
-- **우리 규칙**: 전체 OR3에서 4.20%(Best-Fit 5.37% 대비 **+21.8%**), Weibull에서도 2.87%(학습 안 했는데 3.98%보다 좋음, **전이 성공**). 단 FunSearch의 데이터셋-특화 규칙(OR 3.11%, Weibull 0.68%)엔 못 미침(그들은 10^6 샘플).
-- 교차: 규칙은 **분포 특이적** — Weibull 규칙을 OR3에 쓰면 12.77%(Best-Fit보다 나쁨).
+| 규칙 | OR3 | Weibull 5k |
+|---|---|---|
+| Best-Fit (기준선) | 5.37% | 3.98% |
+| Worst-Fit (일부러 나쁜 규칙) | 148.51% | 151.53% |
+| FunSearch가 발견한 규칙 (OR용) | **3.11%** | 3.03% |
+| FunSearch가 발견한 규칙 (Weibull용) | 12.77% | **0.68%** |
+| **우리 LLM이 진화시킨 규칙 (Sonnet)** | **4.20%** | **2.87%** |
+
+- 굵게 표시한 FunSearch 규칙 성적(OR 3.11%, Weibull 0.68%)이 **논문 Table 1과 소수점까지 일치**합니다. → 우리 실험 환경이 논문과 동일하다는 증거.
+- **우리 규칙**은 OR3에서 4.20%로 Best-Fit(5.37%)보다 약 **22% 좋고**, 학습하지 않은 Weibull에서도 2.87%로 Best-Fit(3.98%)보다 좋습니다(**다른 데이터로도 잘 일반화**). 다만 FunSearch가 **각 데이터에 맞춰** 찾은 규칙(0.68% 등)에는 못 미칩니다 — 그들은 시도를 훨씬 많이 했기 때문(§5.5).
+- 참고로 규칙은 **데이터 분포에 특화**됩니다: Weibull용 규칙을 OR3에 쓰면 12.77%로 오히려 Best-Fit보다 나빠집니다.
 
 ### 4.2 진화 과정 (Sonnet, OR3, 10세대)
-- train 최고 excess: 6.03% → 5.04% → 4.87% → **4.83%** (세대마다 개선).
-- test(4 인스턴스) 초과율 **2.758%** vs Best-Fit 4.001% (+31.1%; 작은 split이라 전체 수치 4.20%보다 낙관적).
+세대가 지날수록 학습용 문제에서의 초과율이 6.03% → 5.04% → 4.87% → **4.83%** 로 꾸준히 낮아졌습니다.
+(시험용 4개 문제에서는 2.758%로 Best-Fit 4.001% 대비 +31%였는데, 문제 수가 적어 전체 20개 기준 4.20%보다 다소 낙관적인 수치입니다.)
 
 ---
-## 5. 구성요소 상세
+## 5. 구성요소 상세 (교수님 설명용)
 
-### 5.1 초기 skeleton (진화 대상 `priority`의 시작점 = Best-Fit)
+### 5.1 시작 규칙(skeleton) — LLM이 개선을 시작하는 출발점 = Best-Fit
 ```python
 def priority(item, bins):
-    """Returns priority with which we want to add item to each bin.
-    Args:  item: Size of item to be added to the bin.
-           bins: Array of capacities for each bin.
-    Return: Array of same size as bins with priority score of each bin."""
-    return -(bins - item)                # Best-Fit: 남는 용량이 가장 작은 bin 선호
+    """이 물건을 각 상자에 넣을 때의 우선순위 점수를 돌려준다.
+       item: 물건 크기 / bins: 각 상자의 남은 용량 배열 / 반환: 상자별 점수 배열"""
+    return -(bins - item)     # Best-Fit: 남는 공간(bins-item)이 가장 작은 상자에 높은 점수
 ```
-+ 고정 골격: `get_valid_bin_indices` / `online_binpack` / `evaluate` (§5.3). LLM은 **`priority` 본문만** 바꿈.
+나머지 뼈대(`get_valid_bin_indices`, `online_binpack`, `evaluate` — §5.3)는 **고정**이고, LLM은 위 `priority` 함수 본문만 바꿉니다.
 
-### 5.2 프롬프트 (초기 system + best-shot vary)
-- **System 프롬프트**(고정 골격을 그대로 노출 — LLM이 문맥을 정확히 알게):
+### 5.2 프롬프트 (LLM에게 주는 지시문)
+**(1) 기본 지시문(system):** 뼈대 코드를 그대로 보여주어 LLM이 맥락을 정확히 알게 합니다.
 ```
-You improve the `priority` function of this FUNSEARCH online bin-packing skeleton:
-    def get_valid_bin_indices(item, bins): return np.nonzero((bins - item) >= 0)[0]
-    def online_binpack(items, bins):
-        for item in items:
-            best = valid[np.argmax(priority(item, bins[valid]))]; bins[best] -= item
-    # evaluate() minimizes the number of used bins.
-def priority(item, bins): -> numpy array of scores; item goes to the HIGHEST-scoring bin.
-You may use numpy... Explore NON-OBVIOUS scoring — the best heuristics do not always pick the tightest bin.
+너는 이 빈 패킹 뼈대의 `priority` 함수만 개선한다:
+    유효한 상자 = 물건이 들어갈 수 있는 상자들 (빈 상자 포함)
+    각 물건마다: 유효한 상자 중 priority 점수가 가장 높은 곳에 넣는다
+    목표: 사용하는 상자 수를 최소화
+priority(item, bins) -> 상자별 점수 배열을 반환. (점수 최고인 상자에 넣음)
+numpy만 사용 가능. 항상 '가장 딱 맞는 상자'만 고르지 말고 비직관적 점수도 탐색하라.
 ```
-- **best-shot vary 프롬프트**: "현재 상위 2개 `priority`(+각 excess%)를 보여주고 → 더 적은 bin을 쓰는 개선판 k개를 생성하라"(간결 출력 강제).
+**(2) 개선 요청(매 세대):** "현재 성적 좋은 규칙 2개(+각 성적)를 보여줄 테니, 상자를 더 적게 쓰는 개선판 몇 개를 만들어라." (좋은 예시를 보여주고 개선을 부탁하는 방식 = best-shot)
 
-### 5.3 자동평가기 (Evaluator) — FunSearch 코드 verbatim
+### 5.3 자동 채점기(evaluator) — FunSearch 코드 그대로
 ```python
-def get_valid_bin_indices(item, bins):
-    return np.nonzero((bins - item) >= 0)[0]        # 사전할당 배열 -> 빈 bin(용량 C)도 후보
+def get_valid_bin_indices(item, bins):      # 물건이 들어갈 수 있는 상자 = 빈 상자도 후보에 포함
+    return np.nonzero((bins - item) >= 0)[0]
 
-def online_binpack(items, bins, priority):
+def online_binpack(items, bins, priority):  # 물건을 하나씩 순서대로 담는다
     for item in items:
         valid = get_valid_bin_indices(item, bins)
-        best_bin = valid[np.argmax(priority(item, bins[valid]))]
+        best_bin = valid[np.argmax(priority(item, bins[valid]))]   # 점수 최고 상자 선택
         bins[best_bin] -= item
 
-def evaluate(instances, priority):                  # 인스턴스별: bins=[cap]*num_items,
-    ...                                             #   사용 bin 수 = (bins != cap).sum()
-    return mean(num_bins)                           # 평균 bin 수(최소화). excess=(avg-하한)/하한
+def evaluate(instances, priority):          # 문제별로 담아 보고, 사용한 상자 수를 센다
+    ...                                     # 점수 = 평균 상자 수(적을수록 좋음), 초과율로 환산
 ```
-- 안전장치: LLM 코드는 **제한 exec**(numpy/max/min/abs/len/range/sum만, no builtins/I/O) + compile·스모크테스트 통과분만 채택.
+안전장치: LLM이 만든 코드는 **numpy와 기본 연산만 허용하는 제한 환경에서 실행**하고, 문법·동작 검사를 통과한 것만 채택합니다(악성·오류 코드 차단).
 
-### 5.4 LLM이 진화시킨 `priority` (Sonnet, OR3)
+### 5.4 LLM이 진화시킨 규칙(`priority`) — Sonnet, OR3
 ```python
 def priority(item, bins):
-    r = bins - item
+    r = bins - item                 # 넣고 나서 남는 공간
     C = np.max(bins)
-    dead  = (r > 0) & (r < item)                    # 다음 아이템(크기 item)이 못 들어가는 '죽은 gap'
-    exact = r == 0                                   # 정확히 딱 맞는 fit
+    dead  = (r > 0) & (r < item)    # '죽은 공간': 남는 공간이 너무 작아 다음 물건이 못 들어감
+    exact = r == 0                  # 딱 맞게 채워지는 경우
     return -r - dead*(r + bins) + exact*C - (bins == C)*item*0.1
-    #      best-fit  죽은gap 페널티     정확fit 보상    새 bin 약간 페널티
+    #      딱맞기  죽은공간 벌점       정확히채움 보상   새 상자 열기 약간 벌점
 ```
-→ **FunSearch가 발견한 것과 같은 통찰**을 자율 재발견: "tight만 좇지 말고, 못 쓰게 될 작은 gap을 피하고, 정확fit을 보상."
+LLM이 스스로 **FunSearch와 같은 통찰**을 찾아냈습니다: "무조건 딱 맞는 상자만 고르지 말고, **나중에 못 쓰게 될 애매한 작은 공간을 피하고, 딱 맞게 채워지는 경우를 우대하라.**"
 
-### 5.5 분산 시스템 (FunSearch) vs 본 데모
-| 항목 | FunSearch (논문) | 본 데모 |
+### 5.5 분산 시스템 — FunSearch vs 우리 데모
+FunSearch는 **여러 대의 컴퓨터가 나눠서 도는 대규모 시스템**입니다. 우리 데모는 개념 시연이라 **한 대에서 순차 실행**합니다.
+
+| 항목 | FunSearch (논문) | 우리 데모 |
 |---|---|---|
-| 구조 | **비동기 분산**: 3종 워커 — Programs DB + **Samplers**(LLM 호출) + **Evaluators**(채점) | **단일 프로세스·순차** |
-| 병렬 | **15 samplers + 150 CPU evaluators**(LLM은 가속기, 평가는 값싼 CPU) | sampler 1(claude CLI 호출) + inline evaluator |
-| Programs DB | **island 모델**(다중 population), 상위·짧은 프로그램 선호 샘플, 주기적 하위 island 폐기 | 단순 **elite pool**(상위 k) |
-| 프롬프트 | best-shot(island에서 k=2 샘플) | best-shot(elite 상위 2) |
-| 총 샘플 | **~10^6** | **~30**(10세대×3) |
-| 목적 | 대규모 병렬로 탐색폭↑·비용↓ (어려운 문제 대응) | 개념 시연(쉬운 문제) |
+| 실행 방식 | 여러 워커가 비동기 병렬 | 한 프로세스에서 순차 |
+| 규칙 생성(LLM 호출) | 샘플러(sampler) **15대** | 1개(claude 호출) |
+| 채점(evaluator) | 값싼 CPU **150대** 병렬 | 코드 내부에서 바로 |
+| 규칙 보관함 | **여러 독립 집단(island)** 으로 나눠 다양성 유지, 부진한 집단은 주기적으로 폐기 | 단순 상위-k 보관 |
+| 총 시도한 규칙 수 | **약 100만 개(10^6)** | 약 30개(10세대×3) |
 
-→ FunSearch의 분산·island·10^6은 **2023년 약한 모델(Codey)의 높은 실패율을 대량 샘플로 보완**하는 성격이 큼. 강한 2026 모델은 샘플당 품질이 높아 **훨씬 적은 샘플로도** 유효(우리 데모가 그 예). 다만 **핵심 아이디어(프로그램탐색+검증 evaluator)** 는 모델이 세질수록 오히려 유용.
+**해석(발표 포인트):** FunSearch가 100만 개나 시도한 이유는, 2023년 당시 LLM(비교적 약한 모델)이 **대부분 쓸모없는 코드를 뱉어서**, 대량으로 뽑아 어쩌다 나오는 좋은 것을 건져야 했기 때문입니다. 2026년의 강한 모델은 **한 번에 훨씬 좋은 코드**를 내므로 **적은 시도로도** 성과가 납니다(우리 데모가 그 예). 즉 **대량 병렬·집단 분리 같은 복잡한 장치는 모델이 약할 때의 보완책**이고, **핵심 아이디어(규칙을 프로그램으로 탐색 + 자동 채점기로 검증)** 는 모델이 강해질수록 오히려 더 유용합니다.
 
 ---
-## 6. 모델 선택 (Haiku vs Sonnet) — 왜 Sonnet
-비자명한 numpy 프로그램 합성 과제. **실증: Haiku는 10세대 내내 Best-Fit을 못 넘음(discovery 실패)**, Sonnet만 개선+전략 재발견. → discovery 성패를 가르는 게 모델 역량이라 **Sonnet 채택**(더 비싸고 verbose하지만).
+## 6. 모델 선택 — 왜 Haiku가 아니라 Sonnet인가
+이 과제는 **비직관적인 파이썬 코드를 만들어 내는** 일이라, 모델의 코딩·추론 능력이 성패를 좌우합니다.
+실제로 **작은 모델(Haiku)은 10세대 내내 Best-Fit을 못 넘었고**(개선 규칙을 못 찾음), **큰 모델(Sonnet)만** 개선을 찾고 위 전략까지 재발견했습니다. 그래서 비용이 더 들더라도 **Sonnet을 선택**했습니다.
 
-## 7. 정직한 한계
-- 소예산(~30 샘플)·**단일 런·작은 test split → 고분산**(같은 셋업 다른 런에서 +52.8% vs +31.1%). Table-1급 강건 수치 아님.
-- FunSearch 데이터셋-특화 규칙(0.68%)엔 못 미침(그들 10^6 vs 우리 ~30).
-- Sonnet verbose → 가끔 호출 timeout(간결 프롬프트로 완화).
+## 7. 한계 (정직하게)
+- **시도 규모가 작고(약 30개) 한 번만 실행 + 시험 문제가 4개뿐 → 수치 변동이 큽니다**(같은 설정 다른 실행에서 +52% vs +31%). 논문 수준의 안정된 수치는 아닙니다.
+- FunSearch가 **각 데이터에 맞춰** 찾은 규칙(0.68%)에는 못 미칩니다(그들 100만 vs 우리 30).
+- Sonnet은 응답이 길어 가끔 호출이 시간초과됩니다(지시문을 간결하게 해 완화).
 
-## 8. 실행법
+## 8. 실행 방법
 ```
-python -m demo.bpp                                  # 비교표(재현+우리규칙), LLM 없이·무료
-DEMO_EVOLVE=1 DEMO_MODEL=sonnet DEMO_GEN=10 python -m demo.bpp   # LLM 진화 재현
+python -m demo.bpp                                              # 비교표 출력 (LLM 없이·무료)
+DEMO_EVOLVE=1 DEMO_MODEL=sonnet DEMO_GEN=10 python -m demo.bpp  # LLM으로 규칙 진화 재현
 ```
-관련 상세 보고서: `2026-06-30-funsearch-native-swap.md`(Table1 재현), `2026-06-30-funsearch-native-evolution.md`(진화 상세).
+더 자세한 기록: `2026-06-30-funsearch-native-swap.md`(논문 표 재현), `2026-06-30-funsearch-native-evolution.md`(진화 상세).
