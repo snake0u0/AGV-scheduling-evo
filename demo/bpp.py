@@ -36,6 +36,17 @@ WORST_FIT = ('def heuristic(item, bins):\n'
              '    """Worst-Fit: prefer the bin with the most remaining capacity."""\n'
              '    return bins')
 
+# FunSearch's PUBLISHED discovered heuristic (Romera-Paredes et al. 2024, Fig 6 = the OSS
+# google-deepmind/funsearch bin-packing function), quoted verbatim, for a direct comparison.
+FUNSEARCH_PUBLISHED = ('def heuristic(item, bins):\n'
+                       '    """Online bin packing heuristic discovered with FunSearch (Fig 6)."""\n'
+                       '    score = 1000 * np.ones(bins.shape)\n'
+                       '    score -= bins * (bins - item)\n'
+                       '    index = np.argmin(bins)\n'
+                       '    score[index] *= item\n'
+                       '    score[index] -= (bins[index] - item) ** 4\n'
+                       '    return score')
+
 _SYSTEM = """You improve a Python heuristic for ONLINE BIN PACKING (bin capacity = 1.0).
 
 The packing skeleton (FIXED, you do not change it) is:
@@ -177,8 +188,11 @@ def main():
 
     bf = fitness(BEST_FIT, TEST, N_TEST_ITEMS)
     wf = fitness(WORST_FIT, TEST, N_TEST_ITEMS)
-    print(f"baseline Best-Fit  excess(test) = {bf*100:.3f}%")
-    print(f"baseline Worst-Fit excess(test) = {wf*100:.3f}%\n")
+    fs = fitness(FUNSEARCH_PUBLISHED, TEST, N_TEST_ITEMS)
+    print(f"baseline Best-Fit           excess(test) = {bf*100:.3f}%")
+    print(f"baseline Worst-Fit          excess(test) = {wf*100:.3f}%")
+    print(f"FunSearch published (Fig 6) excess(test) = {fs*100:.3f}%  "
+          f"({(bf-fs)/bf*100:+.1f}% vs Best-Fit)\n")
 
     elites = evolve_bpp(proposer, TRAIN, gens=int(os.environ.get("DEMO_GEN", "10")))
     sel = min(elites, key=lambda c: fitness(c, VALID, N_TRAIN_ITEMS))    # select on valid
