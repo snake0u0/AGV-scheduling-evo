@@ -1,207 +1,197 @@
-"""DEMO — FunSearch-style LLM program search on Online Bin Packing (OBP).
+"""DEMO — Online Bin Packing with FunSearch's OWN evaluator, skeleton, datasets.
 
-Faithful (simplified) reproduction of the bin-packing experiment in FunSearch
-(Romera-Paredes et al., Nature 2024, "Mathematical discoveries from program search with LLMs"):
-the LLM evolves a Python PROGRAM (a `heuristic(item, bins)` numpy function), not a single-line
-expression. Items are packed online into the bin with the highest heuristic score among bins that
-still fit; objective = fraction of EXCESS bins over the lower bound (lower is better). Evolution
-starts from Best-Fit, exactly as in the paper.
+We downloaded FunSearch (github.com/google-deepmind/funsearch) and REPLACED our home-grown
+evaluator/skeleton with the exact ones from `bin_packing/bin_packing.ipynb`:
+  - get_valid_bin_indices / online_binpack / evaluate   (verbatim)
+  - the initial `priority(item, bins)` skeleton (= Best-Fit, with the paper's docstring)
+  - their published discovered heuristics (OR and Weibull) for direct comparison
+  - their real datasets (OR3, Weibull 5k) + L1 lower bounds  -> demo/funsearch_data.json (CC-BY)
 
-Simplifications vs the paper (see docs/reports report for the full comparison):
-  - simple elite pool + best-shot prompt, NOT the island model / programs database
-  - ~10 LLM samples, NOT ~1e6; single instance size for evolution
-  - model = logged-in `claude` CLI (Haiku by default here), NOT Codey/PaLM2
+The LLM (claude CLI) evolves `priority` starting from Best-Fit, exactly as in the paper. By default
+this script REPRODUCES the published excess numbers (validating our harness == theirs); set
+DEMO_EVOLVE=1 to also run the LLM evolution on the OR3 dataset.
 
-Run:  python -m demo.bpp            (uses claude if available, else a mock proposer)
-      DEMO_LLM=0 python -m demo.bpp (force mock, free)
+Run:  python -m demo.bpp                 (reproduce baselines/published heuristics, free)
+      DEMO_EVOLVE=1 python -m demo.bpp   (also run LLM evolution; uses claude CLI)
 """
-import os, sys, re, math, random, statistics
+import os, sys, re, json
 import numpy as np
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from ahd.llm import ClaudeCliLLM, cli_available
 
-CAP = 1.0
-MODEL = os.environ.get("DEMO_MODEL", "haiku")     # FunSearch used Codey; here Haiku via the CLI
-N_TRAIN_ITEMS = 200
-N_TEST_ITEMS = 500                                 # larger -> tests generalization (FunSearch-style)
-TRAIN = list(range(0, 12))
-VALID = list(range(12, 16))
-TEST = list(range(20, 24))
+_HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.dirname(_HERE))
+_DATA = json.load(open(os.path.join(_HERE, "funsearch_data.json")))
+DATASETS = {k: {n: {**v, "items": np.array(v["items"], dtype=float)} for n, v in d.items()}
+            for k, d in _DATA["datasets"].items()}
+OPT = _DATA["opt_num_bins"]          # per-dataset L1 lower bound (FunSearch's opt_num_bins)
 
-# FunSearch starts from Best-Fit. Baselines expressed as heuristic programs (with docstrings, as in the paper).
-BEST_FIT = ('def heuristic(item, bins):\n'
-            '    """Best-Fit: prefer the bin with the least remaining capacity that still fits."""\n'
-            '    return -(bins - item)')
-WORST_FIT = ('def heuristic(item, bins):\n'
-             '    """Worst-Fit: prefer the bin with the most remaining capacity."""\n'
-             '    return bins')
 
-# FunSearch's PUBLISHED discovered heuristic (Romera-Paredes et al. 2024, Fig 6 = the OSS
-# google-deepmind/funsearch bin-packing function), quoted verbatim, for a direct comparison.
-FUNSEARCH_PUBLISHED = ('def heuristic(item, bins):\n'
-                       '    """Online bin packing heuristic discovered with FunSearch (Fig 6)."""\n'
-                       '    score = 1000 * np.ones(bins.shape)\n'
-                       '    score -= bins * (bins - item)\n'
-                       '    index = np.argmin(bins)\n'
-                       '    score[index] *= item\n'
-                       '    score[index] -= (bins[index] - item) ** 4\n'
-                       '    return score')
+# ================= FunSearch's evaluator skeleton (verbatim from bin_packing.ipynb) =================
+def get_valid_bin_indices(item, bins):
+    """Returns indices of bins in which item can fit."""
+    return np.nonzero((bins - item) >= 0)[0]
 
-_SYSTEM = """You improve a Python heuristic for ONLINE BIN PACKING (bin capacity = 1.0).
 
-The packing skeleton (FIXED, you do not change it) is:
+def online_binpack(items, bins, priority):
+    """Performs online binpacking of `items` into `bins` using `priority`."""
+    packing = [[] for _ in bins]
     for item in items:
-        cand = [remaining capacity of each open bin that still fits item] + [1.0]  # last = a FRESH empty bin
-        scores = heuristic(item, np.array(cand))
-        place item in cand[argmax(scores)]      # if that is the last (fresh) entry, a NEW bin is opened
-
-So `bins` passed to your heuristic is a numpy array of candidate remaining-capacities whose LAST element
-is always a fresh empty bin (capacity 1.0). Your heuristic can therefore CHOOSE to open a new bin (leaving
-more space) instead of squeezing the item into a tight existing bin.
-
-def heuristic(item, bins):  -> return a numpy array of scores (same length as bins); highest score wins.
-Goal: MINIMIZE the total number of bins used.
-You may use numpy as np and the builtins min, max, abs, len, range, sum. No imports, no I/O.
-Explore NON-OBVIOUS scoring (nonlinear in bins and item) — the best heuristics do NOT always pick the
-tightest bin; sometimes leaving a bin's residual capacity un-tiny (or opening a fresh bin) packs better."""
+        valid_bin_indices = get_valid_bin_indices(item, bins)
+        priorities = priority(item, bins[valid_bin_indices])
+        best_bin = valid_bin_indices[np.argmax(priorities)]
+        bins[best_bin] -= item
+        packing[best_bin].append(item)
+    packing = [b for b in packing if b]
+    return packing, bins
 
 
-def gen_items(n, seed):
-    """Weibull-distributed items (FunSearch benchmark family): skewed, many small + few large."""
-    rng = random.Random(seed)
-    items = []
-    while len(items) < n:
-        v = rng.weibullvariate(0.28, 3.0)
-        if 0.02 < v <= 1.0:
-            items.append(round(v, 3))
-    return items
+def evaluate(instances, priority):
+    """Average number of bins used across instances (lower is better)."""
+    num_bins = []
+    for name in instances:
+        inst = instances[name]
+        cap = inst["capacity"]
+        bins = np.array([cap for _ in range(inst["num_items"])], dtype=float)
+        _, packed = online_binpack(inst["items"], bins, priority)
+        num_bins.append(int((packed != cap).sum()))
+    return float(np.mean(num_bins))
 
 
-def compile_heuristic(code):
-    """Safely exec an LLM `heuristic` program; return the callable or None if invalid."""
-    g = {"__builtins__": {}, "np": np, "min": min, "max": max, "abs": abs,
+def excess(dataset_name, priority):
+    """Fraction of excess bins over the L1 lower bound — FunSearch's reported metric."""
+    avg = evaluate(DATASETS[dataset_name], priority)
+    lb = OPT[dataset_name]
+    return (avg - lb) / lb
+
+
+# ================= heuristics (verbatim from the FunSearch notebook where noted) =================
+# Initial skeleton function that FunSearch evolves (best-fit), with the paper's docstring:
+SEED = ('def priority(item, bins):\n'
+        '    """Returns priority with which we want to add item to each bin.\n\n'
+        '    Args:\n      item: Size of item to be added to the bin.\n'
+        '      bins: Array of capacities for each bin.\n'
+        '    Return:\n      Array of same size as bins with priority score of each bin.\n    """\n'
+        '    return -(bins - item)')
+WORST_FIT = 'def priority(item, bins):\n    return bins'
+
+# FunSearch's published discovered heuristics (bin_packing.ipynb), verbatim:
+FUNSEARCH_OR = (
+    'def priority(item, bins):\n'
+    '    """Heuristic discovered for the OR datasets."""\n'
+    '    def s(bin, item):\n'
+    '        if bin - item <= 2: return 4\n'
+    '        elif (bin - item) <= 3: return 3\n'
+    '        elif (bin - item) <= 5: return 2\n'
+    '        elif (bin - item) <= 7: return 1\n'
+    '        elif (bin - item) <= 9: return 0.9\n'
+    '        elif (bin - item) <= 12: return 0.95\n'
+    '        elif (bin - item) <= 15: return 0.97\n'
+    '        elif (bin - item) <= 18: return 0.98\n'
+    '        elif (bin - item) <= 20: return 0.98\n'
+    '        elif (bin - item) <= 21: return 0.98\n'
+    '        else: return 0.99\n'
+    '    return np.array([s(b, item) for b in bins])')
+FUNSEARCH_WEIBULL = (
+    'def priority(item, bins):\n'
+    '    """Heuristic discovered for the Weibull datasets."""\n'
+    '    max_bin_cap = max(bins)\n'
+    '    score = (bins - max_bin_cap)**2 / item + bins**2 / (item**2)\n'
+    '    score += bins**2 / item**3\n'
+    '    score[bins > item] = -score[bins > item]\n'
+    '    score[1:] -= score[:-1]\n'
+    '    return score')
+
+
+def compile_priority(code):
+    g = {"__builtins__": {}, "np": np, "max": max, "min": min, "abs": abs,
          "len": len, "range": range, "sum": sum}
     try:
         exec(code, g)
-        fn = g["heuristic"]
-        s = np.asarray(fn(0.3, np.array([0.4, 0.9, 0.55])), dtype=float)   # smoke-test
-        if s.shape != (3,) or not np.all(np.isfinite(s)):
-            return None
+        fn = g["priority"]
+        fn(50.0, np.array([100.0, 80.0, 60.0]))     # smoke test
         return fn
     except Exception:
         return None
 
 
-def pack(items, fn):
-    """Online packing (FunSearch skeleton). Candidates for each item = the open bins that still fit
-    PLUS one fresh empty bin (capacity CAP) as the LAST element, so the heuristic may CHOOSE to open
-    a new bin. Item -> highest-scoring candidate. Returns #bins used."""
-    bins = []
-    for it in items:
-        idxs = [i for i, r in enumerate(bins) if r + 1e-9 >= it]
-        caps = np.array([bins[i] for i in idxs] + [CAP])     # last entry = a fresh empty bin
-        try:
-            scores = np.asarray(fn(it, caps), dtype=float)
-            if scores.shape != caps.shape:
-                raise ValueError
-            j = int(np.argmax(scores))
-        except Exception:
-            j = int(np.argmin(caps[:-1])) if idxs else len(caps) - 1   # fallback: best-fit / open new
-        if j == len(caps) - 1:
-            bins.append(CAP - it)            # heuristic chose to open a new bin
-        else:
-            bins[idxs[j]] -= it
-    return len(bins)
+# ================= LLM proposer (evolves `priority`, best-shot on the real skeleton) =================
+_SYSTEM = """You improve the `priority` function of this FUNSEARCH online bin-packing skeleton (do NOT
+change anything except the body of `priority`):
 
+    def get_valid_bin_indices(item, bins):
+        return np.nonzero((bins - item) >= 0)[0]          # bins INCLUDES still-empty bins (capacity C)
+    def online_binpack(items, bins):
+        for item in items:
+            valid = get_valid_bin_indices(item, bins)
+            best = valid[np.argmax(priority(item, bins[valid]))]   # place item in the argmax bin
+            bins[best] -= item
+    # evaluate() minimizes the number of used bins.
 
-def fitness(code, seeds, n_items):
-    """Mean fraction of EXCESS bins over the lower bound (sum/cap); lower is better."""
-    fn = compile_heuristic(code)
-    if fn is None:
-        return 9.99
-    exs = []
-    for s in seeds:
-        items = gen_items(n_items, s)
-        lb = sum(items) / CAP
-        exs.append(pack(items, fn) / lb - 1.0)
-    return statistics.mean(exs)
+def priority(item, bins):  # bins = remaining capacities of the bins that fit (incl. empty ones at capacity C)
+    -> return a numpy array of scores, one per bin; the item goes to the HIGHEST-scoring bin.
 
-
-class MockBPP:
-    def __init__(self, seed=0):
-        self.rng = random.Random(seed)
-    def vary(self, elites, k):
-        out = []
-        for _ in range(k):
-            base = self.rng.choice([c for c, _ in elites])
-            # trivial structural tweak (mock only): scale the score
-            out.append(base.replace("return ", "return (1.0 + 0.01*item) * (", 1) + ")"
-                       if "return (" not in base else base)
-        return out
+You may use numpy as np and the builtins max, min, abs, len, range, sum. No imports, no I/O.
+Explore NON-OBVIOUS scoring — the best heuristics do not always pick the tightest bin. Keep it short."""
 
 
 class LLMBPP:
     def __init__(self):
-        self.cli = ClaudeCliLLM(model=MODEL, timeout=300)   # Sonnet verbose replies can exceed 180s
+        from ahd.llm import ClaudeCliLLM
+        self.cli = ClaudeCliLLM(model=os.environ.get("DEMO_MODEL", "sonnet"), timeout=300)
     def vary(self, elites, k):
-        shown = "\n\n".join(f"# version v{i}  (excess over LB = {fit*100:.2f}%)\n{code}"
+        shown = "\n\n".join(f"# version v{i} (excess={fit*100:.2f}%)\n{code}"
                             for i, (code, fit) in enumerate(elites[:2]))
-        prompt = (f"{shown}\n\n# The versions above are prior heuristics (lower excess is better).\n"
-                  f"Write {k} IMPROVED, DIFFERENT versions of `heuristic` that use FEWER bins.\n"
-                  f"Output ONLY the {k} complete functions, each starting with a line "
-                  f"'def heuristic(item, bins):', separated by a line '===NEXT==='. No prose, no markdown.")
+        prompt = (f"{shown}\n\n# Prior `priority` versions (lower excess is better). Write {k} IMPROVED, "
+                  f"DIFFERENT versions that use FEWER bins. Output ONLY the {k} complete functions, each "
+                  f"starting with 'def priority(item, bins):', separated by a line '===NEXT==='. No prose.")
         text = self.cli._complete(_SYSTEM + "\n\n" + prompt)
-        return self._parse(text)
-    def _parse(self, text):
         text = re.sub(r"```(?:python)?", "", text)
-        out = []
-        for block in text.split("===NEXT==="):
-            i = block.find("def heuristic")
-            if i >= 0:
-                out.append(block[i:].strip())
-        return out
+        return [b[b.find("def priority"):].strip() for b in text.split("===NEXT===") if "def priority" in b]
     def usage(self):
         return self.cli.usage()
 
 
-def evolve_bpp(proposer, seeds, gens, pop=8, elite=3, n_items=N_TRAIN_ITEMS, verbose=True):
-    pool = [BEST_FIT]                                  # start from Best-Fit (as in FunSearch)
-    scored = [(c, fitness(c, seeds, n_items)) for c in pool]
+def _excess_split(code, names):
+    """Excess over L1 bound restricted to a subset of OR3 instances (for train/valid/test)."""
+    fn = compile_priority(code)
+    if fn is None:
+        return 9.99
+    sub = {n: DATASETS["OR3"][n] for n in names}
+    return (evaluate(sub, fn) - OPT["OR3"]) / OPT["OR3"]
+
+
+def evolve(proposer, train, valid, gens=8, pop=8, elite=3):
+    scored = [(SEED, _excess_split(SEED, train))]
     for g in range(gens):
         scored.sort(key=lambda x: x[1])
-        elites = scored[:elite] if len(scored) >= 1 else scored
-        kids = [c for c in proposer.vary(elites, pop) if compile_heuristic(c) is not None]
-        scored = elites + [(c, fitness(c, seeds, n_items)) for c in kids]
-        if verbose:
-            b = min(scored, key=lambda x: x[1])
-            print(f"gen {g:>2}: best excess = {b[1]*100:.3f}%   ({len(kids)} valid kids)")
+        elites = scored[:elite]
+        kids = [c for c in proposer.vary(elites, pop) if compile_priority(c) is not None]
+        scored = elites + [(c, _excess_split(c, train)) for c in kids]
+        print(f"gen {g:>2}: best train excess = {min(x[1] for x in scored)*100:.3f}%  ({len(kids)} valid)")
     scored.sort(key=lambda x: x[1])
-    return [c for c, _ in scored[:elite]]
+    return min([c for c, _ in scored[:elite]], key=lambda c: _excess_split(c, valid))
 
 
 def main():
-    use_llm = cli_available() and os.environ.get("DEMO_LLM") != "0"
-    proposer = LLMBPP() if use_llm else MockBPP()
-    tag = f"CLAUDE-CLI/{MODEL}" if use_llm else "MOCK"
-    print(f"OBP (FunSearch-style program search) | proposer={tag} | "
-          f"train {len(TRAIN)}x{N_TRAIN_ITEMS} items / test {len(TEST)}x{N_TEST_ITEMS} items\n")
+    print("== Reproducing FunSearch's published excess numbers (their evaluator + their data) ==\n")
+    print(f"{'heuristic':<26}{'OR3':>10}{'Weibull 5k':>13}")
+    print("-" * 49)
+    for name, code in [("Best-Fit (seed)", SEED), ("Worst-Fit", WORST_FIT),
+                       ("FunSearch OR-discovered", FUNSEARCH_OR),
+                       ("FunSearch Weibull-disc.", FUNSEARCH_WEIBULL)]:
+        fn = compile_priority(code)
+        print(f"{name:<26}{excess('OR3', fn)*100:>9.2f}%{excess('Weibull 5k', fn)*100:>12.2f}%")
+    print("\n(cf. paper Table 1: Best-Fit OR3=5.37%, Weibull5k=3.98%; FunSearch OR3=3.11%, Weibull5k=0.68%)")
 
-    bf = fitness(BEST_FIT, TEST, N_TEST_ITEMS)
-    wf = fitness(WORST_FIT, TEST, N_TEST_ITEMS)
-    fs = fitness(FUNSEARCH_PUBLISHED, TEST, N_TEST_ITEMS)
-    print(f"baseline Best-Fit           excess(test) = {bf*100:.3f}%")
-    print(f"baseline Worst-Fit          excess(test) = {wf*100:.3f}%")
-    print(f"FunSearch published (Fig 6) excess(test) = {fs*100:.3f}%  "
-          f"({(bf-fs)/bf*100:+.1f}% vs Best-Fit)\n")
-
-    elites = evolve_bpp(proposer, TRAIN, gens=int(os.environ.get("DEMO_GEN", "10")))
-    sel = min(elites, key=lambda c: fitness(c, VALID, N_TRAIN_ITEMS))    # select on valid
-    ev = fitness(sel, TEST, N_TEST_ITEMS)                                # report on test (larger size)
-    print(f"\nevolved heuristic (best on valid) | excess(test) = {ev*100:.3f}%  "
-          f"({(bf - ev) / bf * 100:+.1f}% relative to Best-Fit)")
-    print("--- program ---\n" + sel + "\n---------------")
-    if use_llm:
-        print(proposer.usage())
+    if os.environ.get("DEMO_EVOLVE") == "1":
+        names = list(DATASETS["OR3"].keys())
+        train, valid, test = names[:12], names[12:16], names[16:20]
+        print(f"\n== LLM evolution of `priority` on OR3 (train {len(train)}/valid {len(valid)}/test {len(test)}) ==")
+        prop = LLMBPP()
+        sel = evolve(prop, train, valid, gens=int(os.environ.get("DEMO_GEN", "8")))
+        te = _excess_split(sel, test); bf = _excess_split(SEED, test)
+        print(f"\nevolved (best on valid) | OR3 test excess = {te*100:.3f}%  "
+              f"(Best-Fit {bf*100:.3f}%, {(bf-te)/bf*100:+.1f}%)\n--- program ---\n{sel}")
+        print(prop.usage())
 
 
 if __name__ == "__main__":
