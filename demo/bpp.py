@@ -136,13 +136,14 @@ Explore NON-OBVIOUS scoring — the best heuristics do not always pick the tight
 class LLMBPP:
     def __init__(self):
         from ahd.llm import ClaudeCliLLM
-        self.cli = ClaudeCliLLM(model=os.environ.get("DEMO_MODEL", "sonnet"), timeout=300)
+        self.cli = ClaudeCliLLM(model=os.environ.get("DEMO_MODEL", "sonnet"), timeout=420)
     def vary(self, elites, k):
         shown = "\n\n".join(f"# version v{i} (excess={fit*100:.2f}%)\n{code}"
                             for i, (code, fit) in enumerate(elites[:2]))
         prompt = (f"{shown}\n\n# Prior `priority` versions (lower excess is better). Write {k} IMPROVED, "
                   f"DIFFERENT versions that use FEWER bins. Output ONLY the {k} complete functions, each "
-                  f"starting with 'def priority(item, bins):', separated by a line '===NEXT==='. No prose.")
+                  f"starting with 'def priority(item, bins):', separated by a line '===NEXT==='.\n"
+                  f"Be TERSE: no comments, no blank lines, no prose, each function <= 10 lines.")
         text = self.cli._complete(_SYSTEM + "\n\n" + prompt)
         text = re.sub(r"```(?:python)?", "", text)
         return [b[b.find("def priority"):].strip() for b in text.split("===NEXT===") if "def priority" in b]
@@ -159,7 +160,7 @@ def _excess_split(code, names):
     return (evaluate(sub, fn) - OPT["OR3"]) / OPT["OR3"]
 
 
-def evolve(proposer, train, valid, gens=8, pop=8, elite=3):
+def evolve(proposer, train, valid, gens=8, pop=6, elite=3):   # pop=6 -> 3 offspring/call (terser, fewer timeouts)
     scored = [(SEED, _excess_split(SEED, train))]
     for g in range(gens):
         scored.sort(key=lambda x: x[1])
