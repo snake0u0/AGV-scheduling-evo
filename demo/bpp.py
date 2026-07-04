@@ -201,8 +201,11 @@ def main():
         prop = LLMBPP()
         sel = evolve(prop, train, valid, gens=int(os.environ.get("DEMO_GEN", "8")))
         te = _excess_split(sel, test); bf = _excess_split(SEED, test)
-        print(f"\nevolved (best on valid) | OR3 test excess = {te*100:.3f}%  "
-              f"(Best-Fit {bf*100:.3f}%, {(bf-te)/bf*100:+.1f}%)\n--- program ---\n{sel}")
+        fn = compile_priority(sel)
+        print(f"\nevolved (best on valid) [model={os.environ.get('DEMO_MODEL','sonnet')}]:")
+        print(f"  OR3 test-split excess = {te*100:.3f}% (Best-Fit {bf*100:.3f}%, {(bf-te)/bf*100:+.1f}%)")
+        print(f"  FULL OR3 excess = {excess('OR3', fn)*100:.3f}%  |  Weibull 5k excess = {excess('Weibull 5k', fn)*100:.3f}%")
+        print(f"--- program ---\n{sel}")
         print(prop.usage())
 
 
