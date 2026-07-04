@@ -245,7 +245,8 @@ class ClaudeCliLLM(_ExprProposer):
         try:
             proc = subprocess.run(
                 ["claude", "-p", "--model", self.model, "--output-format", "json",
-                 "--dangerously-skip-permissions"],
+                 "--tools", "",                       # disable ALL tools -> pure text generation
+                 "--dangerously-skip-permissions"],   # (nothing to permit once tools are off)
                 input=prompt, capture_output=True, text=True, timeout=self.timeout)
             env = json.loads(proc.stdout)
         except Exception as e:                      # timeout / non-JSON / crash

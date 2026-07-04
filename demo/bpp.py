@@ -100,15 +100,15 @@ FUNSEARCH_WEIBULL = (
     '    score[1:] -= score[:-1]\n'
     '    return score')
 
-# Heuristic our LLM (Sonnet) evolved from Best-Fit on OR3 (10 generations, this repo's loop):
+# Heuristic our LLM (Sonnet) evolved from Best-Fit on OR3 (10 gens, tools OFF = pure LLM proposal):
 LLM_EVOLVED = (
     'def priority(item, bins):\n'
-    '    """Evolved by Sonnet on OR3 (this demo): penalize dead gaps, reward exact fit."""\n'
+    '    """Evolved by Sonnet on OR3 (pure proposal): fragmentation penalty + fill bonus."""\n'
     '    r = bins - item\n'
     '    C = np.max(bins)\n'
-    '    dead = (r > 0) & (r < item)\n'
-    '    exact = r == 0\n'
-    '    return -r - dead*(r + bins) + exact*C - (bins == C)*item*0.1')
+    '    frag = (r > 0) & (r < item)\n'
+    '    fill_bonus = (1 - bins / C) * item\n'
+    '    return np.where(frag, -(r ** 2 + bins) + fill_bonus, -r + fill_bonus + (r == 0) * C)')
 
 
 def compile_priority(code):
