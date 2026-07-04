@@ -1,6 +1,6 @@
 # 보고서 — FunSearch식 LLM 프로그램 탐색 데모: Online Bin Packing (평가·수정·결과)
 
-작성 2026-06-30. 대상: Romera-Paredes et al., *Mathematical discoveries from program search with LLMs*,
+작성 2026-07-02. 대상: Romera-Paredes et al., *Mathematical discoveries from program search with LLMs*,
 Nature 625 (2024), "Bin packing" 절 + Fig 1/2b/6, Table 1. 오픈소스: google-deepmind/funsearch.
 
 ## 결론 (한눈에)
@@ -12,7 +12,7 @@ Nature 625 (2024), "Bin packing" 절 + Fig 1/2b/6, Table 1. 오픈소스: google
 ## 6하원칙
 - **누가**: 연구자(오케스트레이션) + LLM(로그인 `claude` CLI, Haiku·Sonnet)이 heuristic 프로그램 생성자.
 - **무엇을**: 온라인 빈패킹 heuristic을 LLM 프로그램 탐색으로 진화 + 초기 구현을 논문·OSS와 대조·수정.
-- **언제**: 2026-06-30. **어디서**: `demo/bpp.py`.
+- **언제**: 2026-07-02. **어디서**: `demo/bpp.py`.
 - **왜**: 교수님 요청 — 쉬운 표준 문제로 방법론 데모 + skeleton/프롬프트/평가기가 제대로 됐는지 논문·OSS로 평가·수정.
 - **어떻게**: 아래 아키텍처 + 평가 + 수정.
 

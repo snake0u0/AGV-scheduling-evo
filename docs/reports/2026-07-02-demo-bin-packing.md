@@ -1,6 +1,6 @@
 # 보고서 — LLM-AHD 데모: Online Bin Packing (쉬운 벤치마크)
 
-작성 2026-06-30. (교수님 요청: 쉬운 문제로 LLM 기반 진화 탐색 방법론 데모)
+작성 2026-07-02. (교수님 요청: 쉬운 문제로 LLM 기반 진화 탐색 방법론 데모)
 
 ## 결론 (한눈에)
 - **방법론이 표준 쉬운 벤치마크(Online Bin Packing, FunSearch/EoH 정석 문제)에서 end-to-end로 작동**함을 데모로 보였다: LLM이 scoring 표현식을 제안 → 평가 → fitness+reflection 진화 → train/valid/test 분리로 보고. AGV 프로젝트의 기계(`policy_from_expr`, `ClaudeCliLLM`)를 그대로 재사용.

@@ -27,4 +27,4 @@ DEMO_LLM=0 python -m demo.bpp                                   # mock (LLM 없�
 → 우리 평가기가 논문 Table 1을 재현하고(검증), 우리 LLM 규칙이 Best-Fit을 능가.
 
 ## 발표용 종합 설명
-아키텍처·I/O·skeleton·prompt·evaluator·진화된 priority·분산시스템: **`docs/reports/2026-06-30-demo-presentation.md`**
+아키텍처·I/O·skeleton·prompt·evaluator·진화된 priority·분산시스템: **`docs/reports/2026-07-04-demo-presentation.md`**

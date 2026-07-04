@@ -1,6 +1,6 @@
 # 발표용 정리 — LLM으로 규칙(휴리스틱)을 자동 진화시키는 데모: 온라인 빈 패킹
 
-작성 2026-06-30. 이 문서는 교수님 발표용입니다.
+작성 2026-07-04. 이 문서는 교수님 발표용입니다.
 FunSearch 논문(Google DeepMind, *Mathematical discoveries from program search with LLMs*, Nature 2024)의
 방법을 그대로 재현하고, 그 위에서 우리 LLM으로 규칙을 자동 진화시킨 데모를 정리했습니다.
 코드: `demo/bpp.py`, 데이터: `demo/funsearch_data.json`, 원 저장소: github.com/google-deepmind/funsearch.
@@ -157,4 +157,4 @@ FunSearch는 **여러 대의 컴퓨터가 나눠서 도는 대규모 시스템**
 python -m demo.bpp                                              # 비교표 출력 (LLM 없이·무료)
 DEMO_EVOLVE=1 DEMO_MODEL=sonnet DEMO_GEN=10 python -m demo.bpp  # LLM으로 규칙 진화 재현
 ```
-더 자세한 기록: `2026-06-30-funsearch-native-swap.md`(논문 표 재현), `2026-06-30-funsearch-native-evolution.md`(진화 상세).
+더 자세한 기록: `2026-07-04-funsearch-native-swap.md`(논문 표 재현), `2026-07-04-funsearch-native-evolution.md`(진화 상세).

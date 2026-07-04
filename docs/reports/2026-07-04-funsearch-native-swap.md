@@ -1,6 +1,6 @@
 # 보고서 — FunSearch OSS의 evaluator/skeleton/데이터로 데모 교체 + Table 1 재현
 
-작성 2026-06-30. 저장소: github.com/google-deepmind/funsearch (`bin_packing/bin_packing.ipynb`).
+작성 2026-07-04. 저장소: github.com/google-deepmind/funsearch (`bin_packing/bin_packing.ipynb`).
 
 ## 결론 (한눈에)
 - FunSearch OSS를 **직접 다운로드**해서, 우리 데모의 자체 evaluator/skeleton/데이터를 **그들의 실제 코드·데이터로 교체**했다.
@@ -45,4 +45,4 @@
 ## 관련 파일
 - `demo/bpp.py`(FunSearch 실제 evaluator/skeleton 이식), `demo/funsearch_data.json`(그들 OR3/Weibull5k 데이터, CC-BY).
 - 원본: github.com/google-deepmind/funsearch, 논문 `demo/02. Mathematical discoveries ...pdf`.
-- 이전 단계 기록: `docs/reports/2026-06-30-funsearch-obp-demo.md`(자체 evaluator판·수정·Fig6 비교).
+- 이전 단계 기록: `docs/reports/2026-07-02-funsearch-obp-demo.md`(자체 evaluator판·수정·Fig6 비교).

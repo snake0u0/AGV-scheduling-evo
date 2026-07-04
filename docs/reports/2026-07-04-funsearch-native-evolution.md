@@ -1,6 +1,6 @@
 # 보고서 — FunSearch native 셋업에서 LLM 규칙 진화 (Sonnet, 10세대)
 
-작성 2026-06-30. 셋업 = FunSearch 실제 evaluator/skeleton/데이터(`2026-06-30-funsearch-native-swap.md` 참조).
+작성 2026-07-04. 셋업 = FunSearch 실제 evaluator/skeleton/데이터(`2026-07-04-funsearch-native-swap.md` 참조).
 
 ## 결론 (한눈에)
 - FunSearch의 **실제 평가기·골격·데이터(OR3)** 위에서 **Sonnet**으로 `priority`를 Best-Fit에서 **10세대 진화** → OR3 test 초과율 **2.758% vs Best-Fit 4.001% (+31.1%)**.
