@@ -11,3 +11,6 @@ docs/research/pdfs/
 
 # OS / editor
 .DS_Store
+
+# scratch scripts the claude CLI sub-agent may write during demo runs
+demo/_*.py
