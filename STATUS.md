@@ -50,12 +50,18 @@ Berterottière 자체 확장=2·4·6대 최대), 40-50대에서는 비교할 SOT
 4. **[완료] experiment.py + LLM 루프 연결** - `2026-07-24-llm-loop-first-campaign.md`.
    전체 파이프라인(파서->decode->GA->진화->실제 claude CLI) 동작. `fjspt/llm.py`(B안 proposer,
    ahd/llm.py의 _complete 재사용), `fjspt/experiment.py`(evolve/compare/train-test 분할).
-5. **[완료] 본 캠페인** - `2026-07-24-main-campaign.md`. **진화 규칙 P가 held-out 33인스턴스에서
-   D1·D2를 각각 유의미하게 이김**(Wilcoxon P<D1 p=0.0074, P<D2 p=0.0049). P=4861.9 vs D1=4941.2,
-   D2=4949.6. 핵심 통찰 `-max(arrival, machine_free)`(해석 가능). 단 best-of(D1,D2) 오라클은 못 이김
-   (p=0.11, 배포 불가 오라클이라 실무 무관). 비용 $0.28, 40분. 결과/스크립트 = `docs/data/campaigns/`.
-   **다음(논문화 전 필수) = 재현성**: 진화 시드 3~5개 반복해 매번 유의하게 이기는지 + 규칙 수렴 확인.
-   그 다음 ablation(max(arrival,machine_free) 항 분해), GA 강화 후 재검, data set 1 포함.
+5. **[완료] 본 캠페인 + 재현성 캠페인** - `2026-07-24-main-campaign.md`, `-reproducibility-campaign.md`.
+   본 캠페인 단일 run은 P가 D1·D2 양쪽 다 유의하게 이김(p<0.01). **그러나 재현성(독립 진화 3회)에서
+   하향 조정됨**:
+   - **질적 통찰은 재현(강함)**: 3회 모두 machine_free 사용, `max(arrival,machine_free)` 결합 통찰 2/3
+     재등장. LLM이 "공정 시작 = 도착과 기계가용의 결합"을 run마다 독립 재발견 = 논문 가능한 핵심.
+   - **양적 우위는 혼합(약함)**: D2는 3/3 이김(2 유의+1경계), **D1은 1/3만 유의**. "양쪽 다 유의"는
+     본 캠페인 P 포함해도 자주 안 나옴. 단 재현성 test 예산이 가벼워(60x60/시드2) 노이즈 교란 있음.
+   **다음(논문화 전 필수, `-reproducibility-campaign.md` §5)**:
+   (1) 교란 제거 - P_main+P1/P2/P3를 동일 고예산(80x80/시드3~5)으로 재평가해 D1 우위 예산민감성 판별,
+   (2) K=5~10회로 분포 확보, (3) 규칙 선택 프로토콜(validation split, cherry-pick 방지) 확정,
+   (4) ablation(max항 분해), (5) GA 강화, (6) data set 1 포함.
+   결과/스크립트 = `docs/data/campaigns/`. 총비용 ~$1.0, 두 캠페인 합 ~1.5h.
 
 ## 코드 자산 (B안, 2026-07-24 완성)
 
