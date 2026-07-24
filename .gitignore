@@ -8,6 +8,8 @@ __pycache__/
 
 # copyrighted paper PDFs (do not redistribute)
 docs/research/pdfs/
+docs/data/papers/
+docs/data/instances/*.pdf
 
 # OS / editor
 .DS_Store
