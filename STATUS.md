@@ -50,10 +50,12 @@ Berterottière 자체 확장=2·4·6대 최대), 40-50대에서는 비교할 SOT
 4. **[완료] experiment.py + LLM 루프 연결** - `2026-07-24-llm-loop-first-campaign.md`.
    전체 파이프라인(파서->decode->GA->진화->실제 claude CLI) 동작. `fjspt/llm.py`(B안 proposer,
    ahd/llm.py의 _complete 재사용), `fjspt/experiment.py`(evolve/compare/train-test 분할).
-   **첫 캠페인 결과는 결론적이지 않음(정직하게)**: 진화 규칙 `-arrival - wait/(remaining_ops+1)`이
-   train에서 D1/D2 이김(1.3%)이나 test에서 평균만 0.09% 앞서고 인스턴스별 best-of(D1,D2)엔 3승12패.
-   예산이 데모 수준(pop12x4세대, GA30x30, 시드1). **본 캠페인 필요**(pop20x8~10세대, GA60x60, 시드3,
-   2/4/6대, ~$1-2, 1-2h) + Wilcoxon 유의성 검정. 이길지는 미지수 = 그게 진짜 실험.
+5. **[완료] 본 캠페인** - `2026-07-24-main-campaign.md`. **진화 규칙 P가 held-out 33인스턴스에서
+   D1·D2를 각각 유의미하게 이김**(Wilcoxon P<D1 p=0.0074, P<D2 p=0.0049). P=4861.9 vs D1=4941.2,
+   D2=4949.6. 핵심 통찰 `-max(arrival, machine_free)`(해석 가능). 단 best-of(D1,D2) 오라클은 못 이김
+   (p=0.11, 배포 불가 오라클이라 실무 무관). 비용 $0.28, 40분. 결과/스크립트 = `docs/data/campaigns/`.
+   **다음(논문화 전 필수) = 재현성**: 진화 시드 3~5개 반복해 매번 유의하게 이기는지 + 규칙 수렴 확인.
+   그 다음 ablation(max(arrival,machine_free) 항 분해), GA 강화 후 재검, data set 1 포함.
 
 ## 코드 자산 (B안, 2026-07-24 완성)
 
