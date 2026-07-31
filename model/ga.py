@@ -22,11 +22,21 @@ class Chromosome:
         return Chromosome(list(self.OS), list(self.MS), self.fitness)
 
 
-def random_chromosome(inst, rng):
+def random_chromosome(inst, rng, ms_init="random", greedy_p=0.8):
+    """ms_init='greedy' biases each gene towards the shortest-processing-time machine
+    with probability greedy_p, keeping the rest random so the population still varies.
+    Used to test whether the machine-selection search is failing for want of any
+    structural signal at all (2026-07-31 diagnosis)."""
     OS = [j for j, ops in enumerate(inst.jobs) for _ in ops]
     rng.shuffle(OS)
-    MS = [rng.randrange(len(ops[o]))
-          for ops in inst.jobs for o in range(len(ops))]
+    MS = []
+    for ops in inst.jobs:
+        for o in range(len(ops)):
+            alts = ops[o]
+            if ms_init == "greedy" and len(alts) > 1 and rng.random() < greedy_p:
+                MS.append(min(range(len(alts)), key=lambda i: alts[i][1]))
+            else:
+                MS.append(rng.randrange(len(alts)))
     return Chromosome(OS, MS)
 
 
@@ -95,7 +105,7 @@ def mutate_ms(ms, inst, rng, rate=0.1):
 
 class GA:
     def __init__(self, inst, rule, pop_size=100, n_gen=100, pc=0.9, pm=0.1,
-                 n_elite=10, seed=0, time_limit=None):
+                 n_elite=10, seed=0, time_limit=None, ms_init="random"):
         self.inst = inst
         self.rule = rule
         self.pop_size = pop_size
@@ -105,12 +115,16 @@ class GA:
         self.n_elite = n_elite
         self.rng = random.Random(seed)
         self.time_limit = time_limit    # wall-clock seconds; n_gen becomes an upper cap
+        self.ms_init = ms_init
         self.n_gen_done = 0
+        self.n_evals = 0                # exact count; elites carry their fitness over
+        self.last_improve_gen = 0       # generation of the last improvement to the best
 
     def evaluate(self, c):
         if c.fitness is None:
             _, sched = decode(self.inst, c.OS, c.MS, self.rule)
             c.fitness = sched.cmax
+            self.n_evals += 1
         return c.fitness
 
     def tournament(self, pop):
@@ -119,7 +133,8 @@ class GA:
 
     def run(self):
         deadline = None if self.time_limit is None else time.time() + self.time_limit
-        pop = [random_chromosome(self.inst, self.rng) for _ in range(self.pop_size)]
+        pop = [random_chromosome(self.inst, self.rng, self.ms_init)
+               for _ in range(self.pop_size)]
         for c in pop:
             self.evaluate(c)
         best = min(pop, key=lambda c: c.fitness).copy()
@@ -148,6 +163,7 @@ class GA:
             gen_best = min(pop, key=lambda c: c.fitness)
             if gen_best.fitness < best.fitness:
                 best = gen_best.copy()
+                self.last_improve_gen = g + 1
             history.append(best.fitness)
 
         return best, history
