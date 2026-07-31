@@ -5,6 +5,7 @@ GA operators, population size, and time budget are identical. Creativity here wo
 undermine the ablation, so this deliberately mirrors the paper.
 """
 import random
+import time
 
 from simulator.evaluator import decode
 
@@ -94,7 +95,7 @@ def mutate_ms(ms, inst, rng, rate=0.1):
 
 class GA:
     def __init__(self, inst, rule, pop_size=100, n_gen=100, pc=0.9, pm=0.1,
-                 n_elite=10, seed=0):
+                 n_elite=10, seed=0, time_limit=None):
         self.inst = inst
         self.rule = rule
         self.pop_size = pop_size
@@ -103,6 +104,8 @@ class GA:
         self.pm = pm
         self.n_elite = n_elite
         self.rng = random.Random(seed)
+        self.time_limit = time_limit    # wall-clock seconds; n_gen becomes an upper cap
+        self.n_gen_done = 0
 
     def evaluate(self, c):
         if c.fitness is None:
@@ -115,13 +118,17 @@ class GA:
         return a if a.fitness <= b.fitness else b
 
     def run(self):
+        deadline = None if self.time_limit is None else time.time() + self.time_limit
         pop = [random_chromosome(self.inst, self.rng) for _ in range(self.pop_size)]
         for c in pop:
             self.evaluate(c)
         best = min(pop, key=lambda c: c.fitness).copy()
         history = [best.fitness]
 
-        for _ in range(self.n_gen):
+        for g in range(self.n_gen):
+            if deadline is not None and time.time() >= deadline:
+                break
+            self.n_gen_done = g + 1
             pop.sort(key=lambda c: c.fitness)
             nxt = [c.copy() for c in pop[:self.n_elite]]        # elitism
             while len(nxt) < self.pop_size:

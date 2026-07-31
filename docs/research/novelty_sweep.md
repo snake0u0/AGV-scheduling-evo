@@ -12,7 +12,7 @@
 | **MRE** (Memetic&Reflective AHD, MDPI Appl.Sci. 2025, 10.3390/app15158735) — shortlist #7 | **일반 AHD 방법** 논문; 테스트 3개 중 하나가 **"AGV-드론 스케줄링"**, 진화룰이 urgency·**battery·congestion** bidding | ★높음(데모) | MRE는 *방법*+AGV-드론 *coordination(bidding)* 데모. 우리는 **machine-coupled FJSP의 multi-AGV 디스패칭**(드론X, bidding X, FJSP 통합 O) |
 | **PortAgent** (arXiv:2512.14417, 2025) | 항만 컨테이너터미널 VDS 자동설계(에이전트 codegen) | 높음(항만 AGV) | 항만≠FMS, agentic codegen≠진화 |
 | **LLM-VD** (Transp.Res.E 2026, 10.1016/j.tre.2026.104760) | **vehicle-drone 협조 라우팅** AHD | 중(라우팅) | 라우팅≠동적 FJSP 디스패칭 |
-| **VRPAgent** (arXiv:2510.07073, ai4co/KAIST Park) | 정적 VRP(CVRP/VRPTW)용 LLM 연산자+GA, "VRP SOTA 최초" | 중 | 정적 VRP 연산자≠동적 AGV-FMS 룰 |
+| **VRPAgent** (arXiv:2510.07073, ai4co/KAIST Park) | **[정정 2026-07-31]** LLM이 **LNS destroy + repair 순서** 연산자를 생성해 메타휴리스틱에 심고 유전탐색으로 정제. "VRP SOTA 최초". 저장소 코드 확인: 슬롯 `select_by_llm_1`(destroy) + `sort_by_llm_1`(repair 순서) 2개 | **높음 - 우리 옵션 D와 같은 패러다임** | 슬롯 2개·자원 1종 vs 우리 슬롯 5개·자원 2종(기계 배정 포함). 카드 = `cards/vrpagent.md` |
 | **RideAgent** (arXiv:2505.06608) | 전기 택시 fleet MIP 목적함수 자동화+variable fixing | 낮(MoD) | MIP 가이드≠디스패칭 룰 진화 |
 
 ## T2. 방법 계보 (LLM-AHD × 기계 스케줄링) — 두터움
