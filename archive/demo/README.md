@@ -6,7 +6,7 @@ FunSearch(Nature 2024)의 온라인 빈패킹 실험을 **그들의 실제 evalu
 ## 파일
 - `bpp.py` — 데모 전체(평가기·골격·baseline·LLM 진화 루프). FunSearch `bin_packing.ipynb` 코드 이식.
 - `funsearch_data.json` — FunSearch 실제 데이터(OR3, Weibull 5k) + L1 하한. 출처: google-deepmind/funsearch (CC-BY).
-- `02. Mathematical discoveries ... .pdf` — 원논문.
+- 원논문(FunSearch, Nature 2024)은 Zotero `FIPSC9PH`에 있습니다. (중복 사본은 2026-07-23 삭제)
 
 ## 실행
 ```bash

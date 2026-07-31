@@ -23,9 +23,9 @@ sys.path.insert(0, "/home/dohyung/project/research-agent")
 
 from scipy import stats
 
-from fjspt.ga import GA
-from fjspt.instance import DAUZERE_STEMS, load_dauzere
-from fjspt.rules import RULES, rule_from_expr
+from model.ga import GA
+from simulator.instance import DAUZERE_STEMS, load_dauzere
+from model.rules import RULES, rule_from_expr
 
 TRAIN = [("01a", 2), ("13a", 2), ("07a", 4)]
 TEST = [(s, v) for v in (2, 4) for s in DAUZERE_STEMS if (s, v) not in TRAIN]

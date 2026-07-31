@@ -11,7 +11,7 @@ import statistics as st
 import sys
 
 sys.path.insert(0, "/home/dohyung/project/research-agent")
-from fjspt.instance import BASE, parse_format_b
+from simulator.instance import BASE, parse_format_b
 
 # Berterottiere, Dauzere-Peres & Yugma (2024), Table 8, iteration-stop Cmax.
 # (2 vehicles, 4 vehicles, 6 vehicles)

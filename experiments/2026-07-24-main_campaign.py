@@ -12,11 +12,11 @@ sys.path.insert(0, "/home/dohyung/project/research-agent")
 
 from scipy import stats
 
-from fjspt.experiment import evaluate_rule, evolve
-from fjspt.ga import GA
-from fjspt.instance import DAUZERE_STEMS, load_dauzere
-from fjspt.llm import ClaudeRuleProposer
-from fjspt.rules import RULES, rule_from_expr
+from model.experiment import evaluate_rule, evolve
+from model.ga import GA
+from simulator.instance import DAUZERE_STEMS, load_dauzere
+from model.llm import ClaudeRuleProposer
+from model.rules import RULES, rule_from_expr
 
 # --- configuration ----------------------------------------------------------
 # Train spans machine sizes (5/8/10) and both vehicle counts, kept to 3 instances

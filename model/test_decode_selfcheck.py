@@ -1,10 +1,10 @@
 """Regression test: a decoded schedule fed back through the timing core must yield
 the identical makespan. This ties the two front-ends (decode / replay) to one core.
-Run: python -m fjspt.test_decode_selfcheck"""
+Run: python -m model.test_decode_selfcheck"""
 import random
 
-from .evaluator import decode, self_check
-from .instance import load_dauzere
+from simulator.evaluator import decode, self_check
+from simulator.instance import load_dauzere
 from .rules import RULES
 
 

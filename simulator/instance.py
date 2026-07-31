@@ -14,7 +14,7 @@ import os
 from dataclasses import dataclass, field
 
 BASE = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-                    "docs", "data", "instances", "fjspt-lucasberter")
+                    "data", "instances", "fjspt-lucasberter")
 
 
 @dataclass
@@ -180,6 +180,28 @@ def load_dauzere(stem, n_vehicles):
                                f"dpp{stem}_{n_vehicles}veh.txt")
     return inst
 
+
+def load_deroussi(stem, n_vehicles=2):
+    """Deroussi & Norre (2010) instance + its layout.
+
+    These have **8 machines**, not 4: the flexibility-2 structure comes from machines
+    being paired (M1;M2), (M3;M4), (M5;M6), (M7;M8). Earlier sessions assumed 4 machines,
+    which is why every reconstruction of the travel matrix failed.
+    Matrix provenance: DeroussiNorreTravelTimes/SOURCE.md. Replay gate: test_replay_deroussi.
+    """
+    inst = parse_format_a(f"{BASE}/DeroussiNorre/{stem}.txt", name=stem)
+    layout = f"{BASE}/DeroussiNorreTravelTimes/layout{inst.n_machines}.txt"
+    inst.travel = load_travel(layout)
+    if len(inst.travel) != inst.n_machines + 1:
+        raise ValueError(f"{stem}: layout size {len(inst.travel)} != m+1 "
+                         f"({inst.n_machines + 1})")
+    inst.n_vehicles = n_vehicles
+    inst.source["travel"] = layout
+    inst.source["solution"] = f"{BASE}/Deroussi/{stem}.txt"
+    return inst
+
+
+DEROUSSI_STEMS = [f"fjsp{i}" for i in range(1, 11)]
 
 DAUZERE_STEMS = [f"{i:02d}a" for i in range(1, 19)]
 DAUZERE_VEHICLES = [2, 4, 6]

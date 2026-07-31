@@ -1,0 +1,39 @@
+graph LR
+    subgraph DATA["Benchmark data"]
+        P1["Format A parser<br/>DeroussiNorre"]
+        P2["Format B parser<br/>Dauzere / Brandimarte"]
+        P3["Format C parser<br/>Fattahi"]
+        TT["Travel matrix<br/>layout 5/8/10"]
+    end
+
+    INST["Instance<br/>jobs, machines, travel"]
+    P1 --> INST
+    P2 --> INST
+    P3 --> INST
+    TT --> INST
+
+    subgraph EVAL["Evaluator (verified)"]
+        TIMING["Timing core<br/>validated on paper example<br/>Cmax 13 exact match"]
+        DECODE["decode<br/>OS + MS + AGV rule<br/>to makespan"]
+        DECODE --> TIMING
+    end
+
+    INST --> DECODE
+
+    subgraph MACH["Machine side (GA)"]
+        GA["GA<br/>evolves OS and MS"]
+    end
+
+    subgraph AGVSIDE["AGV side (LLM)"]
+        LLM["LLM loop<br/>ReEvo reflection<br/>Claude CLI"]
+        RULE["AGV rule<br/>scores candidate vehicles"]
+        LLM -->|"proposes"| RULE
+    end
+
+    GA -->|"chromosome"| DECODE
+    RULE -->|"selects vehicle"| DECODE
+    TIMING -->|"makespan = fitness"| GA
+    TIMING -->|"makespan = fitness"| LLM
+
+    OUT["Held-out test<br/>33 instances<br/>P beats D1 and D2"]
+    TIMING --> OUT

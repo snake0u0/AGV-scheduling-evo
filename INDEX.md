@@ -1,9 +1,10 @@
-# INDEX — research-agent 프로젝트 지도
+# INDEX - research-agent 프로젝트 지도
 
 > **새 세션은 여기부터.** 그다음 `STATUS.md`(현재 상태·다음 할 일)를 읽으면 방향이 잡힙니다.
 
-연구 주제: *LLM-Evolved Interpretable Joint Dispatching Rules for Integrated Machine-and-AGV
-Dynamic FJSP* — 동적 FJSP에서 기계 시퀀싱 + AGV 디스패칭 규칙을 LLM-AHD로 **동시 진화**. 타깃: KIIE → SCIE.
+연구 주제: **FJSP-AGV(기계+AGV 통합 스케줄링)에서 LLM 기반 자동 휴리스틱 설계(AHD).**
+2026-07-23 기준 **B안(정적 문헌 벤치마크 + GA 뼈대)이 유효**, A안(동적/자체생성)은 보류. 상세 = `STATUS.md`.
+타깃: KIIE -> SCIE.
 
 ## 어디에 뭐가 있나
 
@@ -11,34 +12,51 @@ Dynamic FJSP* — 동적 FJSP에서 기계 시퀀싱 + AGV 디스패칭 규칙�
 | 파일 | 무엇 |
 |---|---|
 | **INDEX.md** | 이 지도 |
-| **STATUS.md** | 현재 진행 상태 + 바로 다음 할 일 (구 NEXT.md) |
+| **STATUS.md** | 현재 상태 + 바로 다음 할 일 + 방향 결정 기록. **여기가 핵심** |
 | **CLAUDE.md** | 에이전트 작업 규칙(헌법) |
-| **PLAN.md** | 전체 실험계획(개요) — 상세 설계는 `docs/research/research_plan.md`, 실행순서는 `docs/research/execution_roadmap.md` |
+| archive/a-track/PLAN.md | A안 실험계획 (보류, 이력 보존용) |
 
-### 코드
-| 폴더 | 무엇 | 핵심 파일 |
-|---|---|---|
-| **sim/** | DES 시뮬레이터 + 고전 baseline | `agv_fms.py`(메인 엔진), `agv_fms_salabim.py`(salabim 트윈), `configs.py`(regime·대규모 config), `policies.py`, `rule.py`, `crosscheck_salabim.py`(엔진 교차검증), `viz.py`(시각화), `run_eval.py`(sanity) |
-| **ahd/** | LLM-AHD 진화 루프 (핵심 컨트리뷰션) | `loop.py`(진화), `llm.py`(MockLLM + ClaudeCliLLM proposer), `run.py`(실행: `python -m ahd.run`) |
+### 코드 (역할 기준. 2026-07-31 개편)
+| 폴더 | 무엇 |
+|---|---|
+| **simulator/** | 문제와 평가. 파서 3종·travel matrix·타이밍 코어·decode·replay·이벤트 구동 엔진. **model/에 의존하지 않음** |
+| **model/** | 방법. 규칙, GA, LLM proposer(`llm.py`+`llm_backend.py`), 실험 드라이버 |
+| **experiments/** | 캠페인 스크립트 (실험 1개 = 파일 1개) |
+| **archive/** | 은퇴 자산. `a-track/`(동적 A안 + PLAN.md + research_plan.md), `demo/`, `lit/` |
 
-### 연구 문서 / 산출물
+회귀 테스트 4종 - 아무거나 건드린 뒤엔 이걸 돌린다:
+```
+python -m simulator.test_paper_example      python -m simulator.test_replay_deroussi
+python -m model.test_ga_operators           python -m model.test_decode_selfcheck
+```
+
+### 데이터
 | 위치 | 무엇 |
 |---|---|
-| **docs/reports/** | **결과 보고서**(스텝/실험마다 1개, 두괄식). ← 진행 추적은 여기서 |
-| **docs/research/** | 연구 문서: `research_plan.md`(실험설계 마스터), `execution_roadmap.md`(실행 runbook), `benchmark_anchor_notes.md`, `contribution.md`, `novelty_sweep.md`, `simulator_spec.md`, `proposal_kiie.md` + `figures/`(그림) + 문헌데이터(`*.jsonl`, `cards/`, `pdfs/`) |
-| **lit/** | 문헌수집 파이프라인: `scripts/`(collect.py 등) + `prompts/`(템플릿) + `pipeline.md`(파이프라인 계획) |
-| **.claude/** | agent `novelty-watch`(스쿱 감지), skill `ahd-loop`(실험 절차) |
+| **data/instances/fjspt-lucasberter/** | FJSPT 벤치마크. 인스턴스 + travel matrix + 공표 해. 포맷 3종·함정 = `STATUS.md §데이터 자산` |
+| **data/results/** | 캠페인 결과 json |
+| **data/papers/** | 정독용 PDF 5편 (Ham2020, Han2024, Homayouni2023, Kumar2011, Meng2025) |
 
-## 자주 쓰는 명령
-```
-python -m ahd.run                  # LLM-AHD 루프 (env: AHD_REGIME / AHD_GEN / AHD_TRAIN_N / AHD_REEVO)
-python sim/run_eval.py             # 고전 룰 sanity
-python sim/crosscheck_salabim.py   # 두 엔진 교차검증
-python sim/viz.py                  # 그림 생성 -> docs/research/figures/
-```
+즉시 실험 가능: **Dauzere 54 케이스**(18 x 차량 2/4/6) + **DeroussiNorre 10 케이스**.
+travel matrix가 없어 아직 막힌 계열: fattahi(20), Homayouni_Brandimarte. 미보유: Kumar EX-series 57개.
+
+### 연구 문서
+| 위치 | 무엇 |
+|---|---|
+| **docs/research/han2024_formulation_notes.md** | **MILP 정식화 + 디코딩 절차. evaluator 설계도** |
+| docs/research/benchmark_anchor_notes.md | FJSPT 벤치마크 혈통·구조 |
+| docs/research/novelty_sweep.md | 경쟁논문·빈칸 검증 (2026-06-09, 재확인 필요) |
+| docs/research/cards/ | 논문 요약카드 9편 |
+| archive/a-track/research_plan.md | A안 마스터플랜 (보류) |
+| docs/research/contribution.md, simulator_spec.md, proposal_kiie.md | A안 계열 문서 (보류) |
+| **docs/reports/** | 결과 보고서(스텝마다 1개, 두괄식). 진행 추적은 여기서 |
+| docs/research/pdfs/ | 논문 PDF. **Zotero가 linked_url이라 여기가 유일본** (gitignored) |
+| lit/ | 문헌수집 파이프라인(collect.py 등) + 프롬프트 |
 
 ## 진행 상태 요약 (상세는 STATUS.md)
-- ✅ 시뮬 v1: 대규모(40–50 AGV) + 혼잡-지연 + FJSP + 교차검증
-- ✅ LLM-AHD 루프: 실제 `claude` CLI proposer, ReEvo 강화, L1에서 +2.1%
-- 🔸 진행중: ReEvo old vs new 비교 런
-- ⬜ 다음: 캠페인(P vs baselines) → 통계 → 집필
+- [완료] 문헌 계보 추적 + 벤치마크 원본 확보 + Zotero 91편 정리
+- [완료] 파서 3종 + 타이밍 코어 + decode + GA + LLM 루프 + 캠페인 3종 + 2x2 ablation
+- [완료] 문헌 격차 실측 (65%, 병목은 AGV가 아니라 기계 선택)
+- [완료 2026-07-31] **replay 검증 10/10** (fjsp1=134 포함) + 폴더 개편
+- [진행] **설계 개정**: 하위문제 4개 전부 진화(슬롯 5개), solver를 GA -> LNS. `STATUS.md` 참고
+- [주의] 6/30 캠페인 수치는 tool-contamination 이전 생성 -> 인용 금지

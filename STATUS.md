@@ -1,12 +1,13 @@
 # START HERE - 여기서 이어서 (resume point)
 
-최종 업데이트 **2026-07-23**. 새 세션에서 "이제 뭘 하면 돼?" -> 이 파일부터.
+최종 업데이트 **2026-07-31**. 새 세션에서 "이제 뭘 하면 돼?" -> 이 파일부터.
 
 ## 한 줄 현황
 
-**방향을 B안(정적 벤치마크)으로 확정**하고, 문헌 벤치마크 데이터/해/travel matrix를 모두 확보한 상태.
-방법론 뼈대(2계층 공진화 + 비분리성 입증)도 정리됨. **다음 = 파서/evaluator/replay 검증 구현.**
-LLM 루프는 뭘 진화시킬지 확정된 뒤에 재가동.
+**설계가 2026-07-31 회의에서 크게 바뀌었다. 아래 "설계 개정" 절을 먼저 읽을 것.**
+요약: 하위문제 4개를 **전부** 진화 대상으로 올리고(슬롯 5개 = 4 하위문제 + LNS destroy),
+solver를 GA에서 **LNS**로 바꾸며, 목적은 **makespan 단일** 유지. 폴더 구조도 개편됨.
+데이터 쪽은 Deroussi&Norre 계열이 열려 replay 게이트 10/10 통과(2026-07-31).
 
 ## 방향 결정 (2026-07-23 확정)
 
@@ -38,19 +39,21 @@ Berterottière 자체 확장=2·4·6대 최대), 40-50대에서는 비교할 SOT
 설계 = `docs/reports/2026-07-23-skeleton-evaluator-design.md`,
 결과 = `docs/reports/2026-07-23-evaluator-implementation-and-replay.md`.
 
-1. **[완료] 파서 3종 + 타이밍 코어** - `fjspt/` 패키지. 포맷 A/B/C 전부 동작.
+1. **[완료] 파서 3종 + 타이밍 코어** - `simulator/` 패키지. 포맷 A/B/C 전부 동작.
    **타이밍 코어는 Berterottière(2024) 논문의 워크드 예제로 검증 통과**(Cmax 13, 중간 시각까지 일치).
 2. **[완료] decode + rules + GA** - `2026-07-24-decode-ga-skeleton.md`. decode 자기검증 180/180 일치.
-   D1/D2 비지배성 재현. 재현: `python -m fjspt.test_paper_example` / `test_ga_operators` /
-   `test_decode_selfcheck`
+   D1/D2 비지배성 재현. 재현: 회귀 테스트 4종 (아래 "코드 자산" 참고)
    **문헌 대비 격차는 아래 6번 참고(65%). 이 보고서의 "+13~43%"는 3개 인스턴스 표본이라 무효.**
-3. **~~replay 검증~~ - 이 데이터셋에서는 불가능**. 공개 해 파일의 M/V 시퀀스가 헤더 Cmax와 모순
-   (2대 케이스는 적재이동 합만으로 Cmax 초과 - 시뮬레이터와 무관한 산술). 54/54 불일치.
-   **-> 레포 해 파일 헤더의 Cmax는 인용 금지. 논문 Table 8(data set 1은 Table 4) 값만 인용.**
-   fjsp1 -> 134도 이동시간 행렬 미확보로 여전히 막힘(가설 8종 전수 실패, Deroussi&Norre 2010 원문 필요).
+3. **[완료 2026-07-31] replay 검증 - Deroussi&Norre에서 10/10 통과**.
+   `2026-07-31-restructure-and-deroussi-unblock.md`. fjsp1-10 전부 공표 Cmax를 정확히 재현.
+   막혔던 원인은 시뮬레이터가 아니라 **전제 오류**였다: 이 인스턴스는 4기계가 아니라 **8기계**(유연도 2는
+   기계가 짝지어져 나오는 것), 행렬은 5x5가 아니라 **9x9**. 행렬은 추측이 아니라 Han 2024가 지목한
+   데이터셋 페이지의 배포 PDF Table 5에서 **전사**했다.
+   게이트: `python -m simulator.test_replay_deroussi`
+   **단, Dauzere 계열(`Berterottiere/dpp*veh/`)의 해 파일은 여전히 헤더와 모순(54/54 불일치)**.
+   -> 그 레포 해 파일 헤더 Cmax는 인용 금지, 논문 Table 8 값만 인용.
 4. **[완료] experiment.py + LLM 루프 연결** - `2026-07-24-llm-loop-first-campaign.md`.
-   전체 파이프라인(파서->decode->GA->진화->실제 claude CLI) 동작. `fjspt/llm.py`(B안 proposer,
-   ahd/llm.py의 _complete 재사용), `fjspt/experiment.py`(evolve/compare/train-test 분할).
+   전체 파이프라인(파서->decode->GA->진화->실제 claude CLI) 동작. `model/llm.py`(proposer, `model/llm_backend.py`의 _complete 재사용), `model/experiment.py`.
 5. **[완료] 캠페인 3종: 본/재현성/교란제거** - `2026-07-24-{main-campaign, reproducibility-campaign,
    confound-removal-reeval}.md`. **읽는 순서 주의: 재현성 보고서의 비관적 결론은 교란제거 보고서가 뒤집음.**
    - **질적 통찰 재현(강함)**: 독립 진화 3회 모두 machine_free 사용, `max(arrival,machine_free)` 결합
@@ -65,7 +68,7 @@ Berterottière 자체 확장=2·4·6대 최대), 40-50대에서는 비교할 SOT
    p=0.047). 둘 다면 D1/D2 다 이김(vs D1 p=0.0009, vs D2 p=0.0002). 계수 c=0.3~0.7 robust.
    -> LLM의 진짜 주역 발견은 "결합 통찰"이 아니라 **공차 최소화**. 결합은 상보적 정제항. 자연실험(P3)이
    통제실험으로 왜 대체돼야 하는지의 사례.
-   결과/스크립트 = `docs/data/campaigns/`. 총비용 ~$1.0, 전체 실험 ~3.7h.
+   결과/스크립트 = `experiments/` + `data/results/`. 총비용 ~$1.0, 전체 실험 ~3.7h.
 7. **[완료] 문헌 격차 실측** - `2026-07-29-literature-gap-measurement.md`.
    **문헌(Table 8) 대비 평균 격차 65%**, 33개 중 문헌을 넘어선 인스턴스 0개.
    격차는 **기계 유연도**와 연동: 유연도<2.0이면 36%, >=2.0이면 84%, 최악 172%(유연도 5.02, 10기계).
@@ -79,17 +82,24 @@ Berterottière 자체 확장=2·4·6대 최대), 40-50대에서는 비교할 SOT
 2. 규칙선택 프로토콜(validation split, cherry-pick 방지) 확정
 3. K=5~10으로 진화가 두 성분 발견하는 빈도 측정
 4. best-of(D1,D2) 오라클 격차(p≈0.1) 공략
-5. data set 1 포함 (Deroussi&Norre 2010 원문 -> 이동시간 행렬 필요)
+5. ~~data set 1 포함~~ **완료 2026-07-31** (이동시간 행렬 확보, replay 10/10)
 
-## 코드 자산 (B안, 2026-07-24 완성)
+## 코드 자산 (폴더 개편 2026-07-31)
 
-`fjspt/` 패키지 (A안 `sim/`·`ahd/`와 분리, 둘 다 안 건드림):
-- `instance.py` 파서 3종 + 데이터셋 레지스트리 | `solution.py` 해 모델+파일파서
-- `timing.py` 타이밍 코어(논문 예제 검증) | `evaluator.py` decode(자기검증 180/180)
-- `rules.py` D1/D2+표현식 컴파일 | `ga.py` GA(DCGA 구조, 단위테스트)
-- `llm.py` B안 proposer(실제 claude CLI) | `experiment.py` evolve/compare/분할
-- `replay.py` (데이터 모순으로 게이트 불가, §3 참고)
-- 테스트: `python -m fjspt.test_paper_example` / `test_ga_operators` / `test_decode_selfcheck`
+역할 기준 구조. **`simulator/`는 `model/`에 의존하지 않는다**(단방향).
+
+- **`simulator/`** 문제와 평가: `instance.py`(파서 3종 + 레지스트리 `load_dauzere`/`load_deroussi`),
+  `solution.py`, `timing.py`(논문 예제 검증), `evaluator.py`(decode, 자기검증 180/180), `replay.py`,
+  `agv_fms.py`(이벤트 구동 엔진 - 규칙 훅 2개 기보유), `policies.py`, `rule.py`
+- **`model/`** 방법: `rules.py`(D1/D2 + 표현식 컴파일), `ga.py`, `llm.py`(proposer),
+  `llm_backend.py`(claude CLI), `experiment.py`
+- **`experiments/`** 캠페인 스크립트 | **`data/{instances,results,papers}`** | **`archive/`** A안 자산
+
+회귀 테스트 4종 (전부 통과해야 함):
+```
+python -m simulator.test_paper_example      python -m simulator.test_replay_deroussi
+python -m model.test_ga_operators           python -m model.test_decode_selfcheck
+```
 
 ## 신뢰하면 안 되는 것
 
@@ -120,12 +130,13 @@ DCGA와 같은 인코딩/벤치마크/목적함수를 쓰므로 비교가 공정
 
 ## 데이터 자산 (2026-07-22 확보)
 
-`docs/data/instances/fjspt-lucasberter/` (github.com/lucasberter/FJSPT 전체)
+`data/instances/fjspt-lucasberter/` (github.com/lucasberter/FJSPT 전체 + 2026-07-31 추가분)
 
 폴더가 **입력(인스턴스)과 출력(해)** 두 종류로 갈리는데 README에 설명이 없으니 주의:
 - 인스턴스: `DeroussiNorre/`(10) `fattahi/`(20) `Dauzere_Data/Text/`(18x2) `Homayouni_Brandimarte/`(대문자 B)
 - **해(결과)**: `Deroussi/` `Homayouni_brandimarte/`(소문자 b) `Homayouni_fattahi/` `Berterottiere/dpp{2,4,6}veh/`
-- travel matrix: `BerterottiereTravelTimes/layout{5,8,10}.txt` - **(m+1)x(m+1) 비대칭**. 행=출발, 열=도착. 인덱스 0 = L/U.
+- travel matrix: `BerterottiereTravelTimes/layout{5,8,10}.txt` (Dauzere용) · **`DeroussiNorreTravelTimes/layout8.txt` (DeroussiNorre용, 9x9, 2026-07-31 전사)**
+- 원본 `BerterottiereTravelTimes/` - **(m+1)x(m+1) 비대칭**. 행=출발, 열=도착. 인덱스 0 = L/U.
 
 포맷 3종:
 - **A. Bilge-Ulusoy 계보**(`DeroussiNorre/`): `nJob nMachine 유연도` / op당 `대체기계수 m m 공통시간`. 대체기계 2개의 **처리시간이 같고** 기계가 (1,2)(3,4)... 로 짝지어짐.

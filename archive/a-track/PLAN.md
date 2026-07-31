@@ -1,5 +1,10 @@
 # PLAN — 전체 실험계획
 
+> **[보류] 2026-07-23**: 이 문서는 **A안(동적 FJSP, mean tardiness, 자체생성 40-50 AGV)** 계획입니다.
+> 현재 유효한 방향은 **B안(정적 문헌 벤치마크 + GA 뼈대)** 입니다. -> `STATUS.md §방향 결정`
+> 삭제하지 않고 이력으로 보존합니다. A안으로 복귀할 경우 이 문서가 출발점입니다.
+
+
 연구: **LLM-Evolved Interpretable Joint Dispatching Rules for Integrated Machine-and-AGV Dynamic FJSP.**
 타깃: KIIE 학술대회(~3개월) → SCIE 저널. 이 문서 = 실험계획 개요.
 상세 설계 = `docs/research/research_plan.md`, 실행 순서·기간 = `docs/research/execution_roadmap.md`.

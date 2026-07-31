@@ -9,7 +9,7 @@ instances it was tuned on.
 from statistics import mean, pstdev
 
 from .ga import GA
-from .instance import DAUZERE_STEMS, load_dauzere
+from simulator.instance import DAUZERE_STEMS, load_dauzere
 from .rules import RULES, rule_from_expr
 
 

@@ -8,11 +8,12 @@ __pycache__/
 
 # copyrighted paper PDFs (do not redistribute)
 docs/research/pdfs/
-docs/data/papers/
-docs/data/instances/*.pdf
+data/papers/
+data/instances/*.pdf
 
 # OS / editor
 .DS_Store
 
 # scratch scripts the claude CLI sub-agent may write during demo runs
 demo/_*.py
+.gstack/

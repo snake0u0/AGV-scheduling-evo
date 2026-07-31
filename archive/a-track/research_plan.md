@@ -1,4 +1,9 @@
 # 연구 마스터 플랜 — LLM 진화 joint 디스패칭 룰 (통합 기계+AGV 동적 FJSP)
+
+> **[보류] 2026-07-23**: 이 문서는 **A안(동적 FJSP, mean tardiness, 자체생성 40-50 AGV)** 계획입니다.
+> 현재 유효한 방향은 **B안(정적 문헌 벤치마크 + GA 뼈대)** 입니다. -> `STATUS.md §방향 결정`
+> 삭제하지 않고 이력으로 보존합니다. A안으로 복귀할 경우 이 문서가 출발점입니다.
+
 작성 2026-06-09. 이 문서가 마스터. 세부는 `novelty_sweep.md`, `contribution.md §8`, `simulator_spec.md`, `lab_research_flows.md`, `proposal_kiie.md` 참조.
 
 ## 0. 한눈에

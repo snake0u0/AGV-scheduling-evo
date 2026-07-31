@@ -1,6 +1,6 @@
 """B-track rule proposer: evolve ONE AGV-selection rule to minimize makespan.
 
-The A-track proposer (ahd/llm.py) evolves (agv, machine) pairs over a different
+The A-track proposer (model/llm_backend.py) evolves (agv, machine) pairs over a different
 feature set for mean tardiness. We do not touch it. Instead we reuse its validated
 CLI call (ClaudeCliLLM._complete, which disables tools with `--tools ""`) and layer
 a B-track prompt and single-rule genome on top.
@@ -8,12 +8,7 @@ a B-track prompt and single-rule genome on top.
 A genome here is a single expression string over the B-track AGV features. D1/D2
 are two points in this space, so they are exact ablations of any evolved rule.
 """
-import sys
-
-sys.path.insert(0, __import__("os").path.dirname(
-    __import__("os").path.dirname(__import__("os").path.abspath(__file__))))
-
-from ahd.llm import ClaudeCliLLM, cli_available          # reuse validated CLI machinery
+from .llm_backend import ClaudeCliLLM, cli_available     # reuse validated CLI machinery
 
 BTRACK_FEATURES = ["empty_travel", "loaded_travel", "arrival", "wait",
                    "agv_free", "agv_cum_travel", "machine_free", "remaining_ops"]

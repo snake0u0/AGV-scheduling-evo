@@ -6,7 +6,7 @@ undermine the ablation, so this deliberately mirrors the paper.
 """
 import random
 
-from .evaluator import decode
+from simulator.evaluator import decode
 
 
 class Chromosome:
