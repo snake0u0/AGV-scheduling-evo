@@ -50,6 +50,7 @@ travel matrix가 없어 아직 막힌 계열: fattahi(20), Homayouni_Brandimarte
 | archive/a-track/research_plan.md | A안 마스터플랜 (보류) |
 | docs/research/contribution.md, simulator_spec.md, proposal_kiie.md | A안 계열 문서 (보류) |
 | **docs/reports/** | 결과 보고서(스텝마다 1개, 두괄식). 진행 추적은 여기서 |
+| docs/discussions/ | `/dh-discuss` 문답 기록. 보고서가 "무엇을 보여줬나"라면 여기는 "내가 어떻게 이해했나" |
 | docs/research/pdfs/ | 논문 PDF. **Zotero가 linked_url이라 여기가 유일본** (gitignored) |
 | lit/ | 문헌수집 파이프라인(collect.py 등) + 프롬프트 |
 

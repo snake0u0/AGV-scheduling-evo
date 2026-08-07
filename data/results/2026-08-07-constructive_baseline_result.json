@@ -1,0 +1,4306 @@
+{
+ "cases": 64,
+ "configs": {
+  "NEUTRAL (\uccab \ud6c4\ubcf4 \uace0\uc815 - \ubcd1\ub9ac\uc801)": {
+   "all": 298.18,
+   "dauzere": 333.58,
+   "deroussi": 107.03,
+   "runs": [
+    {
+     "family": "dauzere",
+     "stem": "01a",
+     "veh": 2,
+     "cmax": 7602
+    },
+    {
+     "family": "dauzere",
+     "stem": "01a",
+     "veh": 4,
+     "cmax": 7602
+    },
+    {
+     "family": "dauzere",
+     "stem": "01a",
+     "veh": 6,
+     "cmax": 7602
+    },
+    {
+     "family": "dauzere",
+     "stem": "02a",
+     "veh": 2,
+     "cmax": 7204
+    },
+    {
+     "family": "dauzere",
+     "stem": "02a",
+     "veh": 4,
+     "cmax": 7204
+    },
+    {
+     "family": "dauzere",
+     "stem": "02a",
+     "veh": 6,
+     "cmax": 7204
+    },
+    {
+     "family": "dauzere",
+     "stem": "03a",
+     "veh": 2,
+     "cmax": 6272
+    },
+    {
+     "family": "dauzere",
+     "stem": "03a",
+     "veh": 4,
+     "cmax": 6272
+    },
+    {
+     "family": "dauzere",
+     "stem": "03a",
+     "veh": 6,
+     "cmax": 6272
+    },
+    {
+     "family": "dauzere",
+     "stem": "04a",
+     "veh": 2,
+     "cmax": 7490
+    },
+    {
+     "family": "dauzere",
+     "stem": "04a",
+     "veh": 4,
+     "cmax": 7490
+    },
+    {
+     "family": "dauzere",
+     "stem": "04a",
+     "veh": 6,
+     "cmax": 7490
+    },
+    {
+     "family": "dauzere",
+     "stem": "05a",
+     "veh": 2,
+     "cmax": 7045
+    },
+    {
+     "family": "dauzere",
+     "stem": "05a",
+     "veh": 4,
+     "cmax": 7045
+    },
+    {
+     "family": "dauzere",
+     "stem": "05a",
+     "veh": 6,
+     "cmax": 7045
+    },
+    {
+     "family": "dauzere",
+     "stem": "06a",
+     "veh": 2,
+     "cmax": 6321
+    },
+    {
+     "family": "dauzere",
+     "stem": "06a",
+     "veh": 4,
+     "cmax": 6321
+    },
+    {
+     "family": "dauzere",
+     "stem": "06a",
+     "veh": 6,
+     "cmax": 6321
+    },
+    {
+     "family": "dauzere",
+     "stem": "07a",
+     "veh": 2,
+     "cmax": 13647
+    },
+    {
+     "family": "dauzere",
+     "stem": "07a",
+     "veh": 4,
+     "cmax": 13647
+    },
+    {
+     "family": "dauzere",
+     "stem": "07a",
+     "veh": 6,
+     "cmax": 13647
+    },
+    {
+     "family": "dauzere",
+     "stem": "08a",
+     "veh": 2,
+     "cmax": 12921
+    },
+    {
+     "family": "dauzere",
+     "stem": "08a",
+     "veh": 4,
+     "cmax": 12921
+    },
+    {
+     "family": "dauzere",
+     "stem": "08a",
+     "veh": 6,
+     "cmax": 12921
+    },
+    {
+     "family": "dauzere",
+     "stem": "09a",
+     "veh": 2,
+     "cmax": 10261
+    },
+    {
+     "family": "dauzere",
+     "stem": "09a",
+     "veh": 4,
+     "cmax": 10261
+    },
+    {
+     "family": "dauzere",
+     "stem": "09a",
+     "veh": 6,
+     "cmax": 10261
+    },
+    {
+     "family": "dauzere",
+     "stem": "10a",
+     "veh": 2,
+     "cmax": 13455
+    },
+    {
+     "family": "dauzere",
+     "stem": "10a",
+     "veh": 4,
+     "cmax": 13455
+    },
+    {
+     "family": "dauzere",
+     "stem": "10a",
+     "veh": 6,
+     "cmax": 13455
+    },
+    {
+     "family": "dauzere",
+     "stem": "11a",
+     "veh": 2,
+     "cmax": 12961
+    },
+    {
+     "family": "dauzere",
+     "stem": "11a",
+     "veh": 4,
+     "cmax": 12961
+    },
+    {
+     "family": "dauzere",
+     "stem": "11a",
+     "veh": 6,
+     "cmax": 12961
+    },
+    {
+     "family": "dauzere",
+     "stem": "12a",
+     "veh": 2,
+     "cmax": 10195
+    },
+    {
+     "family": "dauzere",
+     "stem": "12a",
+     "veh": 4,
+     "cmax": 10195
+    },
+    {
+     "family": "dauzere",
+     "stem": "12a",
+     "veh": 6,
+     "cmax": 10195
+    },
+    {
+     "family": "dauzere",
+     "stem": "13a",
+     "veh": 2,
+     "cmax": 21934
+    },
+    {
+     "family": "dauzere",
+     "stem": "13a",
+     "veh": 4,
+     "cmax": 21934
+    },
+    {
+     "family": "dauzere",
+     "stem": "13a",
+     "veh": 6,
+     "cmax": 21934
+    },
+    {
+     "family": "dauzere",
+     "stem": "14a",
+     "veh": 2,
+     "cmax": 16798
+    },
+    {
+     "family": "dauzere",
+     "stem": "14a",
+     "veh": 4,
+     "cmax": 16798
+    },
+    {
+     "family": "dauzere",
+     "stem": "14a",
+     "veh": 6,
+     "cmax": 16798
+    },
+    {
+     "family": "dauzere",
+     "stem": "15a",
+     "veh": 2,
+     "cmax": 13249
+    },
+    {
+     "family": "dauzere",
+     "stem": "15a",
+     "veh": 4,
+     "cmax": 13249
+    },
+    {
+     "family": "dauzere",
+     "stem": "15a",
+     "veh": 6,
+     "cmax": 13249
+    },
+    {
+     "family": "dauzere",
+     "stem": "16a",
+     "veh": 2,
+     "cmax": 21825
+    },
+    {
+     "family": "dauzere",
+     "stem": "16a",
+     "veh": 4,
+     "cmax": 21825
+    },
+    {
+     "family": "dauzere",
+     "stem": "16a",
+     "veh": 6,
+     "cmax": 21825
+    },
+    {
+     "family": "dauzere",
+     "stem": "17a",
+     "veh": 2,
+     "cmax": 16735
+    },
+    {
+     "family": "dauzere",
+     "stem": "17a",
+     "veh": 4,
+     "cmax": 16735
+    },
+    {
+     "family": "dauzere",
+     "stem": "17a",
+     "veh": 6,
+     "cmax": 16735
+    },
+    {
+     "family": "dauzere",
+     "stem": "18a",
+     "veh": 2,
+     "cmax": 12850
+    },
+    {
+     "family": "dauzere",
+     "stem": "18a",
+     "veh": 4,
+     "cmax": 12850
+    },
+    {
+     "family": "dauzere",
+     "stem": "18a",
+     "veh": 6,
+     "cmax": 12850
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp1",
+     "veh": 2,
+     "cmax": 286
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp2",
+     "veh": 2,
+     "cmax": 232
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp3",
+     "veh": 2,
+     "cmax": 254
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp4",
+     "veh": 2,
+     "cmax": 262
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp5",
+     "veh": 2,
+     "cmax": 194
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp6",
+     "veh": 2,
+     "cmax": 272
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp7",
+     "veh": 2,
+     "cmax": 274
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp8",
+     "veh": 2,
+     "cmax": 370
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp9",
+     "veh": 2,
+     "cmax": 236
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp10",
+     "veh": 2,
+     "cmax": 334
+    }
+   ]
+  },
+  "BALANCED (\uc9e7\uc740 \ud050 = \ubd80\ud558\ubd84\uc0b0\ub9cc)": {
+   "all": 72.14,
+   "dauzere": 76.6,
+   "deroussi": 48.07,
+   "runs": [
+    {
+     "family": "dauzere",
+     "stem": "01a",
+     "veh": 2,
+     "cmax": 4326
+    },
+    {
+     "family": "dauzere",
+     "stem": "01a",
+     "veh": 4,
+     "cmax": 3508
+    },
+    {
+     "family": "dauzere",
+     "stem": "01a",
+     "veh": 6,
+     "cmax": 3522
+    },
+    {
+     "family": "dauzere",
+     "stem": "02a",
+     "veh": 2,
+     "cmax": 4186
+    },
+    {
+     "family": "dauzere",
+     "stem": "02a",
+     "veh": 4,
+     "cmax": 3102
+    },
+    {
+     "family": "dauzere",
+     "stem": "02a",
+     "veh": 6,
+     "cmax": 3447
+    },
+    {
+     "family": "dauzere",
+     "stem": "03a",
+     "veh": 2,
+     "cmax": 4163
+    },
+    {
+     "family": "dauzere",
+     "stem": "03a",
+     "veh": 4,
+     "cmax": 2976
+    },
+    {
+     "family": "dauzere",
+     "stem": "03a",
+     "veh": 6,
+     "cmax": 3216
+    },
+    {
+     "family": "dauzere",
+     "stem": "04a",
+     "veh": 2,
+     "cmax": 3984
+    },
+    {
+     "family": "dauzere",
+     "stem": "04a",
+     "veh": 4,
+     "cmax": 3435
+    },
+    {
+     "family": "dauzere",
+     "stem": "04a",
+     "veh": 6,
+     "cmax": 3576
+    },
+    {
+     "family": "dauzere",
+     "stem": "05a",
+     "veh": 2,
+     "cmax": 3979
+    },
+    {
+     "family": "dauzere",
+     "stem": "05a",
+     "veh": 4,
+     "cmax": 3695
+    },
+    {
+     "family": "dauzere",
+     "stem": "05a",
+     "veh": 6,
+     "cmax": 3175
+    },
+    {
+     "family": "dauzere",
+     "stem": "06a",
+     "veh": 2,
+     "cmax": 4137
+    },
+    {
+     "family": "dauzere",
+     "stem": "06a",
+     "veh": 4,
+     "cmax": 3127
+    },
+    {
+     "family": "dauzere",
+     "stem": "06a",
+     "veh": 6,
+     "cmax": 3088
+    },
+    {
+     "family": "dauzere",
+     "stem": "07a",
+     "veh": 2,
+     "cmax": 6828
+    },
+    {
+     "family": "dauzere",
+     "stem": "07a",
+     "veh": 4,
+     "cmax": 4047
+    },
+    {
+     "family": "dauzere",
+     "stem": "07a",
+     "veh": 6,
+     "cmax": 3742
+    },
+    {
+     "family": "dauzere",
+     "stem": "08a",
+     "veh": 2,
+     "cmax": 6847
+    },
+    {
+     "family": "dauzere",
+     "stem": "08a",
+     "veh": 4,
+     "cmax": 4060
+    },
+    {
+     "family": "dauzere",
+     "stem": "08a",
+     "veh": 6,
+     "cmax": 3492
+    },
+    {
+     "family": "dauzere",
+     "stem": "09a",
+     "veh": 2,
+     "cmax": 6861
+    },
+    {
+     "family": "dauzere",
+     "stem": "09a",
+     "veh": 4,
+     "cmax": 4072
+    },
+    {
+     "family": "dauzere",
+     "stem": "09a",
+     "veh": 6,
+     "cmax": 3633
+    },
+    {
+     "family": "dauzere",
+     "stem": "10a",
+     "veh": 2,
+     "cmax": 6969
+    },
+    {
+     "family": "dauzere",
+     "stem": "10a",
+     "veh": 4,
+     "cmax": 3987
+    },
+    {
+     "family": "dauzere",
+     "stem": "10a",
+     "veh": 6,
+     "cmax": 3646
+    },
+    {
+     "family": "dauzere",
+     "stem": "11a",
+     "veh": 2,
+     "cmax": 6977
+    },
+    {
+     "family": "dauzere",
+     "stem": "11a",
+     "veh": 4,
+     "cmax": 4221
+    },
+    {
+     "family": "dauzere",
+     "stem": "11a",
+     "veh": 6,
+     "cmax": 3220
+    },
+    {
+     "family": "dauzere",
+     "stem": "12a",
+     "veh": 2,
+     "cmax": 6500
+    },
+    {
+     "family": "dauzere",
+     "stem": "12a",
+     "veh": 4,
+     "cmax": 4206
+    },
+    {
+     "family": "dauzere",
+     "stem": "12a",
+     "veh": 6,
+     "cmax": 3472
+    },
+    {
+     "family": "dauzere",
+     "stem": "13a",
+     "veh": 2,
+     "cmax": 11242
+    },
+    {
+     "family": "dauzere",
+     "stem": "13a",
+     "veh": 4,
+     "cmax": 6062
+    },
+    {
+     "family": "dauzere",
+     "stem": "13a",
+     "veh": 6,
+     "cmax": 4405
+    },
+    {
+     "family": "dauzere",
+     "stem": "14a",
+     "veh": 2,
+     "cmax": 9882
+    },
+    {
+     "family": "dauzere",
+     "stem": "14a",
+     "veh": 4,
+     "cmax": 5646
+    },
+    {
+     "family": "dauzere",
+     "stem": "14a",
+     "veh": 6,
+     "cmax": 4371
+    },
+    {
+     "family": "dauzere",
+     "stem": "15a",
+     "veh": 2,
+     "cmax": 9647
+    },
+    {
+     "family": "dauzere",
+     "stem": "15a",
+     "veh": 4,
+     "cmax": 5662
+    },
+    {
+     "family": "dauzere",
+     "stem": "15a",
+     "veh": 6,
+     "cmax": 4211
+    },
+    {
+     "family": "dauzere",
+     "stem": "16a",
+     "veh": 2,
+     "cmax": 11141
+    },
+    {
+     "family": "dauzere",
+     "stem": "16a",
+     "veh": 4,
+     "cmax": 5876
+    },
+    {
+     "family": "dauzere",
+     "stem": "16a",
+     "veh": 6,
+     "cmax": 4290
+    },
+    {
+     "family": "dauzere",
+     "stem": "17a",
+     "veh": 2,
+     "cmax": 10221
+    },
+    {
+     "family": "dauzere",
+     "stem": "17a",
+     "veh": 4,
+     "cmax": 5696
+    },
+    {
+     "family": "dauzere",
+     "stem": "17a",
+     "veh": 6,
+     "cmax": 4343
+    },
+    {
+     "family": "dauzere",
+     "stem": "18a",
+     "veh": 2,
+     "cmax": 9680
+    },
+    {
+     "family": "dauzere",
+     "stem": "18a",
+     "veh": 4,
+     "cmax": 5492
+    },
+    {
+     "family": "dauzere",
+     "stem": "18a",
+     "veh": 6,
+     "cmax": 4360
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp1",
+     "veh": 2,
+     "cmax": 192
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp2",
+     "veh": 2,
+     "cmax": 166
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp3",
+     "veh": 2,
+     "cmax": 216
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp4",
+     "veh": 2,
+     "cmax": 182
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp5",
+     "veh": 2,
+     "cmax": 108
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp6",
+     "veh": 2,
+     "cmax": 232
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp7",
+     "veh": 2,
+     "cmax": 182
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp8",
+     "veh": 2,
+     "cmax": 236
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp9",
+     "veh": 2,
+     "cmax": 196
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp10",
+     "veh": 2,
+     "cmax": 240
+    }
+   ]
+  },
+  "HAND (\uc190\uaddc\uce59 4\uac1c)": {
+   "all": 145.2,
+   "dauzere": 157.68,
+   "deroussi": 77.78,
+   "runs": [
+    {
+     "family": "dauzere",
+     "stem": "01a",
+     "veh": 2,
+     "cmax": 4697
+    },
+    {
+     "family": "dauzere",
+     "stem": "01a",
+     "veh": 4,
+     "cmax": 3783
+    },
+    {
+     "family": "dauzere",
+     "stem": "01a",
+     "veh": 6,
+     "cmax": 3759
+    },
+    {
+     "family": "dauzere",
+     "stem": "02a",
+     "veh": 2,
+     "cmax": 4933
+    },
+    {
+     "family": "dauzere",
+     "stem": "02a",
+     "veh": 4,
+     "cmax": 3703
+    },
+    {
+     "family": "dauzere",
+     "stem": "02a",
+     "veh": 6,
+     "cmax": 3498
+    },
+    {
+     "family": "dauzere",
+     "stem": "03a",
+     "veh": 2,
+     "cmax": 5119
+    },
+    {
+     "family": "dauzere",
+     "stem": "03a",
+     "veh": 4,
+     "cmax": 3587
+    },
+    {
+     "family": "dauzere",
+     "stem": "03a",
+     "veh": 6,
+     "cmax": 3454
+    },
+    {
+     "family": "dauzere",
+     "stem": "04a",
+     "veh": 2,
+     "cmax": 4320
+    },
+    {
+     "family": "dauzere",
+     "stem": "04a",
+     "veh": 4,
+     "cmax": 4135
+    },
+    {
+     "family": "dauzere",
+     "stem": "04a",
+     "veh": 6,
+     "cmax": 3841
+    },
+    {
+     "family": "dauzere",
+     "stem": "05a",
+     "veh": 2,
+     "cmax": 5266
+    },
+    {
+     "family": "dauzere",
+     "stem": "05a",
+     "veh": 4,
+     "cmax": 4214
+    },
+    {
+     "family": "dauzere",
+     "stem": "05a",
+     "veh": 6,
+     "cmax": 3534
+    },
+    {
+     "family": "dauzere",
+     "stem": "06a",
+     "veh": 2,
+     "cmax": 5159
+    },
+    {
+     "family": "dauzere",
+     "stem": "06a",
+     "veh": 4,
+     "cmax": 4354
+    },
+    {
+     "family": "dauzere",
+     "stem": "06a",
+     "veh": 6,
+     "cmax": 3565
+    },
+    {
+     "family": "dauzere",
+     "stem": "07a",
+     "veh": 2,
+     "cmax": 7399
+    },
+    {
+     "family": "dauzere",
+     "stem": "07a",
+     "veh": 4,
+     "cmax": 6457
+    },
+    {
+     "family": "dauzere",
+     "stem": "07a",
+     "veh": 6,
+     "cmax": 4425
+    },
+    {
+     "family": "dauzere",
+     "stem": "08a",
+     "veh": 2,
+     "cmax": 9010
+    },
+    {
+     "family": "dauzere",
+     "stem": "08a",
+     "veh": 4,
+     "cmax": 6701
+    },
+    {
+     "family": "dauzere",
+     "stem": "08a",
+     "veh": 6,
+     "cmax": 6259
+    },
+    {
+     "family": "dauzere",
+     "stem": "09a",
+     "veh": 2,
+     "cmax": 10825
+    },
+    {
+     "family": "dauzere",
+     "stem": "09a",
+     "veh": 4,
+     "cmax": 5989
+    },
+    {
+     "family": "dauzere",
+     "stem": "09a",
+     "veh": 6,
+     "cmax": 5638
+    },
+    {
+     "family": "dauzere",
+     "stem": "10a",
+     "veh": 2,
+     "cmax": 7900
+    },
+    {
+     "family": "dauzere",
+     "stem": "10a",
+     "veh": 4,
+     "cmax": 6022
+    },
+    {
+     "family": "dauzere",
+     "stem": "10a",
+     "veh": 6,
+     "cmax": 4829
+    },
+    {
+     "family": "dauzere",
+     "stem": "11a",
+     "veh": 2,
+     "cmax": 10205
+    },
+    {
+     "family": "dauzere",
+     "stem": "11a",
+     "veh": 4,
+     "cmax": 7354
+    },
+    {
+     "family": "dauzere",
+     "stem": "11a",
+     "veh": 6,
+     "cmax": 4990
+    },
+    {
+     "family": "dauzere",
+     "stem": "12a",
+     "veh": 2,
+     "cmax": 9942
+    },
+    {
+     "family": "dauzere",
+     "stem": "12a",
+     "veh": 4,
+     "cmax": 6806
+    },
+    {
+     "family": "dauzere",
+     "stem": "12a",
+     "veh": 6,
+     "cmax": 5142
+    },
+    {
+     "family": "dauzere",
+     "stem": "13a",
+     "veh": 2,
+     "cmax": 14761
+    },
+    {
+     "family": "dauzere",
+     "stem": "13a",
+     "veh": 4,
+     "cmax": 8688
+    },
+    {
+     "family": "dauzere",
+     "stem": "13a",
+     "veh": 6,
+     "cmax": 6060
+    },
+    {
+     "family": "dauzere",
+     "stem": "14a",
+     "veh": 2,
+     "cmax": 14600
+    },
+    {
+     "family": "dauzere",
+     "stem": "14a",
+     "veh": 4,
+     "cmax": 9662
+    },
+    {
+     "family": "dauzere",
+     "stem": "14a",
+     "veh": 6,
+     "cmax": 7353
+    },
+    {
+     "family": "dauzere",
+     "stem": "15a",
+     "veh": 2,
+     "cmax": 14513
+    },
+    {
+     "family": "dauzere",
+     "stem": "15a",
+     "veh": 4,
+     "cmax": 10488
+    },
+    {
+     "family": "dauzere",
+     "stem": "15a",
+     "veh": 6,
+     "cmax": 8526
+    },
+    {
+     "family": "dauzere",
+     "stem": "16a",
+     "veh": 2,
+     "cmax": 14916
+    },
+    {
+     "family": "dauzere",
+     "stem": "16a",
+     "veh": 4,
+     "cmax": 9663
+    },
+    {
+     "family": "dauzere",
+     "stem": "16a",
+     "veh": 6,
+     "cmax": 7225
+    },
+    {
+     "family": "dauzere",
+     "stem": "17a",
+     "veh": 2,
+     "cmax": 16380
+    },
+    {
+     "family": "dauzere",
+     "stem": "17a",
+     "veh": 4,
+     "cmax": 9946
+    },
+    {
+     "family": "dauzere",
+     "stem": "17a",
+     "veh": 6,
+     "cmax": 6997
+    },
+    {
+     "family": "dauzere",
+     "stem": "18a",
+     "veh": 2,
+     "cmax": 16000
+    },
+    {
+     "family": "dauzere",
+     "stem": "18a",
+     "veh": 4,
+     "cmax": 10833
+    },
+    {
+     "family": "dauzere",
+     "stem": "18a",
+     "veh": 6,
+     "cmax": 7839
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp1",
+     "veh": 2,
+     "cmax": 262
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp2",
+     "veh": 2,
+     "cmax": 200
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp3",
+     "veh": 2,
+     "cmax": 212
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp4",
+     "veh": 2,
+     "cmax": 218
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp5",
+     "veh": 2,
+     "cmax": 172
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp6",
+     "veh": 2,
+     "cmax": 212
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp7",
+     "veh": 2,
+     "cmax": 232
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp8",
+     "veh": 2,
+     "cmax": 278
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp9",
+     "veh": 2,
+     "cmax": 278
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp10",
+     "veh": 2,
+     "cmax": 254
+    }
+   ]
+  },
+  "machine_select \ub9cc BALANCED": {
+   "all": 109.14,
+   "dauzere": 114.7,
+   "deroussi": 79.11,
+   "runs": [
+    {
+     "family": "dauzere",
+     "stem": "01a",
+     "veh": 2,
+     "cmax": 5043
+    },
+    {
+     "family": "dauzere",
+     "stem": "01a",
+     "veh": 4,
+     "cmax": 3756
+    },
+    {
+     "family": "dauzere",
+     "stem": "01a",
+     "veh": 6,
+     "cmax": 3772
+    },
+    {
+     "family": "dauzere",
+     "stem": "02a",
+     "veh": 2,
+     "cmax": 4566
+    },
+    {
+     "family": "dauzere",
+     "stem": "02a",
+     "veh": 4,
+     "cmax": 3466
+    },
+    {
+     "family": "dauzere",
+     "stem": "02a",
+     "veh": 6,
+     "cmax": 3287
+    },
+    {
+     "family": "dauzere",
+     "stem": "03a",
+     "veh": 2,
+     "cmax": 4446
+    },
+    {
+     "family": "dauzere",
+     "stem": "03a",
+     "veh": 4,
+     "cmax": 3252
+    },
+    {
+     "family": "dauzere",
+     "stem": "03a",
+     "veh": 6,
+     "cmax": 2898
+    },
+    {
+     "family": "dauzere",
+     "stem": "04a",
+     "veh": 2,
+     "cmax": 4595
+    },
+    {
+     "family": "dauzere",
+     "stem": "04a",
+     "veh": 4,
+     "cmax": 3907
+    },
+    {
+     "family": "dauzere",
+     "stem": "04a",
+     "veh": 6,
+     "cmax": 3567
+    },
+    {
+     "family": "dauzere",
+     "stem": "05a",
+     "veh": 2,
+     "cmax": 4447
+    },
+    {
+     "family": "dauzere",
+     "stem": "05a",
+     "veh": 4,
+     "cmax": 3825
+    },
+    {
+     "family": "dauzere",
+     "stem": "05a",
+     "veh": 6,
+     "cmax": 3173
+    },
+    {
+     "family": "dauzere",
+     "stem": "06a",
+     "veh": 2,
+     "cmax": 4593
+    },
+    {
+     "family": "dauzere",
+     "stem": "06a",
+     "veh": 4,
+     "cmax": 3086
+    },
+    {
+     "family": "dauzere",
+     "stem": "06a",
+     "veh": 6,
+     "cmax": 2896
+    },
+    {
+     "family": "dauzere",
+     "stem": "07a",
+     "veh": 2,
+     "cmax": 8471
+    },
+    {
+     "family": "dauzere",
+     "stem": "07a",
+     "veh": 4,
+     "cmax": 6036
+    },
+    {
+     "family": "dauzere",
+     "stem": "07a",
+     "veh": 6,
+     "cmax": 4329
+    },
+    {
+     "family": "dauzere",
+     "stem": "08a",
+     "veh": 2,
+     "cmax": 8930
+    },
+    {
+     "family": "dauzere",
+     "stem": "08a",
+     "veh": 4,
+     "cmax": 6157
+    },
+    {
+     "family": "dauzere",
+     "stem": "08a",
+     "veh": 6,
+     "cmax": 3947
+    },
+    {
+     "family": "dauzere",
+     "stem": "09a",
+     "veh": 2,
+     "cmax": 7888
+    },
+    {
+     "family": "dauzere",
+     "stem": "09a",
+     "veh": 4,
+     "cmax": 5890
+    },
+    {
+     "family": "dauzere",
+     "stem": "09a",
+     "veh": 6,
+     "cmax": 4175
+    },
+    {
+     "family": "dauzere",
+     "stem": "10a",
+     "veh": 2,
+     "cmax": 8772
+    },
+    {
+     "family": "dauzere",
+     "stem": "10a",
+     "veh": 4,
+     "cmax": 5294
+    },
+    {
+     "family": "dauzere",
+     "stem": "10a",
+     "veh": 6,
+     "cmax": 4425
+    },
+    {
+     "family": "dauzere",
+     "stem": "11a",
+     "veh": 2,
+     "cmax": 8693
+    },
+    {
+     "family": "dauzere",
+     "stem": "11a",
+     "veh": 4,
+     "cmax": 6574
+    },
+    {
+     "family": "dauzere",
+     "stem": "11a",
+     "veh": 6,
+     "cmax": 4192
+    },
+    {
+     "family": "dauzere",
+     "stem": "12a",
+     "veh": 2,
+     "cmax": 7428
+    },
+    {
+     "family": "dauzere",
+     "stem": "12a",
+     "veh": 4,
+     "cmax": 5103
+    },
+    {
+     "family": "dauzere",
+     "stem": "12a",
+     "veh": 6,
+     "cmax": 4389
+    },
+    {
+     "family": "dauzere",
+     "stem": "13a",
+     "veh": 2,
+     "cmax": 13646
+    },
+    {
+     "family": "dauzere",
+     "stem": "13a",
+     "veh": 4,
+     "cmax": 8036
+    },
+    {
+     "family": "dauzere",
+     "stem": "13a",
+     "veh": 6,
+     "cmax": 6251
+    },
+    {
+     "family": "dauzere",
+     "stem": "14a",
+     "veh": 2,
+     "cmax": 11078
+    },
+    {
+     "family": "dauzere",
+     "stem": "14a",
+     "veh": 4,
+     "cmax": 8636
+    },
+    {
+     "family": "dauzere",
+     "stem": "14a",
+     "veh": 6,
+     "cmax": 6492
+    },
+    {
+     "family": "dauzere",
+     "stem": "15a",
+     "veh": 2,
+     "cmax": 9904
+    },
+    {
+     "family": "dauzere",
+     "stem": "15a",
+     "veh": 4,
+     "cmax": 6442
+    },
+    {
+     "family": "dauzere",
+     "stem": "15a",
+     "veh": 6,
+     "cmax": 5672
+    },
+    {
+     "family": "dauzere",
+     "stem": "16a",
+     "veh": 2,
+     "cmax": 14335
+    },
+    {
+     "family": "dauzere",
+     "stem": "16a",
+     "veh": 4,
+     "cmax": 9196
+    },
+    {
+     "family": "dauzere",
+     "stem": "16a",
+     "veh": 6,
+     "cmax": 6668
+    },
+    {
+     "family": "dauzere",
+     "stem": "17a",
+     "veh": 2,
+     "cmax": 11805
+    },
+    {
+     "family": "dauzere",
+     "stem": "17a",
+     "veh": 4,
+     "cmax": 8070
+    },
+    {
+     "family": "dauzere",
+     "stem": "17a",
+     "veh": 6,
+     "cmax": 5410
+    },
+    {
+     "family": "dauzere",
+     "stem": "18a",
+     "veh": 2,
+     "cmax": 9852
+    },
+    {
+     "family": "dauzere",
+     "stem": "18a",
+     "veh": 4,
+     "cmax": 7472
+    },
+    {
+     "family": "dauzere",
+     "stem": "18a",
+     "veh": 6,
+     "cmax": 5196
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp1",
+     "veh": 2,
+     "cmax": 262
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp2",
+     "veh": 2,
+     "cmax": 206
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp3",
+     "veh": 2,
+     "cmax": 226
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp4",
+     "veh": 2,
+     "cmax": 218
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp5",
+     "veh": 2,
+     "cmax": 174
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp6",
+     "veh": 2,
+     "cmax": 222
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp7",
+     "veh": 2,
+     "cmax": 230
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp8",
+     "veh": 2,
+     "cmax": 258
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp9",
+     "veh": 2,
+     "cmax": 278
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp10",
+     "veh": 2,
+     "cmax": 254
+    }
+   ]
+  },
+  "op_sequence \ub9cc BALANCED": {
+   "all": 153.06,
+   "dauzere": 167.01,
+   "deroussi": 77.78,
+   "runs": [
+    {
+     "family": "dauzere",
+     "stem": "01a",
+     "veh": 2,
+     "cmax": 4352
+    },
+    {
+     "family": "dauzere",
+     "stem": "01a",
+     "veh": 4,
+     "cmax": 4217
+    },
+    {
+     "family": "dauzere",
+     "stem": "01a",
+     "veh": 6,
+     "cmax": 4073
+    },
+    {
+     "family": "dauzere",
+     "stem": "02a",
+     "veh": 2,
+     "cmax": 4707
+    },
+    {
+     "family": "dauzere",
+     "stem": "02a",
+     "veh": 4,
+     "cmax": 3966
+    },
+    {
+     "family": "dauzere",
+     "stem": "02a",
+     "veh": 6,
+     "cmax": 3522
+    },
+    {
+     "family": "dauzere",
+     "stem": "03a",
+     "veh": 2,
+     "cmax": 5407
+    },
+    {
+     "family": "dauzere",
+     "stem": "03a",
+     "veh": 4,
+     "cmax": 3877
+    },
+    {
+     "family": "dauzere",
+     "stem": "03a",
+     "veh": 6,
+     "cmax": 3964
+    },
+    {
+     "family": "dauzere",
+     "stem": "04a",
+     "veh": 2,
+     "cmax": 5045
+    },
+    {
+     "family": "dauzere",
+     "stem": "04a",
+     "veh": 4,
+     "cmax": 4072
+    },
+    {
+     "family": "dauzere",
+     "stem": "04a",
+     "veh": 6,
+     "cmax": 3906
+    },
+    {
+     "family": "dauzere",
+     "stem": "05a",
+     "veh": 2,
+     "cmax": 5179
+    },
+    {
+     "family": "dauzere",
+     "stem": "05a",
+     "veh": 4,
+     "cmax": 3901
+    },
+    {
+     "family": "dauzere",
+     "stem": "05a",
+     "veh": 6,
+     "cmax": 3665
+    },
+    {
+     "family": "dauzere",
+     "stem": "06a",
+     "veh": 2,
+     "cmax": 4903
+    },
+    {
+     "family": "dauzere",
+     "stem": "06a",
+     "veh": 4,
+     "cmax": 3889
+    },
+    {
+     "family": "dauzere",
+     "stem": "06a",
+     "veh": 6,
+     "cmax": 3583
+    },
+    {
+     "family": "dauzere",
+     "stem": "07a",
+     "veh": 2,
+     "cmax": 8327
+    },
+    {
+     "family": "dauzere",
+     "stem": "07a",
+     "veh": 4,
+     "cmax": 5511
+    },
+    {
+     "family": "dauzere",
+     "stem": "07a",
+     "veh": 6,
+     "cmax": 4790
+    },
+    {
+     "family": "dauzere",
+     "stem": "08a",
+     "veh": 2,
+     "cmax": 10569
+    },
+    {
+     "family": "dauzere",
+     "stem": "08a",
+     "veh": 4,
+     "cmax": 6923
+    },
+    {
+     "family": "dauzere",
+     "stem": "08a",
+     "veh": 6,
+     "cmax": 6427
+    },
+    {
+     "family": "dauzere",
+     "stem": "09a",
+     "veh": 2,
+     "cmax": 10825
+    },
+    {
+     "family": "dauzere",
+     "stem": "09a",
+     "veh": 4,
+     "cmax": 6938
+    },
+    {
+     "family": "dauzere",
+     "stem": "09a",
+     "veh": 6,
+     "cmax": 6939
+    },
+    {
+     "family": "dauzere",
+     "stem": "10a",
+     "veh": 2,
+     "cmax": 9513
+    },
+    {
+     "family": "dauzere",
+     "stem": "10a",
+     "veh": 4,
+     "cmax": 5507
+    },
+    {
+     "family": "dauzere",
+     "stem": "10a",
+     "veh": 6,
+     "cmax": 5202
+    },
+    {
+     "family": "dauzere",
+     "stem": "11a",
+     "veh": 2,
+     "cmax": 10205
+    },
+    {
+     "family": "dauzere",
+     "stem": "11a",
+     "veh": 4,
+     "cmax": 7636
+    },
+    {
+     "family": "dauzere",
+     "stem": "11a",
+     "veh": 6,
+     "cmax": 4236
+    },
+    {
+     "family": "dauzere",
+     "stem": "12a",
+     "veh": 2,
+     "cmax": 8936
+    },
+    {
+     "family": "dauzere",
+     "stem": "12a",
+     "veh": 4,
+     "cmax": 7634
+    },
+    {
+     "family": "dauzere",
+     "stem": "12a",
+     "veh": 6,
+     "cmax": 5929
+    },
+    {
+     "family": "dauzere",
+     "stem": "13a",
+     "veh": 2,
+     "cmax": 11774
+    },
+    {
+     "family": "dauzere",
+     "stem": "13a",
+     "veh": 4,
+     "cmax": 8849
+    },
+    {
+     "family": "dauzere",
+     "stem": "13a",
+     "veh": 6,
+     "cmax": 7157
+    },
+    {
+     "family": "dauzere",
+     "stem": "14a",
+     "veh": 2,
+     "cmax": 15008
+    },
+    {
+     "family": "dauzere",
+     "stem": "14a",
+     "veh": 4,
+     "cmax": 11033
+    },
+    {
+     "family": "dauzere",
+     "stem": "14a",
+     "veh": 6,
+     "cmax": 7587
+    },
+    {
+     "family": "dauzere",
+     "stem": "15a",
+     "veh": 2,
+     "cmax": 14513
+    },
+    {
+     "family": "dauzere",
+     "stem": "15a",
+     "veh": 4,
+     "cmax": 10382
+    },
+    {
+     "family": "dauzere",
+     "stem": "15a",
+     "veh": 6,
+     "cmax": 9350
+    },
+    {
+     "family": "dauzere",
+     "stem": "16a",
+     "veh": 2,
+     "cmax": 14916
+    },
+    {
+     "family": "dauzere",
+     "stem": "16a",
+     "veh": 4,
+     "cmax": 8363
+    },
+    {
+     "family": "dauzere",
+     "stem": "16a",
+     "veh": 6,
+     "cmax": 7563
+    },
+    {
+     "family": "dauzere",
+     "stem": "17a",
+     "veh": 2,
+     "cmax": 16380
+    },
+    {
+     "family": "dauzere",
+     "stem": "17a",
+     "veh": 4,
+     "cmax": 9817
+    },
+    {
+     "family": "dauzere",
+     "stem": "17a",
+     "veh": 6,
+     "cmax": 9339
+    },
+    {
+     "family": "dauzere",
+     "stem": "18a",
+     "veh": 2,
+     "cmax": 16000
+    },
+    {
+     "family": "dauzere",
+     "stem": "18a",
+     "veh": 4,
+     "cmax": 11458
+    },
+    {
+     "family": "dauzere",
+     "stem": "18a",
+     "veh": 6,
+     "cmax": 8835
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp1",
+     "veh": 2,
+     "cmax": 262
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp2",
+     "veh": 2,
+     "cmax": 200
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp3",
+     "veh": 2,
+     "cmax": 212
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp4",
+     "veh": 2,
+     "cmax": 218
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp5",
+     "veh": 2,
+     "cmax": 172
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp6",
+     "veh": 2,
+     "cmax": 212
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp7",
+     "veh": 2,
+     "cmax": 232
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp8",
+     "veh": 2,
+     "cmax": 278
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp9",
+     "veh": 2,
+     "cmax": 278
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp10",
+     "veh": 2,
+     "cmax": 254
+    }
+   ]
+  },
+  "vehicle_select \ub9cc BALANCED": {
+   "all": 84.32,
+   "dauzere": 91.77,
+   "deroussi": 44.07,
+   "runs": [
+    {
+     "family": "dauzere",
+     "stem": "01a",
+     "veh": 2,
+     "cmax": 3889
+    },
+    {
+     "family": "dauzere",
+     "stem": "01a",
+     "veh": 4,
+     "cmax": 3623
+    },
+    {
+     "family": "dauzere",
+     "stem": "01a",
+     "veh": 6,
+     "cmax": 3633
+    },
+    {
+     "family": "dauzere",
+     "stem": "02a",
+     "veh": 2,
+     "cmax": 4150
+    },
+    {
+     "family": "dauzere",
+     "stem": "02a",
+     "veh": 4,
+     "cmax": 3513
+    },
+    {
+     "family": "dauzere",
+     "stem": "02a",
+     "veh": 6,
+     "cmax": 3275
+    },
+    {
+     "family": "dauzere",
+     "stem": "03a",
+     "veh": 2,
+     "cmax": 4302
+    },
+    {
+     "family": "dauzere",
+     "stem": "03a",
+     "veh": 4,
+     "cmax": 3376
+    },
+    {
+     "family": "dauzere",
+     "stem": "03a",
+     "veh": 6,
+     "cmax": 3479
+    },
+    {
+     "family": "dauzere",
+     "stem": "04a",
+     "veh": 2,
+     "cmax": 3991
+    },
+    {
+     "family": "dauzere",
+     "stem": "04a",
+     "veh": 4,
+     "cmax": 3529
+    },
+    {
+     "family": "dauzere",
+     "stem": "04a",
+     "veh": 6,
+     "cmax": 3740
+    },
+    {
+     "family": "dauzere",
+     "stem": "05a",
+     "veh": 2,
+     "cmax": 4211
+    },
+    {
+     "family": "dauzere",
+     "stem": "05a",
+     "veh": 4,
+     "cmax": 3533
+    },
+    {
+     "family": "dauzere",
+     "stem": "05a",
+     "veh": 6,
+     "cmax": 3138
+    },
+    {
+     "family": "dauzere",
+     "stem": "06a",
+     "veh": 2,
+     "cmax": 4049
+    },
+    {
+     "family": "dauzere",
+     "stem": "06a",
+     "veh": 4,
+     "cmax": 3776
+    },
+    {
+     "family": "dauzere",
+     "stem": "06a",
+     "veh": 6,
+     "cmax": 3459
+    },
+    {
+     "family": "dauzere",
+     "stem": "07a",
+     "veh": 2,
+     "cmax": 7042
+    },
+    {
+     "family": "dauzere",
+     "stem": "07a",
+     "veh": 4,
+     "cmax": 3921
+    },
+    {
+     "family": "dauzere",
+     "stem": "07a",
+     "veh": 6,
+     "cmax": 3738
+    },
+    {
+     "family": "dauzere",
+     "stem": "08a",
+     "veh": 2,
+     "cmax": 7935
+    },
+    {
+     "family": "dauzere",
+     "stem": "08a",
+     "veh": 4,
+     "cmax": 4180
+    },
+    {
+     "family": "dauzere",
+     "stem": "08a",
+     "veh": 6,
+     "cmax": 3441
+    },
+    {
+     "family": "dauzere",
+     "stem": "09a",
+     "veh": 2,
+     "cmax": 7932
+    },
+    {
+     "family": "dauzere",
+     "stem": "09a",
+     "veh": 4,
+     "cmax": 4731
+    },
+    {
+     "family": "dauzere",
+     "stem": "09a",
+     "veh": 6,
+     "cmax": 3728
+    },
+    {
+     "family": "dauzere",
+     "stem": "10a",
+     "veh": 2,
+     "cmax": 7058
+    },
+    {
+     "family": "dauzere",
+     "stem": "10a",
+     "veh": 4,
+     "cmax": 3966
+    },
+    {
+     "family": "dauzere",
+     "stem": "10a",
+     "veh": 6,
+     "cmax": 3517
+    },
+    {
+     "family": "dauzere",
+     "stem": "11a",
+     "veh": 2,
+     "cmax": 7870
+    },
+    {
+     "family": "dauzere",
+     "stem": "11a",
+     "veh": 4,
+     "cmax": 4999
+    },
+    {
+     "family": "dauzere",
+     "stem": "11a",
+     "veh": 6,
+     "cmax": 3463
+    },
+    {
+     "family": "dauzere",
+     "stem": "12a",
+     "veh": 2,
+     "cmax": 8317
+    },
+    {
+     "family": "dauzere",
+     "stem": "12a",
+     "veh": 4,
+     "cmax": 4662
+    },
+    {
+     "family": "dauzere",
+     "stem": "12a",
+     "veh": 6,
+     "cmax": 3624
+    },
+    {
+     "family": "dauzere",
+     "stem": "13a",
+     "veh": 2,
+     "cmax": 10843
+    },
+    {
+     "family": "dauzere",
+     "stem": "13a",
+     "veh": 4,
+     "cmax": 5675
+    },
+    {
+     "family": "dauzere",
+     "stem": "13a",
+     "veh": 6,
+     "cmax": 4319
+    },
+    {
+     "family": "dauzere",
+     "stem": "14a",
+     "veh": 2,
+     "cmax": 10934
+    },
+    {
+     "family": "dauzere",
+     "stem": "14a",
+     "veh": 4,
+     "cmax": 7005
+    },
+    {
+     "family": "dauzere",
+     "stem": "14a",
+     "veh": 6,
+     "cmax": 4404
+    },
+    {
+     "family": "dauzere",
+     "stem": "15a",
+     "veh": 2,
+     "cmax": 11706
+    },
+    {
+     "family": "dauzere",
+     "stem": "15a",
+     "veh": 4,
+     "cmax": 6320
+    },
+    {
+     "family": "dauzere",
+     "stem": "15a",
+     "veh": 6,
+     "cmax": 4675
+    },
+    {
+     "family": "dauzere",
+     "stem": "16a",
+     "veh": 2,
+     "cmax": 11337
+    },
+    {
+     "family": "dauzere",
+     "stem": "16a",
+     "veh": 4,
+     "cmax": 5844
+    },
+    {
+     "family": "dauzere",
+     "stem": "16a",
+     "veh": 6,
+     "cmax": 4493
+    },
+    {
+     "family": "dauzere",
+     "stem": "17a",
+     "veh": 2,
+     "cmax": 11100
+    },
+    {
+     "family": "dauzere",
+     "stem": "17a",
+     "veh": 4,
+     "cmax": 6925
+    },
+    {
+     "family": "dauzere",
+     "stem": "17a",
+     "veh": 6,
+     "cmax": 4933
+    },
+    {
+     "family": "dauzere",
+     "stem": "18a",
+     "veh": 2,
+     "cmax": 12329
+    },
+    {
+     "family": "dauzere",
+     "stem": "18a",
+     "veh": 4,
+     "cmax": 6549
+    },
+    {
+     "family": "dauzere",
+     "stem": "18a",
+     "veh": 6,
+     "cmax": 5250
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp1",
+     "veh": 2,
+     "cmax": 192
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp2",
+     "veh": 2,
+     "cmax": 160
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp3",
+     "veh": 2,
+     "cmax": 202
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp4",
+     "veh": 2,
+     "cmax": 158
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp5",
+     "veh": 2,
+     "cmax": 124
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp6",
+     "veh": 2,
+     "cmax": 200
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp7",
+     "veh": 2,
+     "cmax": 192
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp8",
+     "veh": 2,
+     "cmax": 223
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp9",
+     "veh": 2,
+     "cmax": 208
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp10",
+     "veh": 2,
+     "cmax": 230
+    }
+   ]
+  },
+  "task_sequence \ub9cc BALANCED": {
+   "all": 149.09,
+   "dauzere": 159.64,
+   "deroussi": 92.09,
+   "runs": [
+    {
+     "family": "dauzere",
+     "stem": "01a",
+     "veh": 2,
+     "cmax": 4681
+    },
+    {
+     "family": "dauzere",
+     "stem": "01a",
+     "veh": 4,
+     "cmax": 3717
+    },
+    {
+     "family": "dauzere",
+     "stem": "01a",
+     "veh": 6,
+     "cmax": 3859
+    },
+    {
+     "family": "dauzere",
+     "stem": "02a",
+     "veh": 2,
+     "cmax": 5520
+    },
+    {
+     "family": "dauzere",
+     "stem": "02a",
+     "veh": 4,
+     "cmax": 3664
+    },
+    {
+     "family": "dauzere",
+     "stem": "02a",
+     "veh": 6,
+     "cmax": 3489
+    },
+    {
+     "family": "dauzere",
+     "stem": "03a",
+     "veh": 2,
+     "cmax": 5563
+    },
+    {
+     "family": "dauzere",
+     "stem": "03a",
+     "veh": 4,
+     "cmax": 4124
+    },
+    {
+     "family": "dauzere",
+     "stem": "03a",
+     "veh": 6,
+     "cmax": 3904
+    },
+    {
+     "family": "dauzere",
+     "stem": "04a",
+     "veh": 2,
+     "cmax": 5070
+    },
+    {
+     "family": "dauzere",
+     "stem": "04a",
+     "veh": 4,
+     "cmax": 4011
+    },
+    {
+     "family": "dauzere",
+     "stem": "04a",
+     "veh": 6,
+     "cmax": 3796
+    },
+    {
+     "family": "dauzere",
+     "stem": "05a",
+     "veh": 2,
+     "cmax": 5469
+    },
+    {
+     "family": "dauzere",
+     "stem": "05a",
+     "veh": 4,
+     "cmax": 3682
+    },
+    {
+     "family": "dauzere",
+     "stem": "05a",
+     "veh": 6,
+     "cmax": 3582
+    },
+    {
+     "family": "dauzere",
+     "stem": "06a",
+     "veh": 2,
+     "cmax": 5822
+    },
+    {
+     "family": "dauzere",
+     "stem": "06a",
+     "veh": 4,
+     "cmax": 4242
+    },
+    {
+     "family": "dauzere",
+     "stem": "06a",
+     "veh": 6,
+     "cmax": 3823
+    },
+    {
+     "family": "dauzere",
+     "stem": "07a",
+     "veh": 2,
+     "cmax": 9371
+    },
+    {
+     "family": "dauzere",
+     "stem": "07a",
+     "veh": 4,
+     "cmax": 5385
+    },
+    {
+     "family": "dauzere",
+     "stem": "07a",
+     "veh": 6,
+     "cmax": 4781
+    },
+    {
+     "family": "dauzere",
+     "stem": "08a",
+     "veh": 2,
+     "cmax": 9797
+    },
+    {
+     "family": "dauzere",
+     "stem": "08a",
+     "veh": 4,
+     "cmax": 6931
+    },
+    {
+     "family": "dauzere",
+     "stem": "08a",
+     "veh": 6,
+     "cmax": 5025
+    },
+    {
+     "family": "dauzere",
+     "stem": "09a",
+     "veh": 2,
+     "cmax": 10472
+    },
+    {
+     "family": "dauzere",
+     "stem": "09a",
+     "veh": 4,
+     "cmax": 6649
+    },
+    {
+     "family": "dauzere",
+     "stem": "09a",
+     "veh": 6,
+     "cmax": 5336
+    },
+    {
+     "family": "dauzere",
+     "stem": "10a",
+     "veh": 2,
+     "cmax": 8631
+    },
+    {
+     "family": "dauzere",
+     "stem": "10a",
+     "veh": 4,
+     "cmax": 6397
+    },
+    {
+     "family": "dauzere",
+     "stem": "10a",
+     "veh": 6,
+     "cmax": 4344
+    },
+    {
+     "family": "dauzere",
+     "stem": "11a",
+     "veh": 2,
+     "cmax": 10899
+    },
+    {
+     "family": "dauzere",
+     "stem": "11a",
+     "veh": 4,
+     "cmax": 6069
+    },
+    {
+     "family": "dauzere",
+     "stem": "11a",
+     "veh": 6,
+     "cmax": 5256
+    },
+    {
+     "family": "dauzere",
+     "stem": "12a",
+     "veh": 2,
+     "cmax": 10530
+    },
+    {
+     "family": "dauzere",
+     "stem": "12a",
+     "veh": 4,
+     "cmax": 6889
+    },
+    {
+     "family": "dauzere",
+     "stem": "12a",
+     "veh": 6,
+     "cmax": 5937
+    },
+    {
+     "family": "dauzere",
+     "stem": "13a",
+     "veh": 2,
+     "cmax": 13061
+    },
+    {
+     "family": "dauzere",
+     "stem": "13a",
+     "veh": 4,
+     "cmax": 8759
+    },
+    {
+     "family": "dauzere",
+     "stem": "13a",
+     "veh": 6,
+     "cmax": 6735
+    },
+    {
+     "family": "dauzere",
+     "stem": "14a",
+     "veh": 2,
+     "cmax": 14634
+    },
+    {
+     "family": "dauzere",
+     "stem": "14a",
+     "veh": 4,
+     "cmax": 10549
+    },
+    {
+     "family": "dauzere",
+     "stem": "14a",
+     "veh": 6,
+     "cmax": 7655
+    },
+    {
+     "family": "dauzere",
+     "stem": "15a",
+     "veh": 2,
+     "cmax": 14431
+    },
+    {
+     "family": "dauzere",
+     "stem": "15a",
+     "veh": 4,
+     "cmax": 11624
+    },
+    {
+     "family": "dauzere",
+     "stem": "15a",
+     "veh": 6,
+     "cmax": 7421
+    },
+    {
+     "family": "dauzere",
+     "stem": "16a",
+     "veh": 2,
+     "cmax": 13809
+    },
+    {
+     "family": "dauzere",
+     "stem": "16a",
+     "veh": 4,
+     "cmax": 8074
+    },
+    {
+     "family": "dauzere",
+     "stem": "16a",
+     "veh": 6,
+     "cmax": 6435
+    },
+    {
+     "family": "dauzere",
+     "stem": "17a",
+     "veh": 2,
+     "cmax": 12561
+    },
+    {
+     "family": "dauzere",
+     "stem": "17a",
+     "veh": 4,
+     "cmax": 10051
+    },
+    {
+     "family": "dauzere",
+     "stem": "17a",
+     "veh": 6,
+     "cmax": 6854
+    },
+    {
+     "family": "dauzere",
+     "stem": "18a",
+     "veh": 2,
+     "cmax": 15094
+    },
+    {
+     "family": "dauzere",
+     "stem": "18a",
+     "veh": 4,
+     "cmax": 11793
+    },
+    {
+     "family": "dauzere",
+     "stem": "18a",
+     "veh": 6,
+     "cmax": 8921
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp1",
+     "veh": 2,
+     "cmax": 284
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp2",
+     "veh": 2,
+     "cmax": 194
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp3",
+     "veh": 2,
+     "cmax": 250
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp4",
+     "veh": 2,
+     "cmax": 214
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp5",
+     "veh": 2,
+     "cmax": 178
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp6",
+     "veh": 2,
+     "cmax": 264
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp7",
+     "veh": 2,
+     "cmax": 234
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp8",
+     "veh": 2,
+     "cmax": 304
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp9",
+     "veh": 2,
+     "cmax": 304
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp10",
+     "veh": 2,
+     "cmax": 298
+    }
+   ]
+  },
+  "machine_select \ub9cc \uc190\uaddc\uce59": {
+   "all": 88.18,
+   "dauzere": 95.66,
+   "deroussi": 47.76,
+   "runs": [
+    {
+     "family": "dauzere",
+     "stem": "01a",
+     "veh": 2,
+     "cmax": 4229
+    },
+    {
+     "family": "dauzere",
+     "stem": "01a",
+     "veh": 4,
+     "cmax": 3734
+    },
+    {
+     "family": "dauzere",
+     "stem": "01a",
+     "veh": 6,
+     "cmax": 3581
+    },
+    {
+     "family": "dauzere",
+     "stem": "02a",
+     "veh": 2,
+     "cmax": 4429
+    },
+    {
+     "family": "dauzere",
+     "stem": "02a",
+     "veh": 4,
+     "cmax": 3408
+    },
+    {
+     "family": "dauzere",
+     "stem": "02a",
+     "veh": 6,
+     "cmax": 3673
+    },
+    {
+     "family": "dauzere",
+     "stem": "03a",
+     "veh": 2,
+     "cmax": 4684
+    },
+    {
+     "family": "dauzere",
+     "stem": "03a",
+     "veh": 4,
+     "cmax": 3711
+    },
+    {
+     "family": "dauzere",
+     "stem": "03a",
+     "veh": 6,
+     "cmax": 3460
+    },
+    {
+     "family": "dauzere",
+     "stem": "04a",
+     "veh": 2,
+     "cmax": 4124
+    },
+    {
+     "family": "dauzere",
+     "stem": "04a",
+     "veh": 4,
+     "cmax": 3847
+    },
+    {
+     "family": "dauzere",
+     "stem": "04a",
+     "veh": 6,
+     "cmax": 3650
+    },
+    {
+     "family": "dauzere",
+     "stem": "05a",
+     "veh": 2,
+     "cmax": 4664
+    },
+    {
+     "family": "dauzere",
+     "stem": "05a",
+     "veh": 4,
+     "cmax": 3342
+    },
+    {
+     "family": "dauzere",
+     "stem": "05a",
+     "veh": 6,
+     "cmax": 3497
+    },
+    {
+     "family": "dauzere",
+     "stem": "06a",
+     "veh": 2,
+     "cmax": 4619
+    },
+    {
+     "family": "dauzere",
+     "stem": "06a",
+     "veh": 4,
+     "cmax": 4147
+    },
+    {
+     "family": "dauzere",
+     "stem": "06a",
+     "veh": 6,
+     "cmax": 3628
+    },
+    {
+     "family": "dauzere",
+     "stem": "07a",
+     "veh": 2,
+     "cmax": 7244
+    },
+    {
+     "family": "dauzere",
+     "stem": "07a",
+     "veh": 4,
+     "cmax": 4117
+    },
+    {
+     "family": "dauzere",
+     "stem": "07a",
+     "veh": 6,
+     "cmax": 3621
+    },
+    {
+     "family": "dauzere",
+     "stem": "08a",
+     "veh": 2,
+     "cmax": 7818
+    },
+    {
+     "family": "dauzere",
+     "stem": "08a",
+     "veh": 4,
+     "cmax": 4462
+    },
+    {
+     "family": "dauzere",
+     "stem": "08a",
+     "veh": 6,
+     "cmax": 3637
+    },
+    {
+     "family": "dauzere",
+     "stem": "09a",
+     "veh": 2,
+     "cmax": 7960
+    },
+    {
+     "family": "dauzere",
+     "stem": "09a",
+     "veh": 4,
+     "cmax": 4541
+    },
+    {
+     "family": "dauzere",
+     "stem": "09a",
+     "veh": 6,
+     "cmax": 3991
+    },
+    {
+     "family": "dauzere",
+     "stem": "10a",
+     "veh": 2,
+     "cmax": 7207
+    },
+    {
+     "family": "dauzere",
+     "stem": "10a",
+     "veh": 4,
+     "cmax": 4044
+    },
+    {
+     "family": "dauzere",
+     "stem": "10a",
+     "veh": 6,
+     "cmax": 3754
+    },
+    {
+     "family": "dauzere",
+     "stem": "11a",
+     "veh": 2,
+     "cmax": 7798
+    },
+    {
+     "family": "dauzere",
+     "stem": "11a",
+     "veh": 4,
+     "cmax": 4302
+    },
+    {
+     "family": "dauzere",
+     "stem": "11a",
+     "veh": 6,
+     "cmax": 3626
+    },
+    {
+     "family": "dauzere",
+     "stem": "12a",
+     "veh": 2,
+     "cmax": 7733
+    },
+    {
+     "family": "dauzere",
+     "stem": "12a",
+     "veh": 4,
+     "cmax": 4464
+    },
+    {
+     "family": "dauzere",
+     "stem": "12a",
+     "veh": 6,
+     "cmax": 3837
+    },
+    {
+     "family": "dauzere",
+     "stem": "13a",
+     "veh": 2,
+     "cmax": 11518
+    },
+    {
+     "family": "dauzere",
+     "stem": "13a",
+     "veh": 4,
+     "cmax": 6049
+    },
+    {
+     "family": "dauzere",
+     "stem": "13a",
+     "veh": 6,
+     "cmax": 4641
+    },
+    {
+     "family": "dauzere",
+     "stem": "14a",
+     "veh": 2,
+     "cmax": 12191
+    },
+    {
+     "family": "dauzere",
+     "stem": "14a",
+     "veh": 4,
+     "cmax": 6153
+    },
+    {
+     "family": "dauzere",
+     "stem": "14a",
+     "veh": 6,
+     "cmax": 4426
+    },
+    {
+     "family": "dauzere",
+     "stem": "15a",
+     "veh": 2,
+     "cmax": 12746
+    },
+    {
+     "family": "dauzere",
+     "stem": "15a",
+     "veh": 4,
+     "cmax": 6484
+    },
+    {
+     "family": "dauzere",
+     "stem": "15a",
+     "veh": 6,
+     "cmax": 4907
+    },
+    {
+     "family": "dauzere",
+     "stem": "16a",
+     "veh": 2,
+     "cmax": 11620
+    },
+    {
+     "family": "dauzere",
+     "stem": "16a",
+     "veh": 4,
+     "cmax": 6336
+    },
+    {
+     "family": "dauzere",
+     "stem": "16a",
+     "veh": 6,
+     "cmax": 4428
+    },
+    {
+     "family": "dauzere",
+     "stem": "17a",
+     "veh": 2,
+     "cmax": 11874
+    },
+    {
+     "family": "dauzere",
+     "stem": "17a",
+     "veh": 4,
+     "cmax": 6498
+    },
+    {
+     "family": "dauzere",
+     "stem": "17a",
+     "veh": 6,
+     "cmax": 4706
+    },
+    {
+     "family": "dauzere",
+     "stem": "18a",
+     "veh": 2,
+     "cmax": 12433
+    },
+    {
+     "family": "dauzere",
+     "stem": "18a",
+     "veh": 4,
+     "cmax": 6334
+    },
+    {
+     "family": "dauzere",
+     "stem": "18a",
+     "veh": 6,
+     "cmax": 4685
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp1",
+     "veh": 2,
+     "cmax": 196
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp2",
+     "veh": 2,
+     "cmax": 158
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp3",
+     "veh": 2,
+     "cmax": 216
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp4",
+     "veh": 2,
+     "cmax": 184
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp5",
+     "veh": 2,
+     "cmax": 114
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp6",
+     "veh": 2,
+     "cmax": 234
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp7",
+     "veh": 2,
+     "cmax": 170
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp8",
+     "veh": 2,
+     "cmax": 240
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp9",
+     "veh": 2,
+     "cmax": 204
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp10",
+     "veh": 2,
+     "cmax": 230
+    }
+   ]
+  },
+  "op_sequence \ub9cc \uc190\uaddc\uce59": {
+   "all": 70.88,
+   "dauzere": 75.1,
+   "deroussi": 48.07,
+   "runs": [
+    {
+     "family": "dauzere",
+     "stem": "01a",
+     "veh": 2,
+     "cmax": 4068
+    },
+    {
+     "family": "dauzere",
+     "stem": "01a",
+     "veh": 4,
+     "cmax": 3455
+    },
+    {
+     "family": "dauzere",
+     "stem": "01a",
+     "veh": 6,
+     "cmax": 3278
+    },
+    {
+     "family": "dauzere",
+     "stem": "02a",
+     "veh": 2,
+     "cmax": 4113
+    },
+    {
+     "family": "dauzere",
+     "stem": "02a",
+     "veh": 4,
+     "cmax": 3305
+    },
+    {
+     "family": "dauzere",
+     "stem": "02a",
+     "veh": 6,
+     "cmax": 3070
+    },
+    {
+     "family": "dauzere",
+     "stem": "03a",
+     "veh": 2,
+     "cmax": 3634
+    },
+    {
+     "family": "dauzere",
+     "stem": "03a",
+     "veh": 4,
+     "cmax": 3171
+    },
+    {
+     "family": "dauzere",
+     "stem": "03a",
+     "veh": 6,
+     "cmax": 3128
+    },
+    {
+     "family": "dauzere",
+     "stem": "04a",
+     "veh": 2,
+     "cmax": 4336
+    },
+    {
+     "family": "dauzere",
+     "stem": "04a",
+     "veh": 4,
+     "cmax": 3249
+    },
+    {
+     "family": "dauzere",
+     "stem": "04a",
+     "veh": 6,
+     "cmax": 3550
+    },
+    {
+     "family": "dauzere",
+     "stem": "05a",
+     "veh": 2,
+     "cmax": 4048
+    },
+    {
+     "family": "dauzere",
+     "stem": "05a",
+     "veh": 4,
+     "cmax": 3193
+    },
+    {
+     "family": "dauzere",
+     "stem": "05a",
+     "veh": 6,
+     "cmax": 3022
+    },
+    {
+     "family": "dauzere",
+     "stem": "06a",
+     "veh": 2,
+     "cmax": 4238
+    },
+    {
+     "family": "dauzere",
+     "stem": "06a",
+     "veh": 4,
+     "cmax": 2848
+    },
+    {
+     "family": "dauzere",
+     "stem": "06a",
+     "veh": 6,
+     "cmax": 3001
+    },
+    {
+     "family": "dauzere",
+     "stem": "07a",
+     "veh": 2,
+     "cmax": 7077
+    },
+    {
+     "family": "dauzere",
+     "stem": "07a",
+     "veh": 4,
+     "cmax": 3866
+    },
+    {
+     "family": "dauzere",
+     "stem": "07a",
+     "veh": 6,
+     "cmax": 3425
+    },
+    {
+     "family": "dauzere",
+     "stem": "08a",
+     "veh": 2,
+     "cmax": 6753
+    },
+    {
+     "family": "dauzere",
+     "stem": "08a",
+     "veh": 4,
+     "cmax": 3920
+    },
+    {
+     "family": "dauzere",
+     "stem": "08a",
+     "veh": 6,
+     "cmax": 3464
+    },
+    {
+     "family": "dauzere",
+     "stem": "09a",
+     "veh": 2,
+     "cmax": 6502
+    },
+    {
+     "family": "dauzere",
+     "stem": "09a",
+     "veh": 4,
+     "cmax": 4324
+    },
+    {
+     "family": "dauzere",
+     "stem": "09a",
+     "veh": 6,
+     "cmax": 3406
+    },
+    {
+     "family": "dauzere",
+     "stem": "10a",
+     "veh": 2,
+     "cmax": 6895
+    },
+    {
+     "family": "dauzere",
+     "stem": "10a",
+     "veh": 4,
+     "cmax": 3773
+    },
+    {
+     "family": "dauzere",
+     "stem": "10a",
+     "veh": 6,
+     "cmax": 3426
+    },
+    {
+     "family": "dauzere",
+     "stem": "11a",
+     "veh": 2,
+     "cmax": 6906
+    },
+    {
+     "family": "dauzere",
+     "stem": "11a",
+     "veh": 4,
+     "cmax": 4023
+    },
+    {
+     "family": "dauzere",
+     "stem": "11a",
+     "veh": 6,
+     "cmax": 3408
+    },
+    {
+     "family": "dauzere",
+     "stem": "12a",
+     "veh": 2,
+     "cmax": 6796
+    },
+    {
+     "family": "dauzere",
+     "stem": "12a",
+     "veh": 4,
+     "cmax": 3807
+    },
+    {
+     "family": "dauzere",
+     "stem": "12a",
+     "veh": 6,
+     "cmax": 3362
+    },
+    {
+     "family": "dauzere",
+     "stem": "13a",
+     "veh": 2,
+     "cmax": 10996
+    },
+    {
+     "family": "dauzere",
+     "stem": "13a",
+     "veh": 4,
+     "cmax": 5775
+    },
+    {
+     "family": "dauzere",
+     "stem": "13a",
+     "veh": 6,
+     "cmax": 4440
+    },
+    {
+     "family": "dauzere",
+     "stem": "14a",
+     "veh": 2,
+     "cmax": 10313
+    },
+    {
+     "family": "dauzere",
+     "stem": "14a",
+     "veh": 4,
+     "cmax": 6212
+    },
+    {
+     "family": "dauzere",
+     "stem": "14a",
+     "veh": 6,
+     "cmax": 4651
+    },
+    {
+     "family": "dauzere",
+     "stem": "15a",
+     "veh": 2,
+     "cmax": 9844
+    },
+    {
+     "family": "dauzere",
+     "stem": "15a",
+     "veh": 4,
+     "cmax": 5903
+    },
+    {
+     "family": "dauzere",
+     "stem": "15a",
+     "veh": 6,
+     "cmax": 4213
+    },
+    {
+     "family": "dauzere",
+     "stem": "16a",
+     "veh": 2,
+     "cmax": 11149
+    },
+    {
+     "family": "dauzere",
+     "stem": "16a",
+     "veh": 4,
+     "cmax": 5864
+    },
+    {
+     "family": "dauzere",
+     "stem": "16a",
+     "veh": 6,
+     "cmax": 4276
+    },
+    {
+     "family": "dauzere",
+     "stem": "17a",
+     "veh": 2,
+     "cmax": 10034
+    },
+    {
+     "family": "dauzere",
+     "stem": "17a",
+     "veh": 4,
+     "cmax": 5867
+    },
+    {
+     "family": "dauzere",
+     "stem": "17a",
+     "veh": 6,
+     "cmax": 4418
+    },
+    {
+     "family": "dauzere",
+     "stem": "18a",
+     "veh": 2,
+     "cmax": 9791
+    },
+    {
+     "family": "dauzere",
+     "stem": "18a",
+     "veh": 4,
+     "cmax": 5649
+    },
+    {
+     "family": "dauzere",
+     "stem": "18a",
+     "veh": 6,
+     "cmax": 4422
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp1",
+     "veh": 2,
+     "cmax": 192
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp2",
+     "veh": 2,
+     "cmax": 166
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp3",
+     "veh": 2,
+     "cmax": 216
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp4",
+     "veh": 2,
+     "cmax": 182
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp5",
+     "veh": 2,
+     "cmax": 108
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp6",
+     "veh": 2,
+     "cmax": 232
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp7",
+     "veh": 2,
+     "cmax": 182
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp8",
+     "veh": 2,
+     "cmax": 236
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp9",
+     "veh": 2,
+     "cmax": 196
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp10",
+     "veh": 2,
+     "cmax": 240
+    }
+   ]
+  },
+  "vehicle_select \ub9cc \uc190\uaddc\uce59": {
+   "all": 116.87,
+   "dauzere": 122.19,
+   "deroussi": 88.15,
+   "runs": [
+    {
+     "family": "dauzere",
+     "stem": "01a",
+     "veh": 2,
+     "cmax": 4816
+    },
+    {
+     "family": "dauzere",
+     "stem": "01a",
+     "veh": 4,
+     "cmax": 3956
+    },
+    {
+     "family": "dauzere",
+     "stem": "01a",
+     "veh": 6,
+     "cmax": 3894
+    },
+    {
+     "family": "dauzere",
+     "stem": "02a",
+     "veh": 2,
+     "cmax": 5008
+    },
+    {
+     "family": "dauzere",
+     "stem": "02a",
+     "veh": 4,
+     "cmax": 3511
+    },
+    {
+     "family": "dauzere",
+     "stem": "02a",
+     "veh": 6,
+     "cmax": 3522
+    },
+    {
+     "family": "dauzere",
+     "stem": "03a",
+     "veh": 2,
+     "cmax": 5358
+    },
+    {
+     "family": "dauzere",
+     "stem": "03a",
+     "veh": 4,
+     "cmax": 3462
+    },
+    {
+     "family": "dauzere",
+     "stem": "03a",
+     "veh": 6,
+     "cmax": 3013
+    },
+    {
+     "family": "dauzere",
+     "stem": "04a",
+     "veh": 2,
+     "cmax": 4728
+    },
+    {
+     "family": "dauzere",
+     "stem": "04a",
+     "veh": 4,
+     "cmax": 3830
+    },
+    {
+     "family": "dauzere",
+     "stem": "04a",
+     "veh": 6,
+     "cmax": 3941
+    },
+    {
+     "family": "dauzere",
+     "stem": "05a",
+     "veh": 2,
+     "cmax": 4759
+    },
+    {
+     "family": "dauzere",
+     "stem": "05a",
+     "veh": 4,
+     "cmax": 3516
+    },
+    {
+     "family": "dauzere",
+     "stem": "05a",
+     "veh": 6,
+     "cmax": 3244
+    },
+    {
+     "family": "dauzere",
+     "stem": "06a",
+     "veh": 2,
+     "cmax": 4664
+    },
+    {
+     "family": "dauzere",
+     "stem": "06a",
+     "veh": 4,
+     "cmax": 3253
+    },
+    {
+     "family": "dauzere",
+     "stem": "06a",
+     "veh": 6,
+     "cmax": 3074
+    },
+    {
+     "family": "dauzere",
+     "stem": "07a",
+     "veh": 2,
+     "cmax": 8598
+    },
+    {
+     "family": "dauzere",
+     "stem": "07a",
+     "veh": 4,
+     "cmax": 5950
+    },
+    {
+     "family": "dauzere",
+     "stem": "07a",
+     "veh": 6,
+     "cmax": 5262
+    },
+    {
+     "family": "dauzere",
+     "stem": "08a",
+     "veh": 2,
+     "cmax": 9638
+    },
+    {
+     "family": "dauzere",
+     "stem": "08a",
+     "veh": 4,
+     "cmax": 5669
+    },
+    {
+     "family": "dauzere",
+     "stem": "08a",
+     "veh": 6,
+     "cmax": 4688
+    },
+    {
+     "family": "dauzere",
+     "stem": "09a",
+     "veh": 2,
+     "cmax": 7357
+    },
+    {
+     "family": "dauzere",
+     "stem": "09a",
+     "veh": 4,
+     "cmax": 4939
+    },
+    {
+     "family": "dauzere",
+     "stem": "09a",
+     "veh": 6,
+     "cmax": 4491
+    },
+    {
+     "family": "dauzere",
+     "stem": "10a",
+     "veh": 2,
+     "cmax": 9161
+    },
+    {
+     "family": "dauzere",
+     "stem": "10a",
+     "veh": 4,
+     "cmax": 5801
+    },
+    {
+     "family": "dauzere",
+     "stem": "10a",
+     "veh": 6,
+     "cmax": 4630
+    },
+    {
+     "family": "dauzere",
+     "stem": "11a",
+     "veh": 2,
+     "cmax": 9370
+    },
+    {
+     "family": "dauzere",
+     "stem": "11a",
+     "veh": 4,
+     "cmax": 5878
+    },
+    {
+     "family": "dauzere",
+     "stem": "11a",
+     "veh": 6,
+     "cmax": 5274
+    },
+    {
+     "family": "dauzere",
+     "stem": "12a",
+     "veh": 2,
+     "cmax": 6992
+    },
+    {
+     "family": "dauzere",
+     "stem": "12a",
+     "veh": 4,
+     "cmax": 5036
+    },
+    {
+     "family": "dauzere",
+     "stem": "12a",
+     "veh": 6,
+     "cmax": 4492
+    },
+    {
+     "family": "dauzere",
+     "stem": "13a",
+     "veh": 2,
+     "cmax": 13375
+    },
+    {
+     "family": "dauzere",
+     "stem": "13a",
+     "veh": 4,
+     "cmax": 8945
+    },
+    {
+     "family": "dauzere",
+     "stem": "13a",
+     "veh": 6,
+     "cmax": 6982
+    },
+    {
+     "family": "dauzere",
+     "stem": "14a",
+     "veh": 2,
+     "cmax": 12421
+    },
+    {
+     "family": "dauzere",
+     "stem": "14a",
+     "veh": 4,
+     "cmax": 8422
+    },
+    {
+     "family": "dauzere",
+     "stem": "14a",
+     "veh": 6,
+     "cmax": 6297
+    },
+    {
+     "family": "dauzere",
+     "stem": "15a",
+     "veh": 2,
+     "cmax": 9072
+    },
+    {
+     "family": "dauzere",
+     "stem": "15a",
+     "veh": 4,
+     "cmax": 7936
+    },
+    {
+     "family": "dauzere",
+     "stem": "15a",
+     "veh": 6,
+     "cmax": 6520
+    },
+    {
+     "family": "dauzere",
+     "stem": "16a",
+     "veh": 2,
+     "cmax": 14734
+    },
+    {
+     "family": "dauzere",
+     "stem": "16a",
+     "veh": 4,
+     "cmax": 9251
+    },
+    {
+     "family": "dauzere",
+     "stem": "16a",
+     "veh": 6,
+     "cmax": 6436
+    },
+    {
+     "family": "dauzere",
+     "stem": "17a",
+     "veh": 2,
+     "cmax": 11877
+    },
+    {
+     "family": "dauzere",
+     "stem": "17a",
+     "veh": 4,
+     "cmax": 7578
+    },
+    {
+     "family": "dauzere",
+     "stem": "17a",
+     "veh": 6,
+     "cmax": 5979
+    },
+    {
+     "family": "dauzere",
+     "stem": "18a",
+     "veh": 2,
+     "cmax": 10927
+    },
+    {
+     "family": "dauzere",
+     "stem": "18a",
+     "veh": 4,
+     "cmax": 7478
+    },
+    {
+     "family": "dauzere",
+     "stem": "18a",
+     "veh": 6,
+     "cmax": 5823
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp1",
+     "veh": 2,
+     "cmax": 258
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp2",
+     "veh": 2,
+     "cmax": 194
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp3",
+     "veh": 2,
+     "cmax": 230
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp4",
+     "veh": 2,
+     "cmax": 218
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp5",
+     "veh": 2,
+     "cmax": 184
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp6",
+     "veh": 2,
+     "cmax": 254
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp7",
+     "veh": 2,
+     "cmax": 232
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp8",
+     "veh": 2,
+     "cmax": 294
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp9",
+     "veh": 2,
+     "cmax": 306
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp10",
+     "veh": 2,
+     "cmax": 298
+    }
+   ]
+  },
+  "task_sequence \ub9cc \uc190\uaddc\uce59": {
+   "all": 67.11,
+   "dauzere": 70.52,
+   "deroussi": 48.69,
+   "runs": [
+    {
+     "family": "dauzere",
+     "stem": "01a",
+     "veh": 2,
+     "cmax": 3939
+    },
+    {
+     "family": "dauzere",
+     "stem": "01a",
+     "veh": 4,
+     "cmax": 3519
+    },
+    {
+     "family": "dauzere",
+     "stem": "01a",
+     "veh": 6,
+     "cmax": 3522
+    },
+    {
+     "family": "dauzere",
+     "stem": "02a",
+     "veh": 2,
+     "cmax": 3754
+    },
+    {
+     "family": "dauzere",
+     "stem": "02a",
+     "veh": 4,
+     "cmax": 3298
+    },
+    {
+     "family": "dauzere",
+     "stem": "02a",
+     "veh": 6,
+     "cmax": 3447
+    },
+    {
+     "family": "dauzere",
+     "stem": "03a",
+     "veh": 2,
+     "cmax": 3790
+    },
+    {
+     "family": "dauzere",
+     "stem": "03a",
+     "veh": 4,
+     "cmax": 3085
+    },
+    {
+     "family": "dauzere",
+     "stem": "03a",
+     "veh": 6,
+     "cmax": 3227
+    },
+    {
+     "family": "dauzere",
+     "stem": "04a",
+     "veh": 2,
+     "cmax": 3720
+    },
+    {
+     "family": "dauzere",
+     "stem": "04a",
+     "veh": 4,
+     "cmax": 3359
+    },
+    {
+     "family": "dauzere",
+     "stem": "04a",
+     "veh": 6,
+     "cmax": 3576
+    },
+    {
+     "family": "dauzere",
+     "stem": "05a",
+     "veh": 2,
+     "cmax": 3731
+    },
+    {
+     "family": "dauzere",
+     "stem": "05a",
+     "veh": 4,
+     "cmax": 3138
+    },
+    {
+     "family": "dauzere",
+     "stem": "05a",
+     "veh": 6,
+     "cmax": 3449
+    },
+    {
+     "family": "dauzere",
+     "stem": "06a",
+     "veh": 2,
+     "cmax": 3569
+    },
+    {
+     "family": "dauzere",
+     "stem": "06a",
+     "veh": 4,
+     "cmax": 3243
+    },
+    {
+     "family": "dauzere",
+     "stem": "06a",
+     "veh": 6,
+     "cmax": 3486
+    },
+    {
+     "family": "dauzere",
+     "stem": "07a",
+     "veh": 2,
+     "cmax": 6676
+    },
+    {
+     "family": "dauzere",
+     "stem": "07a",
+     "veh": 4,
+     "cmax": 3688
+    },
+    {
+     "family": "dauzere",
+     "stem": "07a",
+     "veh": 6,
+     "cmax": 3463
+    },
+    {
+     "family": "dauzere",
+     "stem": "08a",
+     "veh": 2,
+     "cmax": 6892
+    },
+    {
+     "family": "dauzere",
+     "stem": "08a",
+     "veh": 4,
+     "cmax": 4313
+    },
+    {
+     "family": "dauzere",
+     "stem": "08a",
+     "veh": 6,
+     "cmax": 3337
+    },
+    {
+     "family": "dauzere",
+     "stem": "09a",
+     "veh": 2,
+     "cmax": 6598
+    },
+    {
+     "family": "dauzere",
+     "stem": "09a",
+     "veh": 4,
+     "cmax": 3722
+    },
+    {
+     "family": "dauzere",
+     "stem": "09a",
+     "veh": 6,
+     "cmax": 3392
+    },
+    {
+     "family": "dauzere",
+     "stem": "10a",
+     "veh": 2,
+     "cmax": 6391
+    },
+    {
+     "family": "dauzere",
+     "stem": "10a",
+     "veh": 4,
+     "cmax": 4006
+    },
+    {
+     "family": "dauzere",
+     "stem": "10a",
+     "veh": 6,
+     "cmax": 3613
+    },
+    {
+     "family": "dauzere",
+     "stem": "11a",
+     "veh": 2,
+     "cmax": 7240
+    },
+    {
+     "family": "dauzere",
+     "stem": "11a",
+     "veh": 4,
+     "cmax": 4138
+    },
+    {
+     "family": "dauzere",
+     "stem": "11a",
+     "veh": 6,
+     "cmax": 3251
+    },
+    {
+     "family": "dauzere",
+     "stem": "12a",
+     "veh": 2,
+     "cmax": 6704
+    },
+    {
+     "family": "dauzere",
+     "stem": "12a",
+     "veh": 4,
+     "cmax": 3681
+    },
+    {
+     "family": "dauzere",
+     "stem": "12a",
+     "veh": 6,
+     "cmax": 3386
+    },
+    {
+     "family": "dauzere",
+     "stem": "13a",
+     "veh": 2,
+     "cmax": 10314
+    },
+    {
+     "family": "dauzere",
+     "stem": "13a",
+     "veh": 4,
+     "cmax": 6176
+    },
+    {
+     "family": "dauzere",
+     "stem": "13a",
+     "veh": 6,
+     "cmax": 4411
+    },
+    {
+     "family": "dauzere",
+     "stem": "14a",
+     "veh": 2,
+     "cmax": 9724
+    },
+    {
+     "family": "dauzere",
+     "stem": "14a",
+     "veh": 4,
+     "cmax": 5347
+    },
+    {
+     "family": "dauzere",
+     "stem": "14a",
+     "veh": 6,
+     "cmax": 4093
+    },
+    {
+     "family": "dauzere",
+     "stem": "15a",
+     "veh": 2,
+     "cmax": 8561
+    },
+    {
+     "family": "dauzere",
+     "stem": "15a",
+     "veh": 4,
+     "cmax": 5198
+    },
+    {
+     "family": "dauzere",
+     "stem": "15a",
+     "veh": 6,
+     "cmax": 4057
+    },
+    {
+     "family": "dauzere",
+     "stem": "16a",
+     "veh": 2,
+     "cmax": 10921
+    },
+    {
+     "family": "dauzere",
+     "stem": "16a",
+     "veh": 4,
+     "cmax": 5699
+    },
+    {
+     "family": "dauzere",
+     "stem": "16a",
+     "veh": 6,
+     "cmax": 4218
+    },
+    {
+     "family": "dauzere",
+     "stem": "17a",
+     "veh": 2,
+     "cmax": 9450
+    },
+    {
+     "family": "dauzere",
+     "stem": "17a",
+     "veh": 4,
+     "cmax": 5709
+    },
+    {
+     "family": "dauzere",
+     "stem": "17a",
+     "veh": 6,
+     "cmax": 4355
+    },
+    {
+     "family": "dauzere",
+     "stem": "18a",
+     "veh": 2,
+     "cmax": 8774
+    },
+    {
+     "family": "dauzere",
+     "stem": "18a",
+     "veh": 4,
+     "cmax": 5304
+    },
+    {
+     "family": "dauzere",
+     "stem": "18a",
+     "veh": 6,
+     "cmax": 4179
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp1",
+     "veh": 2,
+     "cmax": 230
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp2",
+     "veh": 2,
+     "cmax": 168
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp3",
+     "veh": 2,
+     "cmax": 198
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp4",
+     "veh": 2,
+     "cmax": 164
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp5",
+     "veh": 2,
+     "cmax": 108
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp6",
+     "veh": 2,
+     "cmax": 192
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp7",
+     "veh": 2,
+     "cmax": 194
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp8",
+     "veh": 2,
+     "cmax": 256
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp9",
+     "veh": 2,
+     "cmax": 216
+    },
+    {
+     "family": "deroussi",
+     "stem": "fjsp10",
+     "veh": 2,
+     "cmax": 240
+    }
+   ]
+  }
+ }
+}

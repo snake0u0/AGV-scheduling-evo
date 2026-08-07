@@ -136,6 +136,20 @@ Berterottière 자체 확장=2·4·6대 최대), 40-50대에서는 비교할 SOT
    - **튜닝 예산 곡선 158.7% -> 115.5% -> 74.0% -> 24.3%, 평평해질 기미 없음** -> LNS 근거 더 약화.
    - **정적 링에서 규칙만으로는 안 된다는 것이 두 번째 확인.** 저예산으로 도피 불가
      (1초 구간 절대 격차 158.7%). 가치가 있다면 **탐색 쪽**이고, 그게 5슬롯 설계의 destroy다.
+     **[2026-08-07 정정] 그 158.7%는 GA가 나빴던 탓이다. 같은 구간의 구성형은 76.6%다(아래 13번).**
+13. **[완료 2026-08-07] 4슬롯 이벤트 구동 평가기 + 탐색 없는 기준선** -
+   `2026-08-07b-four-slot-evaluator-and-constructive-baseline.md`.
+   - `simulator/dispatch.py`. **하위문제 4개가 전부 규칙 슬롯이 됐다**(자원 2종 x 배정/순서 대칭).
+     AGV 쪽 특징 이름을 `rules.py`와 맞춰 D1/D2·기존 진화식이 슬롯 3·4에 그대로 꽂힌다.
+   - 게이트: **G1 자기검증 12/12**(builder 해를 timing.py에 되먹임), **G2 공표 해 강제 재현 10/10**
+     (배정·기계순서·차량순서·Cmax 전부 일치). G2가 실제 버그를 잡았다(자원이 유휴로 기다리지
+     못해 8/10 -> `-inf` 규약 도입 후 10/10).
+   - **G4 탐색 없는 기준선 최초 측정**: 부하분산만으로 **Dauzere 76.6%**, 케이스당 0.2초.
+     **GA 1초(158.7%)를 두 배 이상, 5배 빠르게 이긴다.**
+   - **교과서 그리디 손규칙은 부하분산보다 나쁘다**(76.6% -> 157.7%). 특히 AGV 배정 -44.7%p,
+     기계 배정 -16.0%p. 모두가 같은 좋은 자원으로 몰려 경합이 생긴다.
+     -> **손규칙 베이스라인은 앞으로 반드시 부하분산 계열을 포함해야 한다**(약한 상대를 이기면 무의미).
+   - **다음 1순위: GA 초기집단을 구성형 해로 seed.** 무작위보다 두 배 좋은 출발점이 0.2초에 나온다.
 
 ## 다음 (논문화 전)
 
@@ -146,7 +160,9 @@ Berterottière 자체 확장=2·4·6대 최대), 40-50대에서는 비교할 SOT
    비용 문제(적합도 1회 600초) -> 캐스케이드/예산 설계를 먼저 확정해야 함.
    ~~(B) 규칙이 중요해지는 예산 구간 탐색~~ **완료, 기각(위 12번).**
    ~~(D) population 탐색~~ **완료. `pop ≈ 20 x (예산초)^0.6` (위 12번).**
-   **(B') Stage 1 착수 시점이 됐다.** 규칙 단독으로 정적 링에서 못 이긴다는 것이 두 번 확인됐으므로,
+   ~~(B') Stage 1~~ **완료 2026-08-07 (아래 13번).**
+   **(B'') Stage 1 후속 - GA를 구성형 해로 seed. 최우선.**
+   구 (B'): 규칙 단독으로 정적 링에서 못 이긴다는 것이 두 번 확인됐으므로,
    슬롯 1·2·4 + destroy를 실제로 만들어야 더 나아간다. 순수 구성형 기준선도 여기서 첫 측정.
    (C) 예산 곡선 3600초 연장 -> LNS 판정. **우선순위 계속 하락**(곡선이 평평해질 기미 없음).
 1. **Stage 1: 이벤트 구동 평가기 + 4슬롯 분리** - `simulator/agv_fms.py`의 이벤트 루프와
@@ -169,11 +185,14 @@ Berterottière 자체 확장=2·4·6대 최대), 40-50대에서는 비교할 SOT
   `llm_backend.py`(claude CLI), `experiment.py`
 - **`experiments/`** 캠페인 스크립트 | **`data/{instances,results,papers}`** | **`archive/`** A안 자산
 
-회귀 테스트 4종 (전부 통과해야 함):
+회귀 테스트 **6종** (무엇이든 건드린 뒤 전부 통과해야 함):
 ```
-python -m simulator.test_paper_example      python -m simulator.test_replay_deroussi
-python -m model.test_ga_operators           python -m model.test_decode_selfcheck
+python -m simulator.test_paper_example        python -m simulator.test_replay_deroussi
+python -m simulator.test_dispatch             python -m model.test_ga_operators
+python -m model.test_decode_selfcheck         python -m experiments.test_reported_numbers
 ```
+- `simulator/dispatch.py` = **4슬롯 이벤트 구동 평가기**(2026-08-07). 5슬롯 설계의 슬롯 1~4.
+- `experiments/common.py` + `data/literature/` = 기준값·격차·검정·`pop_for()` 단일 출처.
 
 ## 신뢰하면 안 되는 것
 
