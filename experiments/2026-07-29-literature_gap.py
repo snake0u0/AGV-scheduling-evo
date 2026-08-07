@@ -13,16 +13,9 @@ import sys
 sys.path.insert(0, "/home/dohyung/project/research-agent")
 from simulator.instance import BASE, parse_format_b
 
-# Berterottiere, Dauzere-Peres & Yugma (2024), Table 8, iteration-stop Cmax.
-# (2 vehicles, 4 vehicles, 6 vehicles)
-TABLE8 = {
-    "01a": (3029, 2812, 2756), "02a": (2504, 2368, 2428), "03a": (2325, 2289, 2279),
-    "04a": (3000, 2785, 2806), "05a": (2504, 2358, 2408), "06a": (2322, 2267, 2258),
-    "07a": (4157, 2860, 2758), "08a": (3208, 2334, 2259), "09a": (2448, 2213, 2146),
-    "10a": (4145, 2783, 2685), "11a": (3211, 2349, 2265), "12a": (2484, 2173, 2133),
-    "13a": (6332, 3471, 2900), "14a": (4259, 2700, 2379), "15a": (3034, 2367, 2288),
-    "16a": (6472, 3493, 2834), "17a": (4315, 2629, 2367), "18a": (3017, 2355, 2264),
-}
+# 문헌 기준값은 experiments/common.py -> data/literature/ 에서 온다 (2026-08-07 통합).
+from experiments.common import REFERENCES
+TABLE8 = {k: (v[2], v[4], v[6]) for k, v in REFERENCES['dauzere'].items()}
 VI = {2: 0, 4: 1, 6: 2}
 LABEL = {"D1": "빠른도착 규칙(문헌)", "D2": "부하분산 규칙(문헌)",
          "P_main": "진화 규칙 P_main", "P1": "진화 규칙 P1",

@@ -36,14 +36,13 @@ import time
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from scipy import stats
-
+# 문헌 기준값·격차·검정은 experiments/common.py 한 곳에서 온다.
+# 출처와 주의사항 = data/literature/SOURCE.md  (2026-08-07 통합)
+from experiments.common import (SEEDS, WORKERS, gap, mean_gap, paired,
+                                pop_for, reference, run_parallel)
 from model.ga import GA
 from model.rules import RULES, rule_from_expr
 from simulator.instance import load_dauzere, load_deroussi
-
-SEEDS = (0, 21, 42)
-WORKERS = 12
 
 # Tuned per 2026-08-01: population chosen so the run lands at a few hundred generations.
 TUNED = {600: 1000, 10: 70}
@@ -71,16 +70,6 @@ ABLATION = {
 }
 RANKING_RULES = ["D1", "D2", "P_main", "P2", "P3"]
 ALL_RULES = RANKING_RULES + list(ABLATION)
-
-TABLE8 = {"01a": (3029, 2812, 2756), "07a": (4157, 2860, 2758), "09a": (2448, 2213, 2146),
-          "12a": (2484, 2173, 2133), "15a": (3034, 2367, 2288), "18a": (3017, 2355, 2264)}
-VI = {2: 0, 4: 1, 6: 2}
-DEROUSSI_BEST = {"fjsp1": 134, "fjsp8": 178}
-
-
-def reference(family, stem, veh):
-    return TABLE8[stem][VI[veh]] if family == "dauzere" else DEROUSSI_BEST[stem]
-
 
 def make_rule(name):
     if name in RULES:
@@ -122,24 +111,6 @@ def main():
                "runs": recs}, open(out, "w"), indent=1)
     print(f"\nwrote {out}")
     report(recs)
-
-
-def gap(r):
-    ref = reference(r["family"], r["stem"], r["veh"])
-    return 100 * (r["cmax"] - ref) / ref
-
-
-def paired(recs, a, b):
-    """Paired comparison over (case, seed): same instance, same seed, two rules."""
-    ka = {(r["stem"], r["veh"], r["seed"]): r["cmax"] for r in recs if r["rule"] == a}
-    kb = {(r["stem"], r["veh"], r["seed"]): r["cmax"] for r in recs if r["rule"] == b}
-    keys = sorted(set(ka) & set(kb))
-    xa = [ka[k] for k in keys]
-    xb = [kb[k] for k in keys]
-    wins = sum(1 for u, v in zip(xa, xb) if u < v)
-    ties = sum(1 for u, v in zip(xa, xb) if u == v)
-    t = stats.wilcoxon(xa, xb).pvalue if any(u != v for u, v in zip(xa, xb)) else 1.0
-    return wins, ties, len(keys), t
 
 
 def report(recs):

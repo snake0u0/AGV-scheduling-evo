@@ -31,14 +31,13 @@ import time
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from scipy import stats
-
+# 문헌 기준값·격차·검정은 experiments/common.py 한 곳에서 온다.
+# 출처와 주의사항 = data/literature/SOURCE.md  (2026-08-07 통합)
+from experiments.common import (SEEDS, WORKERS, gap, mean_gap, paired,
+                                pop_for, reference, run_parallel)
 from model.ga import GA
 from model.rules import RULES, rule_from_expr
 from simulator.instance import load_dauzere
-
-SEEDS = (0, 21, 42)
-WORKERS = 12
 
 # Populations bracketing the expected optimum at each budget (2026-08-01: 10s -> 70,
 # 600s -> 1000, and the rule of thumb "land at 400-1500 generations").
@@ -61,11 +60,6 @@ RULE_NAMES = ["D1", "D2", "P_main", "P2", "P3"]
 LITERATURE = ["D1", "D2"]
 EVOLVED_NAMES = ["P_main", "P2", "P3"]
 
-TABLE8 = {"01a": (3029, 2812, 2756), "09a": (2448, 2213, 2146),
-          "15a": (3034, 2367, 2288), "18a": (3017, 2355, 2264)}
-VI = {2: 0, 4: 1, 6: 2}
-
-
 def make_rule(name):
     return RULES[name] if name in RULES else rule_from_expr(EVOLVED[name])
 
@@ -79,7 +73,8 @@ def one_run(job):
     best, _ = ga.run()
     return {"stem": stem, "veh": veh, "rule": rname, "budget": budget, "pop": pop,
             "seed": seed, "cmax": best.fitness, "evals": ga.n_evals,
-            "generations": ga.n_gen_done, "elapsed": round(time.time() - t0, 1)}
+            "generations": ga.n_gen_done, "elapsed": round(time.time() - t0, 1),
+            "family": "dauzere"}   # common.gap() 이 요구한다. 없으면 조용히 틀리는 대신 KeyError
 
 
 def main():
@@ -107,20 +102,6 @@ def main():
               open(out, "w"), indent=1)
     print(f"\nwrote {out}")
     report(recs)
-
-
-def gap(r):
-    return 100 * (r["cmax"] - TABLE8[r["stem"]][VI[r["veh"]]]) / TABLE8[r["stem"]][VI[r["veh"]]]
-
-
-def paired(recs, a, b):
-    ka = {(r["stem"], r["veh"], r["seed"]): r["cmax"] for r in recs if r["rule"] == a}
-    kb = {(r["stem"], r["veh"], r["seed"]): r["cmax"] for r in recs if r["rule"] == b}
-    keys = sorted(set(ka) & set(kb))
-    xa, xb = [ka[k] for k in keys], [kb[k] for k in keys]
-    wins = sum(1 for u, v in zip(xa, xb) if u < v)
-    p = stats.wilcoxon(xa, xb).pvalue if any(u != v for u, v in zip(xa, xb)) else 1.0
-    return wins, len(keys), p
 
 
 def report(recs):
@@ -171,7 +152,7 @@ def report(recs):
         cells = []
         for e in EVOLVED_NAMES:
             for l in LITERATURE:
-                w, n, pv = paired(sub, e, l)
+                w, _, n, pv = paired(sub, e, l)
                 cells.append(f"{w}/{n} p={pv:.3f}" + ("*" if pv < 0.05 else " "))
         print(f"{budget:>6}초" + "".join(f"{c:>16}" for c in cells))
 

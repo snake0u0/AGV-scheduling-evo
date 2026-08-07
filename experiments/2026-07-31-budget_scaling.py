@@ -26,15 +26,17 @@ import time
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+# 문헌 기준값·격차·검정은 experiments/common.py 한 곳에서 온다.
+# 출처와 주의사항 = data/literature/SOURCE.md  (2026-08-07 통합)
+from experiments.common import (SEEDS, WORKERS, gap, mean_gap, paired,
+                                pop_for, reference, run_parallel)
 from model.ga import GA
 from model.rules import RULES, rule_from_expr
 from simulator.instance import load_dauzere, load_deroussi, parse_format_b, BASE
 
 # --- protocol, fixed in advance (2026-07-31 design meeting) ------------------
-SEEDS = (0, 21, 42)
 BUDGETS = (10, 60, 600)          # wall-clock seconds per case
 POP = 70                         # same population as the earlier campaigns
-WORKERS = 12                     # of 16 cores
 
 # Cases chosen to span the axes the gap was found to track: machine count and
 # flexibility. The four worst gap instances from 2026-07-29 are all here.
@@ -61,18 +63,6 @@ EVOLVED = {
 RULE_NAMES = ["D1", "D2", "P_main", "P2", "P3"]
 
 # Literature best-known makespan.
-#   Dauzere : Berterottiere, Dauzere-Peres & Yugma (2024) EJOR 312(3), Table 8.
-#   Deroussi: the published solution-file headers, which this repo reproduces
-#             exactly (simulator/test_replay_deroussi, 10/10) and which agree with
-#             Berterottiere et al. (2026) EJOR 332, Table 6.
-TABLE8 = {"01a": (3029, 2812, 2756), "07a": (4157, 2860, 2758), "09a": (2448, 2213, 2146),
-          "12a": (2484, 2173, 2133), "15a": (3034, 2367, 2288), "18a": (3017, 2355, 2264)}
-VI = {2: 0, 4: 1, 6: 2}
-DEROUSSI_BEST = {"fjsp1": 134, "fjsp8": 178}
-
-
-def reference(family, stem, veh):
-    return TABLE8[stem][VI[veh]] if family == "dauzere" else DEROUSSI_BEST[stem]
 
 
 def load(family, stem, veh):
@@ -116,11 +106,6 @@ def main():
                "runs": recs}, open(out, "w"), indent=1)
     print(f"\nwrote {out}")
     report(recs)
-
-
-def gap(rec):
-    ref = reference(rec["family"], rec["stem"], rec["veh"])
-    return 100 * (rec["cmax"] - ref) / ref
 
 
 def report(recs):

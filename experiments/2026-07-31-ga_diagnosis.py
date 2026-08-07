@@ -31,13 +31,15 @@ import time
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+# 문헌 기준값·격차·검정은 experiments/common.py 한 곳에서 온다.
+# 출처와 주의사항 = data/literature/SOURCE.md  (2026-08-07 통합)
+from experiments.common import (SEEDS, WORKERS, gap, mean_gap, paired,
+                                pop_for, reference, run_parallel)
 from model.ga import GA
 from model.rules import rule_from_expr
 from simulator.instance import load_dauzere, load_deroussi
 
-SEEDS = (0, 21, 42)
 BUDGET = 600
-WORKERS = 12
 
 # The rule is held fixed at the best one found so far; this experiment varies the
 # GA configuration, not the rule.
@@ -52,16 +54,6 @@ CASES = [
 ]
 
 CONFIGS = ["pop70", "pop300", "pop1000", "restart10x60", "greedyMS"]
-
-TABLE8 = {"01a": (3029, 2812, 2756), "09a": (2448, 2213, 2146),
-          "15a": (3034, 2367, 2288), "18a": (3017, 2355, 2264)}
-VI = {2: 0, 4: 1, 6: 2}
-DEROUSSI_BEST = {"fjsp1": 134, "fjsp8": 178}
-
-
-def reference(family, stem, veh):
-    return TABLE8[stem][VI[veh]] if family == "dauzere" else DEROUSSI_BEST[stem]
-
 
 def one_run(job):
     family, stem, veh, config, seed = job
@@ -115,11 +107,6 @@ def main():
               open(out, "w"), indent=1)
     print(f"\nwrote {out}")
     report(recs)
-
-
-def gap(r):
-    ref = reference(r["family"], r["stem"], r["veh"])
-    return 100 * (r["cmax"] - ref) / ref
 
 
 def report(recs):
