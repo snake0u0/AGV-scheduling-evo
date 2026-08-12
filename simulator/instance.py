@@ -27,7 +27,7 @@ class Instance:
     n_vehicles: int = 0             # NOT from the instance file - injected by caller
     source: dict = field(default_factory=dict)
 
-    @property
+    @property # 괄호없이 변수처럼 접근할 수 있게 해주는 데코레이터. 메서드는 inst.n_ops()로 호출
     def n_ops(self):
         return sum(len(ops) for ops in self.jobs)
 
@@ -60,24 +60,24 @@ def _tokens(path):
         return f.read().split()
 
 
-def parse_format_a(path, name=None):
+def parse_format_a(path, name=None): # 포인터 i를 이동시키며 순서대로 숫자를 읽고, 정해진 구조(job → operation → 대체기계+시간)대로 중첩 리스트를 쌓아 올려 Instance 객체를 만든다.
     """Bilge-Ulusoy lineage (DeroussiNorre/): `nJob nMachine ?`,
     then per job `nOps`, then per op `k m1..mk sharedTime`.
     The alternative machines of one operation share a single processing time.
     The third header field is read but never used (ambiguous across the corpus)."""
-    t = _tokens(path)
-    i = 0
-    n = int(t[i]); i += 1
-    m = int(t[i]); i += 1
-    i += 1                                   # third field: deliberately unused
+    t = _tokens(path) # 파일 전체를 토큰 리스트로 읽음.
+    i = 0 # 지금 몇 번째 토큰을 읽고 있는지 가리키는 포인터
+    n = int(t[i]); i += 1 # 1번째 토큰 = job수
+    m = int(t[i]); i += 1 # 2번째 토큰 = machine 수
+    i += 1 # 3번째 토큰은 읽기만 하고 버림.
     jobs = []
-    for _ in range(n):
-        n_ops = int(t[i]); i += 1
-        ops = []
-        for _ in range(n_ops):
-            k = int(t[i]); i += 1
-            machines = [int(t[i + q]) for q in range(k)]; i += k
-            pt = int(t[i]); i += 1
+    for _ in range(n): # job마다
+        n_ops = int(t[i]); i += 1 # 이 job의 공정 수
+        ops = [] 
+        for _ in range(n_ops): # operation 마다
+            k = int(t[i]); i += 1 # 대체 가능한 machine 수
+            machines = [int(t[i + q]) for q in range(k)]; i += k # 기계 번호 k개
+            pt = int(t[i]); i += 1 # 공통 가공시간 1개
             ops.append([(mk, pt) for mk in machines])
         jobs.append(ops)
     return Instance(name or os.path.basename(path).replace(".txt", ""), n, m, jobs,
@@ -155,16 +155,16 @@ def parse_format_c(path, name=None):
 
 def load_travel(path):
     """Square travel-time matrix, (m+1)x(m+1), index 0 = L/U. Asymmetric."""
-    with open(path) as f:
-        mat = [[int(x) for x in ln.split()] for ln in f if ln.strip()]
+    with open(path) as f: # 파일 열기(자동으로 닫아줌)
+        mat = [[int(x) for x in ln.split()] for ln in f if ln.strip()] # 파일의 각 줄을 흝되, 빈 줄은 건너뜀.
     if any(len(r) != len(mat) for r in mat):
         raise ValueError(f"{path}: travel matrix is not square")
     return mat
 
 
 # --- dataset registry -------------------------------------------------------
-# Pairing an instance with the right travel matrix is a data-provenance decision,
-# so it lives here rather than being guessed inside a parser.
+# 인스턴스와 알맞은 행렬을 짝짓는 건 출처(provenance) 판단이지, 파서 안에서 추측할 일이 아니다.
+
 
 def load_dauzere(stem, n_vehicles):
     """Dauzere-Peres & Paulli instance + the Berterottiere layout of matching size."""
