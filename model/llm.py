@@ -55,7 +55,16 @@ def valid_btrack(expr):
 
 class ClaudeRuleProposer(ClaudeCliLLM):
     """Single-rule B-track proposer. Reuses ClaudeCliLLM._complete/usage/cost; only
-    the seed set and the prompt change."""
+    the seed set and the prompt change.
+
+    `last_call` holds what the most recent vary() actually sent and received, so a run
+    can be reconstructed from its result file alone. Without it the prompt, the raw
+    reply, the reflection the model was asked for, and every rejected candidate were
+    all discarded (2026-08-10 review). The system prompt is a module constant
+    (`_SYSTEM`) and is not repeated per call - record it once per run.
+    """
+
+    last_call = None
 
     def seed_population(self, n):
         pop = list(_SEEDS)
@@ -66,8 +75,12 @@ class ClaudeRuleProposer(ClaudeCliLLM):
     def vary(self, elites, k):
         # elites: [(expr, fitness)] best-first, fitness = mean makespan (LOWER better)
         exprs = [e for e, _ in elites]
+        parents = [{"expr": e, "fitness": f} for e, f in elites]
         if self.calls >= self.max_calls:
-            return [exprs[i % len(exprs)] for i in range(k)]
+            out = [exprs[i % len(exprs)] for i in range(k)]
+            self.last_call = {"skipped": "max_calls reached", "parents": parents,
+                              "returned": out}
+            return out
         if self.reevo:
             ranked = "\n".join(f"{i+1}. makespan={fit:.1f}   {e}"
                                for i, (e, fit) in enumerate(elites))
@@ -90,24 +103,41 @@ class ClaudeRuleProposer(ClaudeCliLLM):
                 f"OUTPUT: respond with ONLY a single-line JSON object, no markdown fences. "
                 f'Exactly {k} rules:\n{{"offspring":["<expr>","<expr>"]}}')
         text = self._complete(_SYSTEM + "\n\n" + prompt)
-        kids = self._parse_rules(text)
+        kids, reflection = self._parse_rules(text)
         valid = [e for e in kids if valid_btrack(e)]
+        rejected = [e for e in kids if not valid_btrack(e)]
+        n_valid = len(valid)
         while len(valid) < k:
             valid.append(exprs[len(valid) % len(exprs)])
-        return valid[:k]
+        out = valid[:k]
+        self.last_call = {
+            "prompt_user": prompt,          # _SYSTEM is constant; record it once per run
+            "response": text,
+            "reflection": reflection,
+            "parents": parents,
+            "proposed": kids,
+            "rejected": rejected,           # dropped silently before 2026-08-10
+            "n_padded": max(0, k - n_valid),  # elite copies used to fill the shortfall
+            "returned": out,
+        }
+        return out
 
     def _parse_rules(self, text):
-        from ahd.llm import _extract_json
+        """(offspring, reflection). The reflection is requested by the prompt and was
+        previously parsed out and thrown away."""
+        from .llm_backend import _extract_json
         try:
             obj = _extract_json(text)
-            return list(obj["offspring"])
+            return list(obj["offspring"]), obj.get("reflection")
         except Exception:
-            return []
+            return [], None
 
 
 class LocalProposer:
     """No-CLI proposer for testing the loop machinery. Seeds from the same rules and
     varies expressions by appending small structural terms. Deterministic given seed."""
+
+    last_call = None
 
     def __init__(self, seed=0):
         import random
@@ -125,11 +155,21 @@ class LocalProposer:
         exprs = [e for e, _ in elites]
         terms = ["- 0.1*empty_travel", "- 0.05*agv_cum_travel", "- 0.2*wait",
                  "- 0.1*machine_free", "+ 0.1*remaining_ops", "- 0.1*loaded_travel"]
-        kids = []
+        kids, of = [], []
         for _ in range(k):
             base = self.rng.choice(exprs)
             kid = f"({base}) {self.rng.choice(terms)}"
             kids.append(kid if valid_btrack(kid) else base)
+            of.append(base)
+        # This proposer picks one parent per child, so it can record true per-child
+        # lineage. The LLM proposer cannot: it is shown every elite and returns k
+        # children without saying which came from which.
+        self.last_call = {
+            "prompt_user": None, "response": None, "reflection": None,
+            "parents": [{"expr": e, "fitness": f} for e, f in elites],
+            "proposed": kids, "rejected": [], "n_padded": 0, "returned": kids,
+            "child_parent": of,
+        }
         return kids
 
     def usage(self):

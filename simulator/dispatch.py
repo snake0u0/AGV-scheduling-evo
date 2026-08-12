@@ -62,18 +62,73 @@ def _argmax(items, score):
     return best
 
 
-def build(inst, slots, params=Params(), on_commit=None):
+def _with_all(rule, cands, feat):
+    """Score each candidate with `_all` = every candidate's features in the dict.
+
+    Without this a rule sees one candidate at a time and can only judge it in
+    absolute terms, which is exactly the expressive power of Han 2024's fixed
+    decodings. Relative judgements - "is this the busiest vehicle in the fleet?",
+    "is the travel spread small enough that load matters more?" - need the others.
+    2026-08-07 measured why that matters: textbook greedy rules (fastest machine,
+    earliest AGV) score 157.7% against 76.6% for plain load balancing, because
+    everyone crowds the same good resource. Avoiding contention is a relative
+    judgement.
+
+    The feature dicts are built once and shared, so this stays O(V) per decision and
+    `_argmax`/`forced_slots` are untouched.
+    """
+    feats = {c: feat(c) for c in cands}
+    allf = list(feats.values())
+    for f in allf:
+        f["_all"] = allf
+    return lambda c: rule(feats[c])
+
+
+def build(inst, slots, params=Params(), on_commit=None, fixed=None):
     """Run the four slots over `inst` and return (Solution, Schedule).
 
     `slots` maps each name in SLOTS to a callable f(features) -> score.
     `on_commit(kind, resource, gid)` is called after each committed decision, where
     kind is "machine" or "vehicle"; `forced_slots` uses it to advance its pointers.
+
+    `fixed` is a Solution whose assignments are kept: any operation in
+    `fixed.machine_of` takes its machine from there instead of asking slot 1, and
+    likewise for vehicles and slot 3. Operations absent from it are decided by the
+    slots as usual. That is LNS repair - destroy drops operations out of `fixed`, and
+    the rules place only those.
+
+    It is a parameter rather than a `NEVER`-returning slot wrapper (which would also
+    work) because a fixed decision is structural, not a preference. Hiding it in the
+    scoring channel would leave the builder unable to tell "the rule strongly prefers
+    machine 3" from "this is not a decision", which blocks incremental rebuild,
+    per-iteration logging of what the rules actually chose, and any check that repair
+    touched only the destroyed operations.
     """
     missing = [s for s in SLOTS if s not in slots]
     if missing:
         raise DispatchError(f"missing slot(s): {missing}")
     if not inst.travel:
         raise DispatchError(f"{inst.name}: no travel matrix loaded")
+
+    # Assignments are fixed by lookup; sequences by a head pointer per resource, so a
+    # kept operation may only be taken when it is next in its prescribed order while a
+    # destroyed one competes freely. Fixing assignments alone would let repair reshuffle
+    # every queue, which is a restart with hints rather than a large neighbourhood.
+    fix_m = fixed.machine_of if fixed is not None else {}
+    fix_v = fixed.vehicle_of if fixed is not None else {}
+    fseq_m = dict(fixed.machine_seq) if fixed is not None else {}
+    fseq_v = dict(fixed.vehicle_seq) if fixed is not None else {}
+    fset_m = {k: set(s) for k, s in fseq_m.items()}
+    fset_v = {v: set(s) for v, s in fseq_v.items()}
+    fpos_m = {k: 0 for k in fseq_m}
+    fpos_v = {v: 0 for v in fseq_v}
+
+    def _selectable(cands, seq, sset, pos):
+        """Kept operations only at the head of their prescribed order; the rest free."""
+        if seq is None:
+            return cands
+        head = seq[pos] if pos < len(seq) else None
+        return [g for g in cands if g not in sset or g == head]
 
     M = range(1, inst.n_machines + 1)
     V = range(1, inst.n_vehicles + 1)
@@ -117,16 +172,21 @@ def build(inst, slots, params=Params(), on_commit=None):
             ready = 0 if prev is None else end[prev]
             n_left, proc_left = job_tail(g)
 
-            k = _argmax(inst.eligible(g), lambda k: slots["machine_select"]({
-                "_gid": g, "_cand": k,
-                "proc_time": inst.proc_time(g, k),
-                "machine_free": machine_free[k],
-                "travel_to": inst.travel[pick_loc][k],
-                "queue_len": len(mq[k]),
-                "job_ready": ready,
-                "remaining_ops": n_left,
-                "remaining_proc": proc_left,
-            }))
+            def mfeat(k):
+                return {
+                    "_gid": g, "_cand": k,
+                    "proc_time": inst.proc_time(g, k),
+                    "machine_free": machine_free[k],
+                    "travel_to": inst.travel[pick_loc][k],
+                    "queue_len": len(mq[k]),
+                    "job_ready": ready,
+                    "remaining_ops": n_left,
+                    "remaining_proc": proc_left,
+                }
+
+            k = (fix_m.get(g) if g in fix_m else
+                 _argmax(inst.eligible(g), _with_all(slots["machine_select"],
+                                                     inst.eligible(g), mfeat)))
             machine_of[g] = k
             job_next[j] += 1
             moved = True
@@ -137,17 +197,22 @@ def build(inst, slots, params=Params(), on_commit=None):
                 continue
 
             loaded = inst.travel[pick_loc][k]
-            v = _argmax(list(V), lambda v: slots["vehicle_select"]({
-                "_gid": g, "_cand": v,
-                "empty_travel": inst.travel[veh_loc[v]][pick_loc],
-                "loaded_travel": loaded,
-                "agv_free": veh_free[v],
-                "agv_cum_travel": veh_cum[v],
-                "queue_len": len(vq[v]),
-                "ready": ready,
-                "machine_free": machine_free[k],
-                "remaining_ops": n_left,
-            }))
+
+            def vfeat(v):
+                return {
+                    "_gid": g, "_cand": v,
+                    "empty_travel": inst.travel[veh_loc[v]][pick_loc],
+                    "loaded_travel": loaded,
+                    "agv_free": veh_free[v],
+                    "agv_cum_travel": veh_cum[v],
+                    "queue_len": len(vq[v]),
+                    "ready": ready,
+                    "machine_free": machine_free[k],
+                    "remaining_ops": n_left,
+                }
+
+            v = (fix_v.get(g) if g in fix_v else
+                 _argmax(list(V), _with_all(slots["vehicle_select"], list(V), vfeat)))
             vehicle_of[g] = v
             vq[v].append(g)
         return moved
@@ -175,9 +240,12 @@ def build(inst, slots, params=Params(), on_commit=None):
                 "remaining_proc": proc_left,
             }
 
-        g = _argmax(vq[v], lambda g: slots["task_sequence"](feat(g)))
+        cands = _selectable(vq[v], fseq_v.get(v), fset_v.get(v, ()), fpos_v.get(v, 0))
+        g = _argmax(cands, _with_all(slots["task_sequence"], cands, feat))
         if g is None:
             return False                          # the vehicle waits
+        if v in fpos_v and fpos_v[v] < len(fseq_v[v]) and fseq_v[v][fpos_v[v]] == g:
+            fpos_v[v] += 1
         vq[v].remove(g)
         prev = prev_of(g)
         pick_loc = 0 if prev is None else machine_of[prev]
@@ -213,9 +281,12 @@ def build(inst, slots, params=Params(), on_commit=None):
                 "remaining_proc": proc_left,
             }
 
-        g = _argmax(ready_ops, lambda g: slots["op_sequence"](feat(g)))
+        cands = _selectable(ready_ops, fseq_m.get(k), fset_m.get(k, ()), fpos_m.get(k, 0))
+        g = _argmax(cands, _with_all(slots["op_sequence"], cands, feat))
         if g is None:
             return False                          # the machine idles
+        if k in fpos_m and fpos_m[k] < len(fseq_m[k]) and fseq_m[k][fpos_m[k]] == g:
+            fpos_m[k] += 1
         mq[k].remove(g)
         s = max(arrive[g], machine_free[k])
         start[g], end[g] = s, s + inst.proc_time(g, k)

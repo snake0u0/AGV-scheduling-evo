@@ -1,0 +1,609 @@
+{
+ "protocol": {
+  "cases": [
+   [
+    "dauzere",
+    "01a",
+    2
+   ],
+   [
+    "dauzere",
+    "07a",
+    4
+   ],
+   [
+    "dauzere",
+    "09a",
+    2
+   ],
+   [
+    "dauzere",
+    "12a",
+    2
+   ],
+   [
+    "dauzere",
+    "15a",
+    2
+   ],
+   [
+    "dauzere",
+    "18a",
+    2
+   ],
+   [
+    "deroussi",
+    "fjsp1",
+    2
+   ],
+   [
+    "deroussi",
+    "fjsp8",
+    2
+   ]
+  ],
+  "seeds": [
+   0,
+   21,
+   42
+  ],
+  "budget": 600,
+  "frac": 0.2,
+  "eta": 0.1,
+  "slots": "hand (balanced+arrival)"
+ },
+ "runs": [
+  {
+   "family": "dauzere",
+   "stem": "01a",
+   "veh": 2,
+   "seed": 42,
+   "rule": "LNS",
+   "cmax": 3823,
+   "iterations": 57453,
+   "accepted": 11
+  },
+  {
+   "family": "dauzere",
+   "stem": "01a",
+   "veh": 2,
+   "seed": 0,
+   "rule": "LNS",
+   "cmax": 3793,
+   "iterations": 56990,
+   "accepted": 8
+  },
+  {
+   "family": "dauzere",
+   "stem": "01a",
+   "veh": 2,
+   "seed": 21,
+   "rule": "LNS",
+   "cmax": 3800,
+   "iterations": 56711,
+   "accepted": 7
+  },
+  {
+   "family": "dauzere",
+   "stem": "09a",
+   "veh": 2,
+   "seed": 0,
+   "rule": "LNS",
+   "cmax": 6605,
+   "iterations": 26673,
+   "accepted": 5
+  },
+  {
+   "family": "dauzere",
+   "stem": "12a",
+   "veh": 2,
+   "seed": 42,
+   "rule": "LNS",
+   "cmax": 6259,
+   "iterations": 27120,
+   "accepted": 8
+  },
+  {
+   "family": "dauzere",
+   "stem": "12a",
+   "veh": 2,
+   "seed": 0,
+   "rule": "LNS",
+   "cmax": 6713,
+   "iterations": 27272,
+   "accepted": 5
+  },
+  {
+   "family": "dauzere",
+   "stem": "12a",
+   "veh": 2,
+   "seed": 21,
+   "rule": "LNS",
+   "cmax": 6464,
+   "iterations": 27196,
+   "accepted": 10
+  },
+  {
+   "family": "dauzere",
+   "stem": "07a",
+   "veh": 4,
+   "seed": 0,
+   "rule": "LNS",
+   "cmax": 3889,
+   "iterations": 24962,
+   "accepted": 7
+  },
+  {
+   "family": "dauzere",
+   "stem": "07a",
+   "veh": 4,
+   "seed": 42,
+   "rule": "LNS",
+   "cmax": 3831,
+   "iterations": 24741,
+   "accepted": 10
+  },
+  {
+   "family": "dauzere",
+   "stem": "07a",
+   "veh": 4,
+   "seed": 21,
+   "rule": "LNS",
+   "cmax": 3831,
+   "iterations": 24519,
+   "accepted": 8
+  },
+  {
+   "family": "dauzere",
+   "stem": "09a",
+   "veh": 2,
+   "seed": 21,
+   "rule": "LNS",
+   "cmax": 6561,
+   "iterations": 27039,
+   "accepted": 4
+  },
+  {
+   "family": "dauzere",
+   "stem": "09a",
+   "veh": 2,
+   "seed": 42,
+   "rule": "LNS",
+   "cmax": 6607,
+   "iterations": 26961,
+   "accepted": 7
+  },
+  {
+   "family": "deroussi",
+   "stem": "fjsp1",
+   "veh": 2,
+   "seed": 0,
+   "rule": "LNS",
+   "cmax": 188,
+   "iterations": 862811,
+   "accepted": 1
+  },
+  {
+   "family": "deroussi",
+   "stem": "fjsp1",
+   "veh": 2,
+   "seed": 21,
+   "rule": "LNS",
+   "cmax": 188,
+   "iterations": 865205,
+   "accepted": 1
+  },
+  {
+   "family": "deroussi",
+   "stem": "fjsp1",
+   "veh": 2,
+   "seed": 42,
+   "rule": "LNS",
+   "cmax": 188,
+   "iterations": 865996,
+   "accepted": 1
+  },
+  {
+   "family": "deroussi",
+   "stem": "fjsp8",
+   "veh": 2,
+   "seed": 0,
+   "rule": "LNS",
+   "cmax": 254,
+   "iterations": 823659,
+   "accepted": 1
+  },
+  {
+   "family": "deroussi",
+   "stem": "fjsp8",
+   "veh": 2,
+   "seed": 21,
+   "rule": "LNS",
+   "cmax": 254,
+   "iterations": 834822,
+   "accepted": 1
+  },
+  {
+   "family": "deroussi",
+   "stem": "fjsp8",
+   "veh": 2,
+   "seed": 42,
+   "rule": "LNS",
+   "cmax": 254,
+   "iterations": 828095,
+   "accepted": 1
+  },
+  {
+   "family": "dauzere",
+   "stem": "15a",
+   "veh": 2,
+   "seed": 0,
+   "rule": "LNS",
+   "cmax": 8473,
+   "iterations": 15765,
+   "accepted": 0
+  },
+  {
+   "family": "dauzere",
+   "stem": "15a",
+   "veh": 2,
+   "seed": 42,
+   "rule": "LNS",
+   "cmax": 8473,
+   "iterations": 15801,
+   "accepted": 0
+  },
+  {
+   "family": "dauzere",
+   "stem": "15a",
+   "veh": 2,
+   "seed": 21,
+   "rule": "LNS",
+   "cmax": 8473,
+   "iterations": 15588,
+   "accepted": 0
+  },
+  {
+   "family": "dauzere",
+   "stem": "18a",
+   "veh": 2,
+   "seed": 21,
+   "rule": "LNS",
+   "cmax": 8813,
+   "iterations": 15675,
+   "accepted": 0
+  },
+  {
+   "family": "dauzere",
+   "stem": "18a",
+   "veh": 2,
+   "seed": 0,
+   "rule": "LNS",
+   "cmax": 8813,
+   "iterations": 15490,
+   "accepted": 0
+  },
+  {
+   "family": "dauzere",
+   "stem": "18a",
+   "veh": 2,
+   "seed": 42,
+   "rule": "LNS",
+   "cmax": 8813,
+   "iterations": 15840,
+   "accepted": 0
+  },
+  {
+   "family": "dauzere",
+   "stem": "01a",
+   "veh": 2,
+   "rule": "GA_D1",
+   "budget": 600,
+   "pop": 1000,
+   "seed": 0,
+   "cmax": 3039,
+   "evals": 804880,
+   "generations": 812,
+   "elapsed": 600.0
+  },
+  {
+   "family": "dauzere",
+   "stem": "01a",
+   "veh": 2,
+   "rule": "GA_D1",
+   "budget": 600,
+   "pop": 1000,
+   "seed": 21,
+   "cmax": 2977,
+   "evals": 805870,
+   "generations": 813,
+   "elapsed": 600.4
+  },
+  {
+   "family": "dauzere",
+   "stem": "01a",
+   "veh": 2,
+   "rule": "GA_D1",
+   "budget": 600,
+   "pop": 1000,
+   "seed": 42,
+   "cmax": 3119,
+   "evals": 807850,
+   "generations": 815,
+   "elapsed": 600.5
+  },
+  {
+   "family": "dauzere",
+   "stem": "07a",
+   "veh": 4,
+   "rule": "GA_D1",
+   "budget": 600,
+   "pop": 1000,
+   "seed": 0,
+   "cmax": 3337,
+   "evals": 386110,
+   "generations": 389,
+   "elapsed": 600.4
+  },
+  {
+   "family": "dauzere",
+   "stem": "07a",
+   "veh": 4,
+   "rule": "GA_D1",
+   "budget": 600,
+   "pop": 1000,
+   "seed": 21,
+   "cmax": 3334,
+   "evals": 388090,
+   "generations": 391,
+   "elapsed": 600.6
+  },
+  {
+   "family": "dauzere",
+   "stem": "07a",
+   "veh": 4,
+   "rule": "GA_D1",
+   "budget": 600,
+   "pop": 1000,
+   "seed": 42,
+   "cmax": 3336,
+   "evals": 385120,
+   "generations": 388,
+   "elapsed": 601.1
+  },
+  {
+   "family": "dauzere",
+   "stem": "09a",
+   "veh": 2,
+   "rule": "GA_D1",
+   "budget": 600,
+   "pop": 1000,
+   "seed": 0,
+   "cmax": 2890,
+   "evals": 529660,
+   "generations": 534,
+   "elapsed": 600.2
+  },
+  {
+   "family": "dauzere",
+   "stem": "09a",
+   "veh": 2,
+   "rule": "GA_D1",
+   "budget": 600,
+   "pop": 1000,
+   "seed": 42,
+   "cmax": 2917,
+   "evals": 527680,
+   "generations": 532,
+   "elapsed": 600.1
+  },
+  {
+   "family": "dauzere",
+   "stem": "09a",
+   "veh": 2,
+   "rule": "GA_D1",
+   "budget": 600,
+   "pop": 1000,
+   "seed": 21,
+   "cmax": 2752,
+   "evals": 545500,
+   "generations": 550,
+   "elapsed": 600.4
+  },
+  {
+   "family": "dauzere",
+   "stem": "12a",
+   "veh": 2,
+   "rule": "GA_D1",
+   "budget": 600,
+   "pop": 1000,
+   "seed": 0,
+   "cmax": 2896,
+   "evals": 538570,
+   "generations": 543,
+   "elapsed": 600.9
+  },
+  {
+   "family": "dauzere",
+   "stem": "12a",
+   "veh": 2,
+   "rule": "GA_D1",
+   "budget": 600,
+   "pop": 1000,
+   "seed": 42,
+   "cmax": 2910,
+   "evals": 540550,
+   "generations": 545,
+   "elapsed": 600.6
+  },
+  {
+   "family": "dauzere",
+   "stem": "12a",
+   "veh": 2,
+   "rule": "GA_D1",
+   "budget": 600,
+   "pop": 1000,
+   "seed": 21,
+   "cmax": 2849,
+   "evals": 540550,
+   "generations": 545,
+   "elapsed": 600.8
+  },
+  {
+   "family": "dauzere",
+   "stem": "15a",
+   "veh": 2,
+   "rule": "GA_D1",
+   "budget": 600,
+   "pop": 1000,
+   "seed": 0,
+   "cmax": 4183,
+   "evals": 365320,
+   "generations": 368,
+   "elapsed": 600.6
+  },
+  {
+   "family": "dauzere",
+   "stem": "15a",
+   "veh": 2,
+   "rule": "GA_D1",
+   "budget": 600,
+   "pop": 1000,
+   "seed": 21,
+   "cmax": 4220,
+   "evals": 369280,
+   "generations": 372,
+   "elapsed": 600.4
+  },
+  {
+   "family": "dauzere",
+   "stem": "15a",
+   "veh": 2,
+   "rule": "GA_D1",
+   "budget": 600,
+   "pop": 1000,
+   "seed": 42,
+   "cmax": 4163,
+   "evals": 370270,
+   "generations": 373,
+   "elapsed": 601.2
+  },
+  {
+   "family": "dauzere",
+   "stem": "18a",
+   "veh": 2,
+   "rule": "GA_D1",
+   "budget": 600,
+   "pop": 1000,
+   "seed": 0,
+   "cmax": 4115,
+   "evals": 359380,
+   "generations": 362,
+   "elapsed": 600.0
+  },
+  {
+   "family": "dauzere",
+   "stem": "18a",
+   "veh": 2,
+   "rule": "GA_D1",
+   "budget": 600,
+   "pop": 1000,
+   "seed": 21,
+   "cmax": 4187,
+   "evals": 360370,
+   "generations": 363,
+   "elapsed": 600.4
+  },
+  {
+   "family": "dauzere",
+   "stem": "18a",
+   "veh": 2,
+   "rule": "GA_D1",
+   "budget": 600,
+   "pop": 1000,
+   "seed": 42,
+   "cmax": 4240,
+   "evals": 355420,
+   "generations": 358,
+   "elapsed": 601.2
+  },
+  {
+   "family": "deroussi",
+   "stem": "fjsp1",
+   "veh": 2,
+   "rule": "GA_D1",
+   "budget": 600,
+   "pop": 1000,
+   "seed": 0,
+   "cmax": 140,
+   "evals": 7645780,
+   "generations": 7722,
+   "elapsed": 600.0
+  },
+  {
+   "family": "deroussi",
+   "stem": "fjsp1",
+   "veh": 2,
+   "rule": "GA_D1",
+   "budget": 600,
+   "pop": 1000,
+   "seed": 21,
+   "cmax": 144,
+   "evals": 7703200,
+   "generations": 7780,
+   "elapsed": 600.0
+  },
+  {
+   "family": "deroussi",
+   "stem": "fjsp1",
+   "veh": 2,
+   "rule": "GA_D1",
+   "budget": 600,
+   "pop": 1000,
+   "seed": 42,
+   "cmax": 144,
+   "evals": 7723000,
+   "generations": 7800,
+   "elapsed": 600.0
+  },
+  {
+   "family": "deroussi",
+   "stem": "fjsp8",
+   "veh": 2,
+   "rule": "GA_D1",
+   "budget": 600,
+   "pop": 1000,
+   "seed": 0,
+   "cmax": 182,
+   "evals": 7271560,
+   "generations": 7344,
+   "elapsed": 600.0
+  },
+  {
+   "family": "deroussi",
+   "stem": "fjsp8",
+   "veh": 2,
+   "rule": "GA_D1",
+   "budget": 600,
+   "pop": 1000,
+   "seed": 21,
+   "cmax": 178,
+   "evals": 7334920,
+   "generations": 7408,
+   "elapsed": 600.0
+  },
+  {
+   "family": "deroussi",
+   "stem": "fjsp8",
+   "veh": 2,
+   "rule": "GA_D1",
+   "budget": 600,
+   "pop": 1000,
+   "seed": 42,
+   "cmax": 179,
+   "evals": 7390360,
+   "generations": 7464,
+   "elapsed": 600.0
+  }
+ ]
+}
