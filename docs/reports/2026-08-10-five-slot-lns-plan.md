@@ -175,7 +175,38 @@ LNS 명분이 성능이 아니므로 "비기면 통과". 단 **크게 뒤지면 
 
 ---
 
-## Stage 4 - 5슬롯 진화 루프 (약 1주)
+## Stage 4' - 4슬롯 진화 루프, 구성형 체제 (LNS 대신, 2026-08-12 착수)
+
+Stage 3(LNS)이 기각되면서 원래 Stage 4(LNS 위에 5슬롯)는 폐기. 대신 2026-08-10 보고서 권고대로
+**탐색을 아예 없애고**(`dispatch.build`, 케이스당 0.2초) 4슬롯을 진화시킨다. 근거: 규칙 하나
+바꿨을 때 튜닝된 GA 위에서는 1~2%p, 구성형에서는 ~80%p가 움직인다(2026-08-01b vs 2026-08-07).
+
+- [x] 슬롯별 특징 목록 `model/rules.py::SLOT_FEATURES` (dispatch.py 4개 feat 딕셔너리와 대조 확인)
+- [x] `model/experiment.py::evaluate_bundle` - `dispatch.build` 1회, seeds 불필요(결정론적)
+- [x] `model/experiment.py::evolve_bundle` - 개체 = `{slot: expr}` 4개, 적합도 1개, `evolve()`와
+      같은 기록 메커니즘(`record`) 공유
+- [x] `model/llm.py::ClaudeBundleProposer` + `LocalBundleProposer` - 4슬롯 동시 제안,
+      `bundle_valid`(함수형 지원 - 정적 이름검사 대신 대표 특징값으로 실행해 검증)
+- [x] 시드 3종(BALANCED 76.6%/HAND 157.7%/MIX) - 성능·구조 둘 다 다양화
+
+**게이트**: 무료 스모크(LocalBundleProposer) + 실제 CLI 소규모 검증에서 4슬롯이 한 번에
+제안되고, 유효성 검사를 통과하고, 개선이 실제로 일어날 것.
+
+> **결과: 통과 (2026-08-12).**
+> - 시드 3개 전부 `bundle_valid` 통과.
+> - 무료 스모크(6개체x2세대): 3984 -> 3796 개선 확인.
+> - **실제 CLI 검증(5개체x1세대, $0.45)**: 4슬롯을 **한 번의 응답에 동시 제안**, 거부 0개,
+>   즉시 개선(3984 -> 3774). reflection: *"The best bundles spread work across machines and
+>   AGVs with -queue_len while sequencing purely by arrival order (FIFO), which avoids both
+>   resource congestion and starvation."* - 8/7이 측정한 "경합 회피" 교훈을 LLM이 스스로 되짚었다.
+> - 회귀 테스트 5종 전부 통과 (기존 경로 무수정, 순수 추가).
+>
+> 아직 안 한 것: **논문 스케일 실행**(며칠 전 20x65=995개체 규모)과 **held-out 검증**.
+> 지금 확인된 건 "배관이 돈다"이지 "규칙이 좋다"가 아니다.
+
+---
+
+## Stage 4 (폐기, LNS 전제) - 5슬롯 진화 루프
 
 - [ ] ~~`evolve()`를 GA→`decode`에서 LNS→`build` 경로로 전환~~
 - [ ] ~~개체 = 5개 함수 묶음(4슬롯 + destroy), 적합도 하나~~

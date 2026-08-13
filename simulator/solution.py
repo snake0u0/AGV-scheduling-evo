@@ -1,9 +1,9 @@
 """Fully-specified solution: what machine/vehicle does each operation, in what order.
 
-This is the single representation shared by the two front-ends:
-  - replay.py reads a published solution file into this
-  - evaluator.py produces this from (OS, MS, rule)
-so both feed the identical timing core.
+This is the single representation every producer feeds into the timing core:
+  - parse_solution_file() reads a published solution file into this
+  - dispatch.build() produces one from a bundle of scoring rules
+so a published schedule and an evolved one are timed by identical code.
 """
 import re
 from dataclasses import dataclass, field

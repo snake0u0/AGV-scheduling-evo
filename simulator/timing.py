@@ -1,13 +1,13 @@
 """The timing core: the single place where schedule times are computed.
 
-Both front-ends (replay of a published solution, and decoding of a GA chromosome)
-call this, so validating it against published makespans validates both.
+Every front-end that produces a fully-specified solution calls this, so validating
+it against published makespans validates all of them.
 
 Recurrence, for operation o (the i-th operation of job j):
 
     transport needed  <=>  i == 0  or  machine(prev) != machine(o)
-        (verified 2026-07-23 against the benchmark solutions: the omitted transports
-         are exactly the same-machine consecutive pairs, 122/122, no counterexample)
+        (verified against the benchmark solutions: the omitted transports are
+         exactly the same-machine consecutive pairs, 122/122, no counterexample)
 
     with transport, on vehicle v:
         pick_loc = L/U if i == 0 else machine(prev)
@@ -28,9 +28,9 @@ from dataclasses import dataclass
 
 @dataclass(frozen=True)
 class Params:
-    """Assumptions the literature does not state explicitly. Defaults are the
-    plain reading; replay.py can sweep them if a published makespan fails to
-    reproduce (see the design report, section 6.2)."""
+    """Assumptions the literature does not state explicitly. Defaults are the plain
+    reading, and reproduce the published makespans; sweep them only if a benchmark
+    fails to replay."""
     load_time: int = 0
     unload_time: int = 0
     vehicles_start_at_depot: bool = True

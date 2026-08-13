@@ -3,9 +3,8 @@ and require the makespan stated in its own header.
 
 This is the strongest end-to-end check available - it exercises the parser, the travel
 matrix, the operation numbering and the timing recurrence at once, against numbers we
-did not produce. It became possible on 2026-07-31 when the layout was recovered from the
-authors' dataset page (DeroussiNorreTravelTimes/SOURCE.md); before that the matrix was
-unknown and this test could not be written.
+did not produce. The travel matrix comes from the authors' dataset page
+(DeroussiNorreTravelTimes/SOURCE.md).
 
 Run: python -m simulator.test_replay_deroussi
 """

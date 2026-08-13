@@ -1,0 +1,2980 @@
+{
+  "config": {
+    "pop_size": 20,
+    "n_gens": 6,
+    "max_calls": 50,
+    "hint_in_prompt": false,
+    "train": [
+      [
+        "01a",
+        2
+      ],
+      [
+        "07a",
+        2
+      ],
+      [
+        "13a",
+        2
+      ]
+    ],
+    "test": [
+      [
+        "02a",
+        2
+      ],
+      [
+        "03a",
+        2
+      ],
+      [
+        "04a",
+        2
+      ],
+      [
+        "05a",
+        2
+      ],
+      [
+        "06a",
+        2
+      ],
+      [
+        "08a",
+        2
+      ],
+      [
+        "09a",
+        2
+      ],
+      [
+        "10a",
+        2
+      ],
+      [
+        "11a",
+        2
+      ],
+      [
+        "12a",
+        2
+      ],
+      [
+        "14a",
+        2
+      ],
+      [
+        "15a",
+        2
+      ],
+      [
+        "16a",
+        2
+      ],
+      [
+        "17a",
+        2
+      ],
+      [
+        "18a",
+        2
+      ]
+    ]
+  },
+  "system_prompt": "You design FOUR priority rules that together build one complete schedule for a\nflexible job-shop with AGV transport, in a single pass with NO search: each rule scores its\ncandidates once and the highest score is taken immediately - there is no chance to undo a\ndecision, and no metaheuristic wraps this. The objective is to MINIMIZE the makespan (the\ncompletion time of the last operation).\n\nThe four rules and when each is called:\n  machine_select   an operation is ready -> scores each ELIGIBLE MACHINE, highest is assigned\n  op_sequence      a machine falls idle  -> scores each operation WAITING FOR THAT MACHINE\n  vehicle_select   a transport is needed -> scores each AGV, highest is assigned to carry it\n  task_sequence    an AGV falls idle     -> scores each transport WAITING FOR THAT AGV\n\nThe four rules do NOT share a feature set - only these names are valid for each:\n  machine_select:  proc_time, machine_free, travel_to, queue_len, job_ready, remaining_ops, remaining_proc\n  op_sequence:     proc_time, arrival, wait, idle, job_wait, queue_len, remaining_ops, remaining_proc\n  vehicle_select:  empty_travel, loaded_travel, agv_free, agv_cum_travel, queue_len, ready, machine_free, remaining_ops\n  task_sequence:   empty_travel, loaded_travel, arrival, wait, agv_free, agv_cum_travel, machine_free, remaining_ops, remaining_proc\n\nTwo forms are allowed for each rule:\n  expression   \"-queue_len\"                            (one line, no def)\n  function     \"def rule(f):\\n    return -f['queue_len']\"\n\nInside a function, f[\"_all\"] is the list of every OTHER candidate's feature dict at this same\ndecision, so a rule can compare a candidate against the field (e.g. \"is this the busiest AGV\nright now?\"). Returning float(\"-inf\") declines a candidate outright.\n\nEXPRESSION GRAMMAR (strict): only that rule's own feature names, numeric constants, the\noperators + - * / ** %, parentheses, and the functions min(), max(), abs(), sum(), len(),\nsorted(). No imports, no while loops, no comments. Keep each rule short and interpretable.",
+  "best_bundle": {
+    "machine_select": "-queue_len - 2*travel_to - proc_time",
+    "op_sequence": "-arrival - 0.5*proc_time + 2*remaining_ops",
+    "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+    "task_sequence": "-arrival + 3*remaining_ops"
+  },
+  "best_train_fitness": 5974,
+  "history": [
+    7122,
+    6670.333333333333,
+    6342,
+    6144.333333333333,
+    6040,
+    5998.666666666667,
+    5974
+  ],
+  "held_out": {
+    "evolved": 4707.866666666667,
+    "BALANCED": 7011.6,
+    "HAND": 9939.2,
+    "MIX": 6670.733333333334
+  },
+  "record": [
+    {
+      "gen": 0,
+      "population": [
+        {
+          "bundle": {
+            "machine_select": "-queue_len",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 7122,
+          "origin": "seed"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 7122,
+          "origin": "seed"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 7122,
+          "origin": "seed"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 7122,
+          "origin": "seed"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 7122,
+          "origin": "seed"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 7122,
+          "origin": "seed"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len",
+            "op_sequence": "0",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "0"
+          },
+          "fitness": 7465.333333333333,
+          "origin": "seed"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len",
+            "op_sequence": "0",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "0"
+          },
+          "fitness": 7465.333333333333,
+          "origin": "seed"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len",
+            "op_sequence": "0",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "0"
+          },
+          "fitness": 7465.333333333333,
+          "origin": "seed"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len",
+            "op_sequence": "0",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "0"
+          },
+          "fitness": 7465.333333333333,
+          "origin": "seed"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len",
+            "op_sequence": "0",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "0"
+          },
+          "fitness": 7465.333333333333,
+          "origin": "seed"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len",
+            "op_sequence": "0",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "0"
+          },
+          "fitness": 7465.333333333333,
+          "origin": "seed"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len",
+            "op_sequence": "0",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "0"
+          },
+          "fitness": 7465.333333333333,
+          "origin": "seed"
+        },
+        {
+          "bundle": {
+            "machine_select": "-proc_time - machine_free",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-(agv_free + empty_travel)",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 8952.333333333334,
+          "origin": "seed"
+        },
+        {
+          "bundle": {
+            "machine_select": "-proc_time - machine_free",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-(agv_free + empty_travel)",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 8952.333333333334,
+          "origin": "seed"
+        },
+        {
+          "bundle": {
+            "machine_select": "-proc_time - machine_free",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-(agv_free + empty_travel)",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 8952.333333333334,
+          "origin": "seed"
+        },
+        {
+          "bundle": {
+            "machine_select": "-proc_time - machine_free",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-(agv_free + empty_travel)",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 8952.333333333334,
+          "origin": "seed"
+        },
+        {
+          "bundle": {
+            "machine_select": "-proc_time - machine_free",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-(agv_free + empty_travel)",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 8952.333333333334,
+          "origin": "seed"
+        },
+        {
+          "bundle": {
+            "machine_select": "-proc_time - machine_free",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-(agv_free + empty_travel)",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 8952.333333333334,
+          "origin": "seed"
+        },
+        {
+          "bundle": {
+            "machine_select": "-proc_time - machine_free",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-(agv_free + empty_travel)",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 8952.333333333334,
+          "origin": "seed"
+        }
+      ]
+    },
+    {
+      "gen": 1,
+      "population": [
+        {
+          "bundle": {
+            "machine_select": "-queue_len",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 7122,
+          "origin": "elite"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 7122,
+          "origin": "elite"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 7122,
+          "origin": "elite"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 7122,
+          "origin": "elite"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 7122,
+          "origin": "elite"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len",
+            "op_sequence": "remaining_proc",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 7032.666666666667,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len",
+            "op_sequence": "remaining_ops",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 7060.333333333333,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len",
+            "op_sequence": "-proc_time",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 7029,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 6864,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-machine_free",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 7258,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-empty_travel",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 8476,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-agv_cum_travel",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 6819.666666666667,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "-wait"
+          },
+          "fitness": 7408.666666666667,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "remaining_proc"
+          },
+          "fitness": 7332.333333333333,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 6670.333333333333,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len",
+            "op_sequence": "remaining_proc",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "remaining_proc"
+          },
+          "fitness": 7335.666666666667,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-machine_free - queue_len",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-agv_free - queue_len",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 7431.333333333333,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len + 0.5*remaining_proc",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 7122,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "remaining_proc / (proc_time + 1) - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 6864,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-travel_to - queue_len",
+            "op_sequence": "remaining_proc",
+            "vehicle_select": "-empty_travel - queue_len",
+            "task_sequence": "remaining_proc"
+          },
+          "fitness": 7133,
+          "origin": "child"
+        }
+      ],
+      "call": {
+        "prompt_user": "Current best rule bundles, ranked best first, with their mean makespan (LOWER is better):\n1. makespan=7122.0\n   machine_select: -queue_len\n   op_sequence:    -arrival\n   vehicle_select: -queue_len\n   task_sequence:  -arrival\n2. makespan=7122.0\n   machine_select: -queue_len\n   op_sequence:    -arrival\n   vehicle_select: -queue_len\n   task_sequence:  -arrival\n3. makespan=7122.0\n   machine_select: -queue_len\n   op_sequence:    -arrival\n   vehicle_select: -queue_len\n   task_sequence:  -arrival\n4. makespan=7122.0\n   machine_select: -queue_len\n   op_sequence:    -arrival\n   vehicle_select: -queue_len\n   task_sequence:  -arrival\n5. makespan=7122.0\n   machine_select: -queue_len\n   op_sequence:    -arrival\n   vehicle_select: -queue_len\n   task_sequence:  -arrival\n\nFirst, in one short sentence, reflect on what the lower-makespan bundles do well. Then propose 15 NEW bundles predicted to achieve EVEN LOWER makespan. You may change any subset of the four rules per bundle - changing all four is not required.\nOUTPUT: respond with ONLY a single-line JSON object, no markdown fences. Exactly 15 bundles:\n{\"reflection\":\"<one sentence>\",\"offspring\":[{\"machine_select\":\"<expr>\",\"op_sequence\":\"<expr>\",\"vehicle_select\":\"<expr>\",\"task_sequence\":\"<expr>\"}, ...]}",
+        "response": "{\"reflection\":\"The top bundles rely purely on greedy load-balancing (shortest queue) plus FIFO ordering, ignoring travel distance and remaining-work signals that matter for a joint machine+AGV makespan objective.\",\"offspring\":[{\"machine_select\":\"-queue_len\",\"op_sequence\":\"remaining_proc\",\"vehicle_select\":\"-queue_len\",\"task_sequence\":\"-arrival\"},{\"machine_select\":\"-queue_len\",\"op_sequence\":\"remaining_ops\",\"vehicle_select\":\"-queue_len\",\"task_sequence\":\"-arrival\"},{\"machine_select\":\"-queue_len\",\"op_sequence\":\"-proc_time\",\"vehicle_select\":\"-queue_len\",\"task_sequence\":\"-arrival\"},{\"machine_select\":\"-travel_to\",\"op_sequence\":\"-arrival\",\"vehicle_select\":\"-queue_len\",\"task_sequence\":\"-arrival\"},{\"machine_select\":\"-machine_free\",\"op_sequence\":\"-arrival\",\"vehicle_select\":\"-queue_len\",\"task_sequence\":\"-arrival\"},{\"machine_select\":\"-queue_len\",\"op_sequence\":\"-arrival\",\"vehicle_select\":\"-empty_travel\",\"task_sequence\":\"-arrival\"},{\"machine_select\":\"-queue_len\",\"op_sequence\":\"-arrival\",\"vehicle_select\":\"-agv_cum_travel\",\"task_sequence\":\"-arrival\"},{\"machine_select\":\"-queue_len\",\"op_sequence\":\"-arrival\",\"vehicle_select\":\"-queue_len\",\"task_sequence\":\"-wait\"},{\"machine_select\":\"-queue_len\",\"op_sequence\":\"-arrival\",\"vehicle_select\":\"-queue_len\",\"task_sequence\":\"remaining_proc\"},{\"machine_select\":\"-queue_len - travel_to\",\"op_sequence\":\"-arrival\",\"vehicle_select\":\"-queue_len - empty_travel\",\"task_sequence\":\"-arrival\"},{\"machine_select\":\"-queue_len\",\"op_sequence\":\"remaining_proc\",\"vehicle_select\":\"-queue_len\",\"task_sequence\":\"remaining_proc\"},{\"machine_select\":\"-machine_free - queue_len\",\"op_sequence\":\"-arrival\",\"vehicle_select\":\"-agv_free - queue_len\",\"task_sequence\":\"-arrival\"},{\"machine_select\":\"-queue_len + 0.5*remaining_proc\",\"op_sequence\":\"-arrival\",\"vehicle_select\":\"-queue_len\",\"task_sequence\":\"-arrival\"},{\"machine_select\":\"remaining_proc / (proc_time + 1) - travel_to\",\"op_sequence\":\"-arrival\",\"vehicle_select\":\"-queue_len\",\"task_sequence\":\"-arrival\"},{\"machine_select\":\"-travel_to - queue_len\",\"op_sequence\":\"remaining_proc\",\"vehicle_select\":\"-empty_travel - queue_len\",\"task_sequence\":\"remaining_proc\"}]}",
+        "reflection": "The top bundles rely purely on greedy load-balancing (shortest queue) plus FIFO ordering, ignoring travel distance and remaining-work signals that matter for a joint machine+AGV makespan objective.",
+        "parents": [
+          {
+            "bundle": {
+              "machine_select": "-queue_len",
+              "op_sequence": "-arrival",
+              "vehicle_select": "-queue_len",
+              "task_sequence": "-arrival"
+            },
+            "fitness": 7122
+          },
+          {
+            "bundle": {
+              "machine_select": "-queue_len",
+              "op_sequence": "-arrival",
+              "vehicle_select": "-queue_len",
+              "task_sequence": "-arrival"
+            },
+            "fitness": 7122
+          },
+          {
+            "bundle": {
+              "machine_select": "-queue_len",
+              "op_sequence": "-arrival",
+              "vehicle_select": "-queue_len",
+              "task_sequence": "-arrival"
+            },
+            "fitness": 7122
+          },
+          {
+            "bundle": {
+              "machine_select": "-queue_len",
+              "op_sequence": "-arrival",
+              "vehicle_select": "-queue_len",
+              "task_sequence": "-arrival"
+            },
+            "fitness": 7122
+          },
+          {
+            "bundle": {
+              "machine_select": "-queue_len",
+              "op_sequence": "-arrival",
+              "vehicle_select": "-queue_len",
+              "task_sequence": "-arrival"
+            },
+            "fitness": 7122
+          }
+        ],
+        "proposed": [
+          {
+            "machine_select": "-queue_len",
+            "op_sequence": "remaining_proc",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len",
+            "op_sequence": "remaining_ops",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len",
+            "op_sequence": "-proc_time",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-machine_free",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-empty_travel",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-agv_cum_travel",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "-wait"
+          },
+          {
+            "machine_select": "-queue_len",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "remaining_proc"
+          },
+          {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len",
+            "op_sequence": "remaining_proc",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "remaining_proc"
+          },
+          {
+            "machine_select": "-machine_free - queue_len",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-agv_free - queue_len",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len + 0.5*remaining_proc",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "remaining_proc / (proc_time + 1) - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-travel_to - queue_len",
+            "op_sequence": "remaining_proc",
+            "vehicle_select": "-empty_travel - queue_len",
+            "task_sequence": "remaining_proc"
+          }
+        ],
+        "rejected": [],
+        "n_padded": 0,
+        "returned": [
+          {
+            "machine_select": "-queue_len",
+            "op_sequence": "remaining_proc",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len",
+            "op_sequence": "remaining_ops",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len",
+            "op_sequence": "-proc_time",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-machine_free",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-empty_travel",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-agv_cum_travel",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "-wait"
+          },
+          {
+            "machine_select": "-queue_len",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "remaining_proc"
+          },
+          {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len",
+            "op_sequence": "remaining_proc",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "remaining_proc"
+          },
+          {
+            "machine_select": "-machine_free - queue_len",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-agv_free - queue_len",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len + 0.5*remaining_proc",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "remaining_proc / (proc_time + 1) - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-travel_to - queue_len",
+            "op_sequence": "remaining_proc",
+            "vehicle_select": "-empty_travel - queue_len",
+            "task_sequence": "remaining_proc"
+          }
+        ]
+      }
+    },
+    {
+      "gen": 2,
+      "population": [
+        {
+          "bundle": {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 6670.333333333333,
+          "origin": "elite"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-agv_cum_travel",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 6819.666666666667,
+          "origin": "elite"
+        },
+        {
+          "bundle": {
+            "machine_select": "-travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 6864,
+          "origin": "elite"
+        },
+        {
+          "bundle": {
+            "machine_select": "remaining_proc / (proc_time + 1) - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 6864,
+          "origin": "elite"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len",
+            "op_sequence": "-proc_time",
+            "vehicle_select": "-queue_len",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 7029,
+          "origin": "elite"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 6342,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-2*queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 6670.333333333333,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 6594.666666666667,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - 2*empty_travel",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 6860,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-2*queue_len - empty_travel",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 6853,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "remaining_proc / (proc_time + 1) - queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 6670.333333333333,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - travel_to - machine_free",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 7373,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel - agv_free",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 6781.666666666667,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "wait",
+            "vehicle_select": "-queue_len - empty_travel",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 7250.666666666667,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel",
+            "task_sequence": "wait"
+          },
+          "fitness": 10145,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "wait",
+            "vehicle_select": "-queue_len - empty_travel",
+            "task_sequence": "wait"
+          },
+          "fitness": 9985.333333333334,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival - proc_time",
+            "vehicle_select": "-queue_len - empty_travel",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 6641.333333333333,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          "fitness": 6617.333333333333,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel - loaded_travel",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 6670.333333333333,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - travel_to + remaining_ops",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel + remaining_ops",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 6670.333333333333,
+          "origin": "child"
+        }
+      ],
+      "call": {
+        "prompt_user": "Current best rule bundles, ranked best first, with their mean makespan (LOWER is better):\n1. makespan=6670.3\n   machine_select: -queue_len - travel_to\n   op_sequence:    -arrival\n   vehicle_select: -queue_len - empty_travel\n   task_sequence:  -arrival\n2. makespan=6819.7\n   machine_select: -queue_len\n   op_sequence:    -arrival\n   vehicle_select: -agv_cum_travel\n   task_sequence:  -arrival\n3. makespan=6864.0\n   machine_select: -travel_to\n   op_sequence:    -arrival\n   vehicle_select: -queue_len\n   task_sequence:  -arrival\n4. makespan=6864.0\n   machine_select: remaining_proc / (proc_time + 1) - travel_to\n   op_sequence:    -arrival\n   vehicle_select: -queue_len\n   task_sequence:  -arrival\n5. makespan=7029.0\n   machine_select: -queue_len\n   op_sequence:    -proc_time\n   vehicle_select: -queue_len\n   task_sequence:  -arrival\n\nFirst, in one short sentence, reflect on what the lower-makespan bundles do well. Then propose 15 NEW bundles predicted to achieve EVEN LOWER makespan. You may change any subset of the four rules per bundle - changing all four is not required.\nOUTPUT: respond with ONLY a single-line JSON object, no markdown fences. Exactly 15 bundles:\n{\"reflection\":\"<one sentence>\",\"offspring\":[{\"machine_select\":\"<expr>\",\"op_sequence\":\"<expr>\",\"vehicle_select\":\"<expr>\",\"task_sequence\":\"<expr>\"}, ...]}",
+        "response": "{\"reflection\":\"Lower-makespan bundles combine two negatively-weighted congestion/distance features per selection rule (queue_len+travel_to for machines, queue_len+empty_travel for AGVs) while keeping both sequencing rules as plain FIFO (-arrival).\",\"offspring\":[{\"machine_select\":\"-queue_len - travel_to\",\"op_sequence\":\"-arrival\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival\"},{\"machine_select\":\"-2*queue_len - travel_to\",\"op_sequence\":\"-arrival\",\"vehicle_select\":\"-queue_len - empty_travel\",\"task_sequence\":\"-arrival\"},{\"machine_select\":\"-queue_len - 2*travel_to\",\"op_sequence\":\"-arrival\",\"vehicle_select\":\"-queue_len - empty_travel\",\"task_sequence\":\"-arrival\"},{\"machine_select\":\"-queue_len - travel_to\",\"op_sequence\":\"-arrival\",\"vehicle_select\":\"-queue_len - 2*empty_travel\",\"task_sequence\":\"-arrival\"},{\"machine_select\":\"-queue_len - travel_to\",\"op_sequence\":\"-arrival\",\"vehicle_select\":\"-2*queue_len - empty_travel\",\"task_sequence\":\"-arrival\"},{\"machine_select\":\"remaining_proc / (proc_time + 1) - queue_len - travel_to\",\"op_sequence\":\"-arrival\",\"vehicle_select\":\"-queue_len - empty_travel\",\"task_sequence\":\"-arrival\"},{\"machine_select\":\"-queue_len - travel_to - machine_free\",\"op_sequence\":\"-arrival\",\"vehicle_select\":\"-queue_len - empty_travel\",\"task_sequence\":\"-arrival\"},{\"machine_select\":\"-queue_len - travel_to\",\"op_sequence\":\"-arrival\",\"vehicle_select\":\"-queue_len - empty_travel - agv_free\",\"task_sequence\":\"-arrival\"},{\"machine_select\":\"-queue_len - travel_to\",\"op_sequence\":\"wait\",\"vehicle_select\":\"-queue_len - empty_travel\",\"task_sequence\":\"-arrival\"},{\"machine_select\":\"-queue_len - travel_to\",\"op_sequence\":\"-arrival\",\"vehicle_select\":\"-queue_len - empty_travel\",\"task_sequence\":\"wait\"},{\"machine_select\":\"-queue_len - travel_to\",\"op_sequence\":\"wait\",\"vehicle_select\":\"-queue_len - empty_travel\",\"task_sequence\":\"wait\"},{\"machine_select\":\"-queue_len - travel_to\",\"op_sequence\":\"-arrival - proc_time\",\"vehicle_select\":\"-queue_len - empty_travel\",\"task_sequence\":\"-arrival\"},{\"machine_select\":\"-queue_len - travel_to\",\"op_sequence\":\"-arrival\",\"vehicle_select\":\"-queue_len - empty_travel\",\"task_sequence\":\"-arrival + remaining_ops\"},{\"machine_select\":\"-queue_len - travel_to\",\"op_sequence\":\"-arrival\",\"vehicle_select\":\"-queue_len - empty_travel - loaded_travel\",\"task_sequence\":\"-arrival\"},{\"machine_select\":\"-queue_len - travel_to + remaining_ops\",\"op_sequence\":\"-arrival\",\"vehicle_select\":\"-queue_len - empty_travel + remaining_ops\",\"task_sequence\":\"-arrival\"}]}",
+        "reflection": "Lower-makespan bundles combine two negatively-weighted congestion/distance features per selection rule (queue_len+travel_to for machines, queue_len+empty_travel for AGVs) while keeping both sequencing rules as plain FIFO (-arrival).",
+        "parents": [
+          {
+            "bundle": {
+              "machine_select": "-queue_len - travel_to",
+              "op_sequence": "-arrival",
+              "vehicle_select": "-queue_len - empty_travel",
+              "task_sequence": "-arrival"
+            },
+            "fitness": 6670.333333333333
+          },
+          {
+            "bundle": {
+              "machine_select": "-queue_len",
+              "op_sequence": "-arrival",
+              "vehicle_select": "-agv_cum_travel",
+              "task_sequence": "-arrival"
+            },
+            "fitness": 6819.666666666667
+          },
+          {
+            "bundle": {
+              "machine_select": "-travel_to",
+              "op_sequence": "-arrival",
+              "vehicle_select": "-queue_len",
+              "task_sequence": "-arrival"
+            },
+            "fitness": 6864
+          },
+          {
+            "bundle": {
+              "machine_select": "remaining_proc / (proc_time + 1) - travel_to",
+              "op_sequence": "-arrival",
+              "vehicle_select": "-queue_len",
+              "task_sequence": "-arrival"
+            },
+            "fitness": 6864
+          },
+          {
+            "bundle": {
+              "machine_select": "-queue_len",
+              "op_sequence": "-proc_time",
+              "vehicle_select": "-queue_len",
+              "task_sequence": "-arrival"
+            },
+            "fitness": 7029
+          }
+        ],
+        "proposed": [
+          {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-2*queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - 2*empty_travel",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-2*queue_len - empty_travel",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "remaining_proc / (proc_time + 1) - queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len - travel_to - machine_free",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel - agv_free",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "wait",
+            "vehicle_select": "-queue_len - empty_travel",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel",
+            "task_sequence": "wait"
+          },
+          {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "wait",
+            "vehicle_select": "-queue_len - empty_travel",
+            "task_sequence": "wait"
+          },
+          {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival - proc_time",
+            "vehicle_select": "-queue_len - empty_travel",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel - loaded_travel",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len - travel_to + remaining_ops",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel + remaining_ops",
+            "task_sequence": "-arrival"
+          }
+        ],
+        "rejected": [],
+        "n_padded": 0,
+        "returned": [
+          {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-2*queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - 2*empty_travel",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-2*queue_len - empty_travel",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "remaining_proc / (proc_time + 1) - queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len - travel_to - machine_free",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel - agv_free",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "wait",
+            "vehicle_select": "-queue_len - empty_travel",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel",
+            "task_sequence": "wait"
+          },
+          {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "wait",
+            "vehicle_select": "-queue_len - empty_travel",
+            "task_sequence": "wait"
+          },
+          {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival - proc_time",
+            "vehicle_select": "-queue_len - empty_travel",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel - loaded_travel",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len - travel_to + remaining_ops",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel + remaining_ops",
+            "task_sequence": "-arrival"
+          }
+        ]
+      }
+    },
+    {
+      "gen": 3,
+      "population": [
+        {
+          "bundle": {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 6342,
+          "origin": "elite"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 6594.666666666667,
+          "origin": "elite"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          "fitness": 6617.333333333333,
+          "origin": "elite"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival - proc_time",
+            "vehicle_select": "-queue_len - empty_travel",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 6641.333333333333,
+          "origin": "elite"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 6670.333333333333,
+          "origin": "elite"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          "fitness": 6297,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 6342,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          "fitness": 6334.666666666667,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival - proc_time",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 6419,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival - proc_time",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          "fitness": 6144.333333333333,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel - 2*agv_cum_travel",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 6418,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel - 0.5*agv_cum_travel",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 6511.333333333333,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-2*queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 6342,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - travel_to - machine_free",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 6903.666666666667,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel - agv_free",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 6498,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_proc"
+          },
+          "fitness": 6628.666666666667,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival + remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 6602.666666666667,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival - job_wait",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 6399.666666666667,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-2*queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 6681.666666666667,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - travel_to - proc_time",
+            "op_sequence": "-arrival - remaining_proc",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel - agv_free",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          "fitness": 6451.333333333333,
+          "origin": "child"
+        }
+      ],
+      "call": {
+        "prompt_user": "Current best rule bundles, ranked best first, with their mean makespan (LOWER is better):\n1. makespan=6342.0\n   machine_select: -queue_len - travel_to\n   op_sequence:    -arrival\n   vehicle_select: -queue_len - empty_travel - agv_cum_travel\n   task_sequence:  -arrival\n2. makespan=6594.7\n   machine_select: -queue_len - 2*travel_to\n   op_sequence:    -arrival\n   vehicle_select: -queue_len - empty_travel\n   task_sequence:  -arrival\n3. makespan=6617.3\n   machine_select: -queue_len - travel_to\n   op_sequence:    -arrival\n   vehicle_select: -queue_len - empty_travel\n   task_sequence:  -arrival + remaining_ops\n4. makespan=6641.3\n   machine_select: -queue_len - travel_to\n   op_sequence:    -arrival - proc_time\n   vehicle_select: -queue_len - empty_travel\n   task_sequence:  -arrival\n5. makespan=6670.3\n   machine_select: -queue_len - travel_to\n   op_sequence:    -arrival\n   vehicle_select: -queue_len - empty_travel\n   task_sequence:  -arrival\n\nFirst, in one short sentence, reflect on what the lower-makespan bundles do well. Then propose 15 NEW bundles predicted to achieve EVEN LOWER makespan. You may change any subset of the four rules per bundle - changing all four is not required.\nOUTPUT: respond with ONLY a single-line JSON object, no markdown fences. Exactly 15 bundles:\n{\"reflection\":\"<one sentence>\",\"offspring\":[{\"machine_select\":\"<expr>\",\"op_sequence\":\"<expr>\",\"vehicle_select\":\"<expr>\",\"task_sequence\":\"<expr>\"}, ...]}",
+        "response": "{\"reflection\":\"The best bundles pair local congestion/distance avoidance (-queue_len, -travel_to, -empty_travel) for assignment rules with FIFO urgency (-arrival) for sequencing rules, and the biggest further gain comes from adding a genuinely per-candidate discriminator like agv_cum_travel (load-balancing) or remaining_ops (job urgency) that actually varies across candidates rather than being constant within a decision.\",\"offspring\":[{\"machine_select\":\"-queue_len - travel_to\",\"op_sequence\":\"-arrival\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival + remaining_ops\"},{\"machine_select\":\"-queue_len - 2*travel_to\",\"op_sequence\":\"-arrival\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival\"},{\"machine_select\":\"-queue_len - 2*travel_to\",\"op_sequence\":\"-arrival\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival + remaining_ops\"},{\"machine_select\":\"-queue_len - travel_to\",\"op_sequence\":\"-arrival - proc_time\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival\"},{\"machine_select\":\"-queue_len - 2*travel_to\",\"op_sequence\":\"-arrival - proc_time\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival + remaining_ops\"},{\"machine_select\":\"-queue_len - travel_to\",\"op_sequence\":\"-arrival\",\"vehicle_select\":\"-queue_len - empty_travel - 2*agv_cum_travel\",\"task_sequence\":\"-arrival\"},{\"machine_select\":\"-queue_len - travel_to\",\"op_sequence\":\"-arrival\",\"vehicle_select\":\"-queue_len - empty_travel - 0.5*agv_cum_travel\",\"task_sequence\":\"-arrival\"},{\"machine_select\":\"-2*queue_len - travel_to\",\"op_sequence\":\"-arrival\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival\"},{\"machine_select\":\"-queue_len - travel_to - machine_free\",\"op_sequence\":\"-arrival\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival\"},{\"machine_select\":\"-queue_len - travel_to\",\"op_sequence\":\"-arrival\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel - agv_free\",\"task_sequence\":\"-arrival\"},{\"machine_select\":\"-queue_len - travel_to\",\"op_sequence\":\"-arrival\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival + remaining_proc\"},{\"machine_select\":\"-queue_len - travel_to\",\"op_sequence\":\"-arrival + remaining_ops\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival\"},{\"machine_select\":\"-queue_len - travel_to\",\"op_sequence\":\"-arrival - job_wait\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival\"},{\"machine_select\":\"-queue_len - travel_to\",\"op_sequence\":\"-arrival\",\"vehicle_select\":\"-2*queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival\"},{\"machine_select\":\"-queue_len - travel_to - proc_time\",\"op_sequence\":\"-arrival - remaining_proc\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel - agv_free\",\"task_sequence\":\"-arrival + remaining_ops\"}]}",
+        "reflection": "The best bundles pair local congestion/distance avoidance (-queue_len, -travel_to, -empty_travel) for assignment rules with FIFO urgency (-arrival) for sequencing rules, and the biggest further gain comes from adding a genuinely per-candidate discriminator like agv_cum_travel (load-balancing) or remaining_ops (job urgency) that actually varies across candidates rather than being constant within a decision.",
+        "parents": [
+          {
+            "bundle": {
+              "machine_select": "-queue_len - travel_to",
+              "op_sequence": "-arrival",
+              "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+              "task_sequence": "-arrival"
+            },
+            "fitness": 6342
+          },
+          {
+            "bundle": {
+              "machine_select": "-queue_len - 2*travel_to",
+              "op_sequence": "-arrival",
+              "vehicle_select": "-queue_len - empty_travel",
+              "task_sequence": "-arrival"
+            },
+            "fitness": 6594.666666666667
+          },
+          {
+            "bundle": {
+              "machine_select": "-queue_len - travel_to",
+              "op_sequence": "-arrival",
+              "vehicle_select": "-queue_len - empty_travel",
+              "task_sequence": "-arrival + remaining_ops"
+            },
+            "fitness": 6617.333333333333
+          },
+          {
+            "bundle": {
+              "machine_select": "-queue_len - travel_to",
+              "op_sequence": "-arrival - proc_time",
+              "vehicle_select": "-queue_len - empty_travel",
+              "task_sequence": "-arrival"
+            },
+            "fitness": 6641.333333333333
+          },
+          {
+            "bundle": {
+              "machine_select": "-queue_len - travel_to",
+              "op_sequence": "-arrival",
+              "vehicle_select": "-queue_len - empty_travel",
+              "task_sequence": "-arrival"
+            },
+            "fitness": 6670.333333333333
+          }
+        ],
+        "proposed": [
+          {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival - proc_time",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival - proc_time",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel - 2*agv_cum_travel",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel - 0.5*agv_cum_travel",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-2*queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len - travel_to - machine_free",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel - agv_free",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_proc"
+          },
+          {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival + remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival - job_wait",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-2*queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len - travel_to - proc_time",
+            "op_sequence": "-arrival - remaining_proc",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel - agv_free",
+            "task_sequence": "-arrival + remaining_ops"
+          }
+        ],
+        "rejected": [],
+        "n_padded": 0,
+        "returned": [
+          {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival - proc_time",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival - proc_time",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel - 2*agv_cum_travel",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel - 0.5*agv_cum_travel",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-2*queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len - travel_to - machine_free",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel - agv_free",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_proc"
+          },
+          {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival + remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival - job_wait",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-2*queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival"
+          },
+          {
+            "machine_select": "-queue_len - travel_to - proc_time",
+            "op_sequence": "-arrival - remaining_proc",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel - agv_free",
+            "task_sequence": "-arrival + remaining_ops"
+          }
+        ]
+      }
+    },
+    {
+      "gen": 4,
+      "population": [
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival - proc_time",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          "fitness": 6144.333333333333,
+          "origin": "elite"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          "fitness": 6297,
+          "origin": "elite"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          "fitness": 6334.666666666667,
+          "origin": "elite"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 6342,
+          "origin": "elite"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival"
+          },
+          "fitness": 6342,
+          "origin": "elite"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival - 2*proc_time",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          "fitness": 6131.333333333333,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival - 0.5*proc_time",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          "fitness": 6191.333333333333,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 3*travel_to",
+            "op_sequence": "-arrival - proc_time",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          "fitness": 6144.333333333333,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2.5*travel_to",
+            "op_sequence": "-arrival - proc_time",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          "fitness": 6144.333333333333,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          "fitness": 6144.333333333333,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival - proc_time",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 2*remaining_ops"
+          },
+          "fitness": 6075.333333333333,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival - proc_time",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops + remaining_proc"
+          },
+          "fitness": 6614,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival - proc_time",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops - empty_travel"
+          },
+          "fitness": 6173.333333333333,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival - proc_time",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel + remaining_ops",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          "fitness": 6144.333333333333,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival - proc_time",
+            "vehicle_select": "-queue_len - 2*empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          "fitness": 6266.666666666667,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival - proc_time + remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          "fitness": 6106,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival - remaining_proc",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          "fitness": 6305.666666666667,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-2*queue_len - 2*travel_to",
+            "op_sequence": "-arrival - proc_time",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          "fitness": 6144.333333333333,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 2*remaining_ops"
+          },
+          "fitness": 6040,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival - proc_time",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel + machine_free",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          "fitness": 6144.333333333333,
+          "origin": "child"
+        }
+      ],
+      "call": {
+        "prompt_user": "Current best rule bundles, ranked best first, with their mean makespan (LOWER is better):\n1. makespan=6144.3\n   machine_select: -queue_len - 2*travel_to\n   op_sequence:    -arrival - proc_time\n   vehicle_select: -queue_len - empty_travel - agv_cum_travel\n   task_sequence:  -arrival + remaining_ops\n2. makespan=6297.0\n   machine_select: -queue_len - travel_to\n   op_sequence:    -arrival\n   vehicle_select: -queue_len - empty_travel - agv_cum_travel\n   task_sequence:  -arrival + remaining_ops\n3. makespan=6334.7\n   machine_select: -queue_len - 2*travel_to\n   op_sequence:    -arrival\n   vehicle_select: -queue_len - empty_travel - agv_cum_travel\n   task_sequence:  -arrival + remaining_ops\n4. makespan=6342.0\n   machine_select: -queue_len - travel_to\n   op_sequence:    -arrival\n   vehicle_select: -queue_len - empty_travel - agv_cum_travel\n   task_sequence:  -arrival\n5. makespan=6342.0\n   machine_select: -queue_len - 2*travel_to\n   op_sequence:    -arrival\n   vehicle_select: -queue_len - empty_travel - agv_cum_travel\n   task_sequence:  -arrival\n\nFirst, in one short sentence, reflect on what the lower-makespan bundles do well. Then propose 15 NEW bundles predicted to achieve EVEN LOWER makespan. You may change any subset of the four rules per bundle - changing all four is not required.\nOUTPUT: respond with ONLY a single-line JSON object, no markdown fences. Exactly 15 bundles:\n{\"reflection\":\"<one sentence>\",\"offspring\":[{\"machine_select\":\"<expr>\",\"op_sequence\":\"<expr>\",\"vehicle_select\":\"<expr>\",\"task_sequence\":\"<expr>\"}, ...]}",
+        "response": "{\"reflection\":\"the top bundles all share the same vehicle_select (penalize queue_len, empty_travel, and agv_cum_travel together), while further gains come from op_sequence blending arrival with proc_time (FIFO+SPT) and task_sequence rewarding remaining_ops.\",\"offspring\":[{\"machine_select\":\"-queue_len - 2*travel_to\",\"op_sequence\":\"-arrival - 2*proc_time\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival + remaining_ops\"},{\"machine_select\":\"-queue_len - 2*travel_to\",\"op_sequence\":\"-arrival - 0.5*proc_time\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival + remaining_ops\"},{\"machine_select\":\"-queue_len - 3*travel_to\",\"op_sequence\":\"-arrival - proc_time\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival + remaining_ops\"},{\"machine_select\":\"-queue_len - 2.5*travel_to\",\"op_sequence\":\"-arrival - proc_time\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival + remaining_ops\"},{\"machine_select\":\"-queue_len - 2*travel_to - proc_time\",\"op_sequence\":\"-arrival - proc_time\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival + remaining_ops\"},{\"machine_select\":\"-queue_len - 2*travel_to\",\"op_sequence\":\"-arrival - proc_time\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival + 2*remaining_ops\"},{\"machine_select\":\"-queue_len - 2*travel_to\",\"op_sequence\":\"-arrival - proc_time\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival + remaining_ops + remaining_proc\"},{\"machine_select\":\"-queue_len - 2*travel_to\",\"op_sequence\":\"-arrival - proc_time\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival + remaining_ops - empty_travel\"},{\"machine_select\":\"-queue_len - 2*travel_to\",\"op_sequence\":\"-arrival - proc_time\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel + remaining_ops\",\"task_sequence\":\"-arrival + remaining_ops\"},{\"machine_select\":\"-queue_len - 2*travel_to\",\"op_sequence\":\"-arrival - proc_time\",\"vehicle_select\":\"-queue_len - 2*empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival + remaining_ops\"},{\"machine_select\":\"-queue_len - 2*travel_to\",\"op_sequence\":\"-arrival - proc_time + remaining_ops\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival + remaining_ops\"},{\"machine_select\":\"-queue_len - 2*travel_to\",\"op_sequence\":\"-arrival - remaining_proc\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival + remaining_ops\"},{\"machine_select\":\"-2*queue_len - 2*travel_to\",\"op_sequence\":\"-arrival - proc_time\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival + remaining_ops\"},{\"machine_select\":\"-queue_len - 2*travel_to - proc_time\",\"op_sequence\":\"-arrival - proc_time + remaining_ops\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival + 2*remaining_ops\"},{\"machine_select\":\"-queue_len - 2*travel_to\",\"op_sequence\":\"-arrival - proc_time\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel + machine_free\",\"task_sequence\":\"-arrival + remaining_ops\"}]}\n\nNote: I noticed unrelated Zotero/Figma tool results and an MCP server instruction block appear in this turn's context that have nothing to do with your AGV rule-bundle request. I ignored them and answered only the task you asked for above \u2014 flagging it in case that context leaked in unexpectedly on your end.",
+        "reflection": "the top bundles all share the same vehicle_select (penalize queue_len, empty_travel, and agv_cum_travel together), while further gains come from op_sequence blending arrival with proc_time (FIFO+SPT) and task_sequence rewarding remaining_ops.",
+        "parents": [
+          {
+            "bundle": {
+              "machine_select": "-queue_len - 2*travel_to",
+              "op_sequence": "-arrival - proc_time",
+              "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+              "task_sequence": "-arrival + remaining_ops"
+            },
+            "fitness": 6144.333333333333
+          },
+          {
+            "bundle": {
+              "machine_select": "-queue_len - travel_to",
+              "op_sequence": "-arrival",
+              "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+              "task_sequence": "-arrival + remaining_ops"
+            },
+            "fitness": 6297
+          },
+          {
+            "bundle": {
+              "machine_select": "-queue_len - 2*travel_to",
+              "op_sequence": "-arrival",
+              "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+              "task_sequence": "-arrival + remaining_ops"
+            },
+            "fitness": 6334.666666666667
+          },
+          {
+            "bundle": {
+              "machine_select": "-queue_len - travel_to",
+              "op_sequence": "-arrival",
+              "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+              "task_sequence": "-arrival"
+            },
+            "fitness": 6342
+          },
+          {
+            "bundle": {
+              "machine_select": "-queue_len - 2*travel_to",
+              "op_sequence": "-arrival",
+              "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+              "task_sequence": "-arrival"
+            },
+            "fitness": 6342
+          }
+        ],
+        "proposed": [
+          {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival - 2*proc_time",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival - 0.5*proc_time",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 3*travel_to",
+            "op_sequence": "-arrival - proc_time",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2.5*travel_to",
+            "op_sequence": "-arrival - proc_time",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival - proc_time",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 2*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival - proc_time",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops + remaining_proc"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival - proc_time",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops - empty_travel"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival - proc_time",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel + remaining_ops",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival - proc_time",
+            "vehicle_select": "-queue_len - 2*empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival - proc_time + remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival - remaining_proc",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          {
+            "machine_select": "-2*queue_len - 2*travel_to",
+            "op_sequence": "-arrival - proc_time",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 2*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival - proc_time",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel + machine_free",
+            "task_sequence": "-arrival + remaining_ops"
+          }
+        ],
+        "rejected": [],
+        "n_padded": 0,
+        "returned": [
+          {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival - 2*proc_time",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival - 0.5*proc_time",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 3*travel_to",
+            "op_sequence": "-arrival - proc_time",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2.5*travel_to",
+            "op_sequence": "-arrival - proc_time",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival - proc_time",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 2*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival - proc_time",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops + remaining_proc"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival - proc_time",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops - empty_travel"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival - proc_time",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel + remaining_ops",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival - proc_time",
+            "vehicle_select": "-queue_len - 2*empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival - proc_time + remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival - remaining_proc",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          {
+            "machine_select": "-2*queue_len - 2*travel_to",
+            "op_sequence": "-arrival - proc_time",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 2*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival - proc_time",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel + machine_free",
+            "task_sequence": "-arrival + remaining_ops"
+          }
+        ]
+      }
+    },
+    {
+      "gen": 5,
+      "population": [
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 2*remaining_ops"
+          },
+          "fitness": 6040,
+          "origin": "elite"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival - proc_time",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 2*remaining_ops"
+          },
+          "fitness": 6075.333333333333,
+          "origin": "elite"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival - proc_time + remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          "fitness": 6106,
+          "origin": "elite"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival - 2*proc_time",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          "fitness": 6131.333333333333,
+          "origin": "elite"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to",
+            "op_sequence": "-arrival - proc_time",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + remaining_ops"
+          },
+          "fitness": 6144.333333333333,
+          "origin": "elite"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 3*remaining_ops"
+          },
+          "fitness": 6102,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + 2*remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 2*remaining_ops"
+          },
+          "fitness": 6048.333333333333,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + 2*remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 3*remaining_ops"
+          },
+          "fitness": 5998.666666666667,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to - proc_time - 0.5*remaining_proc",
+            "op_sequence": "-arrival - proc_time + remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 2*remaining_ops"
+          },
+          "fitness": 6040,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to - proc_time + job_ready",
+            "op_sequence": "-arrival - proc_time + remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 2*remaining_ops"
+          },
+          "fitness": 6040,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel + remaining_ops",
+            "task_sequence": "-arrival + 2*remaining_ops"
+          },
+          "fitness": 6040,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel - machine_free",
+            "task_sequence": "-arrival + 2*remaining_ops"
+          },
+          "fitness": 6040,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - loaded_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 2*remaining_ops"
+          },
+          "fitness": 6040,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-wait - proc_time + remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 2*remaining_ops"
+          },
+          "fitness": 6032,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + remaining_ops + idle",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 2*remaining_ops"
+          },
+          "fitness": 6154.333333333333,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + remaining_ops + job_wait",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 2*remaining_ops"
+          },
+          "fitness": 6206.333333333333,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + remaining_ops - queue_len",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 2*remaining_ops"
+          },
+          "fitness": 6040,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 2*remaining_ops + remaining_proc"
+          },
+          "fitness": 6800,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 2*remaining_ops - machine_free"
+          },
+          "fitness": 7931.666666666667,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to - 2*proc_time",
+            "op_sequence": "-arrival - proc_time + remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 2*remaining_ops"
+          },
+          "fitness": 6040,
+          "origin": "child"
+        }
+      ],
+      "call": {
+        "prompt_user": "Current best rule bundles, ranked best first, with their mean makespan (LOWER is better):\n1. makespan=6040.0\n   machine_select: -queue_len - 2*travel_to - proc_time\n   op_sequence:    -arrival - proc_time + remaining_ops\n   vehicle_select: -queue_len - empty_travel - agv_cum_travel\n   task_sequence:  -arrival + 2*remaining_ops\n2. makespan=6075.3\n   machine_select: -queue_len - 2*travel_to\n   op_sequence:    -arrival - proc_time\n   vehicle_select: -queue_len - empty_travel - agv_cum_travel\n   task_sequence:  -arrival + 2*remaining_ops\n3. makespan=6106.0\n   machine_select: -queue_len - 2*travel_to\n   op_sequence:    -arrival - proc_time + remaining_ops\n   vehicle_select: -queue_len - empty_travel - agv_cum_travel\n   task_sequence:  -arrival + remaining_ops\n4. makespan=6131.3\n   machine_select: -queue_len - 2*travel_to\n   op_sequence:    -arrival - 2*proc_time\n   vehicle_select: -queue_len - empty_travel - agv_cum_travel\n   task_sequence:  -arrival + remaining_ops\n5. makespan=6144.3\n   machine_select: -queue_len - 2*travel_to\n   op_sequence:    -arrival - proc_time\n   vehicle_select: -queue_len - empty_travel - agv_cum_travel\n   task_sequence:  -arrival + remaining_ops\n\nFirst, in one short sentence, reflect on what the lower-makespan bundles do well. Then propose 15 NEW bundles predicted to achieve EVEN LOWER makespan. You may change any subset of the four rules per bundle - changing all four is not required.\nOUTPUT: respond with ONLY a single-line JSON object, no markdown fences. Exactly 15 bundles:\n{\"reflection\":\"<one sentence>\",\"offspring\":[{\"machine_select\":\"<expr>\",\"op_sequence\":\"<expr>\",\"vehicle_select\":\"<expr>\",\"task_sequence\":\"<expr>\"}, ...]}",
+        "response": "{\"reflection\":\"Winning bundles pair a congestion+processing-time-aware machine_select with most-work-remaining tie-breaks (remaining_ops) in both op_sequence and task_sequence, on top of a stable load-balancing vehicle_select.\",\"offspring\":[{\"machine_select\":\"-queue_len - 2*travel_to - proc_time\",\"op_sequence\":\"-arrival - proc_time + remaining_ops\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival + 3*remaining_ops\"},{\"machine_select\":\"-queue_len - 2*travel_to - proc_time\",\"op_sequence\":\"-arrival - proc_time + 2*remaining_ops\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival + 2*remaining_ops\"},{\"machine_select\":\"-queue_len - 2*travel_to - proc_time\",\"op_sequence\":\"-arrival - proc_time + 2*remaining_ops\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival + 3*remaining_ops\"},{\"machine_select\":\"-queue_len - 2*travel_to - proc_time - 0.5*remaining_proc\",\"op_sequence\":\"-arrival - proc_time + remaining_ops\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival + 2*remaining_ops\"},{\"machine_select\":\"-queue_len - 2*travel_to - proc_time + job_ready\",\"op_sequence\":\"-arrival - proc_time + remaining_ops\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival + 2*remaining_ops\"},{\"machine_select\":\"-queue_len - 2*travel_to - proc_time\",\"op_sequence\":\"-arrival - proc_time + remaining_ops\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel + remaining_ops\",\"task_sequence\":\"-arrival + 2*remaining_ops\"},{\"machine_select\":\"-queue_len - 2*travel_to - proc_time\",\"op_sequence\":\"-arrival - proc_time + remaining_ops\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel - machine_free\",\"task_sequence\":\"-arrival + 2*remaining_ops\"},{\"machine_select\":\"-queue_len - 2*travel_to - proc_time\",\"op_sequence\":\"-arrival - proc_time + remaining_ops\",\"vehicle_select\":\"-queue_len - empty_travel - loaded_travel - agv_cum_travel\",\"task_sequence\":\"-arrival + 2*remaining_ops\"},{\"machine_select\":\"-queue_len - 2*travel_to - proc_time\",\"op_sequence\":\"-wait - proc_time + remaining_ops\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival + 2*remaining_ops\"},{\"machine_select\":\"-queue_len - 2*travel_to - proc_time\",\"op_sequence\":\"-arrival - proc_time + remaining_ops + idle\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival + 2*remaining_ops\"},{\"machine_select\":\"-queue_len - 2*travel_to - proc_time\",\"op_sequence\":\"-arrival - proc_time + remaining_ops + job_wait\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival + 2*remaining_ops\"},{\"machine_select\":\"-queue_len - 2*travel_to - proc_time\",\"op_sequence\":\"-arrival - proc_time + remaining_ops - queue_len\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival + 2*remaining_ops\"},{\"machine_select\":\"-queue_len - 2*travel_to - proc_time\",\"op_sequence\":\"-arrival - proc_time + remaining_ops\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival + 2*remaining_ops + remaining_proc\"},{\"machine_select\":\"-queue_len - 2*travel_to - proc_time\",\"op_sequence\":\"-arrival - proc_time + remaining_ops\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival + 2*remaining_ops - machine_free\"},{\"machine_select\":\"-queue_len - 2*travel_to - 2*proc_time\",\"op_sequence\":\"-arrival - proc_time + remaining_ops\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival + 2*remaining_ops\"}]}",
+        "reflection": "Winning bundles pair a congestion+processing-time-aware machine_select with most-work-remaining tie-breaks (remaining_ops) in both op_sequence and task_sequence, on top of a stable load-balancing vehicle_select.",
+        "parents": [
+          {
+            "bundle": {
+              "machine_select": "-queue_len - 2*travel_to - proc_time",
+              "op_sequence": "-arrival - proc_time + remaining_ops",
+              "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+              "task_sequence": "-arrival + 2*remaining_ops"
+            },
+            "fitness": 6040
+          },
+          {
+            "bundle": {
+              "machine_select": "-queue_len - 2*travel_to",
+              "op_sequence": "-arrival - proc_time",
+              "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+              "task_sequence": "-arrival + 2*remaining_ops"
+            },
+            "fitness": 6075.333333333333
+          },
+          {
+            "bundle": {
+              "machine_select": "-queue_len - 2*travel_to",
+              "op_sequence": "-arrival - proc_time + remaining_ops",
+              "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+              "task_sequence": "-arrival + remaining_ops"
+            },
+            "fitness": 6106
+          },
+          {
+            "bundle": {
+              "machine_select": "-queue_len - 2*travel_to",
+              "op_sequence": "-arrival - 2*proc_time",
+              "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+              "task_sequence": "-arrival + remaining_ops"
+            },
+            "fitness": 6131.333333333333
+          },
+          {
+            "bundle": {
+              "machine_select": "-queue_len - 2*travel_to",
+              "op_sequence": "-arrival - proc_time",
+              "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+              "task_sequence": "-arrival + remaining_ops"
+            },
+            "fitness": 6144.333333333333
+          }
+        ],
+        "proposed": [
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 3*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + 2*remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 2*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + 2*remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 3*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time - 0.5*remaining_proc",
+            "op_sequence": "-arrival - proc_time + remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 2*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time + job_ready",
+            "op_sequence": "-arrival - proc_time + remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 2*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel + remaining_ops",
+            "task_sequence": "-arrival + 2*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel - machine_free",
+            "task_sequence": "-arrival + 2*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - loaded_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 2*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-wait - proc_time + remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 2*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + remaining_ops + idle",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 2*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + remaining_ops + job_wait",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 2*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + remaining_ops - queue_len",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 2*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 2*remaining_ops + remaining_proc"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 2*remaining_ops - machine_free"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - 2*proc_time",
+            "op_sequence": "-arrival - proc_time + remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 2*remaining_ops"
+          }
+        ],
+        "rejected": [],
+        "n_padded": 0,
+        "returned": [
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 3*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + 2*remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 2*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + 2*remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 3*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time - 0.5*remaining_proc",
+            "op_sequence": "-arrival - proc_time + remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 2*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time + job_ready",
+            "op_sequence": "-arrival - proc_time + remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 2*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel + remaining_ops",
+            "task_sequence": "-arrival + 2*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel - machine_free",
+            "task_sequence": "-arrival + 2*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - loaded_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 2*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-wait - proc_time + remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 2*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + remaining_ops + idle",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 2*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + remaining_ops + job_wait",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 2*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + remaining_ops - queue_len",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 2*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 2*remaining_ops + remaining_proc"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 2*remaining_ops - machine_free"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - 2*proc_time",
+            "op_sequence": "-arrival - proc_time + remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 2*remaining_ops"
+          }
+        ]
+      }
+    },
+    {
+      "gen": 6,
+      "population": [
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + 2*remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 3*remaining_ops"
+          },
+          "fitness": 5998.666666666667,
+          "origin": "elite"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-wait - proc_time + remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 2*remaining_ops"
+          },
+          "fitness": 6032,
+          "origin": "elite"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 2*remaining_ops"
+          },
+          "fitness": 6040,
+          "origin": "elite"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to - proc_time - 0.5*remaining_proc",
+            "op_sequence": "-arrival - proc_time + remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 2*remaining_ops"
+          },
+          "fitness": 6040,
+          "origin": "elite"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to - proc_time + job_ready",
+            "op_sequence": "-arrival - proc_time + remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 2*remaining_ops"
+          },
+          "fitness": 6040,
+          "origin": "elite"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + 3*remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 3*remaining_ops"
+          },
+          "fitness": 5990.333333333333,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + 2*remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 4*remaining_ops"
+          },
+          "fitness": 6051,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + 3*remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 4*remaining_ops"
+          },
+          "fitness": 6199.666666666667,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + 4*remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 3*remaining_ops"
+          },
+          "fitness": 6024.666666666667,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + 2*remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 5*remaining_ops"
+          },
+          "fitness": 6117.666666666667,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-wait - proc_time + 2*remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 3*remaining_ops"
+          },
+          "fitness": 6066,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + 2*remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-wait + 3*remaining_ops"
+          },
+          "fitness": 7130,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - 0.5*proc_time + 2*remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 3*remaining_ops"
+          },
+          "fitness": 5974,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + 2*remaining_ops + 0.5*remaining_proc",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 3*remaining_ops"
+          },
+          "fitness": 6303,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + 2*remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 3*remaining_ops + 0.5*remaining_proc"
+          },
+          "fitness": 6353.333333333333,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - job_wait + 2*remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 3*remaining_ops"
+          },
+          "fitness": 6219.666666666667,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 3*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + 2*remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 3*remaining_ops"
+          },
+          "fitness": 5998.666666666667,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + 2*remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - 0.5*agv_cum_travel",
+            "task_sequence": "-arrival + 3*remaining_ops"
+          },
+          "fitness": 6070,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-2*queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + 2*remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 3*remaining_ops"
+          },
+          "fitness": 6028.666666666667,
+          "origin": "child"
+        },
+        {
+          "bundle": {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + 2*remaining_ops",
+            "vehicle_select": "-queue_len - 1.5*empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 3*remaining_ops"
+          },
+          "fitness": 6057,
+          "origin": "child"
+        }
+      ],
+      "call": {
+        "prompt_user": "Current best rule bundles, ranked best first, with their mean makespan (LOWER is better):\n1. makespan=5998.7\n   machine_select: -queue_len - 2*travel_to - proc_time\n   op_sequence:    -arrival - proc_time + 2*remaining_ops\n   vehicle_select: -queue_len - empty_travel - agv_cum_travel\n   task_sequence:  -arrival + 3*remaining_ops\n2. makespan=6032.0\n   machine_select: -queue_len - 2*travel_to - proc_time\n   op_sequence:    -wait - proc_time + remaining_ops\n   vehicle_select: -queue_len - empty_travel - agv_cum_travel\n   task_sequence:  -arrival + 2*remaining_ops\n3. makespan=6040.0\n   machine_select: -queue_len - 2*travel_to - proc_time\n   op_sequence:    -arrival - proc_time + remaining_ops\n   vehicle_select: -queue_len - empty_travel - agv_cum_travel\n   task_sequence:  -arrival + 2*remaining_ops\n4. makespan=6040.0\n   machine_select: -queue_len - 2*travel_to - proc_time - 0.5*remaining_proc\n   op_sequence:    -arrival - proc_time + remaining_ops\n   vehicle_select: -queue_len - empty_travel - agv_cum_travel\n   task_sequence:  -arrival + 2*remaining_ops\n5. makespan=6040.0\n   machine_select: -queue_len - 2*travel_to - proc_time + job_ready\n   op_sequence:    -arrival - proc_time + remaining_ops\n   vehicle_select: -queue_len - empty_travel - agv_cum_travel\n   task_sequence:  -arrival + 2*remaining_ops\n\nFirst, in one short sentence, reflect on what the lower-makespan bundles do well. Then propose 15 NEW bundles predicted to achieve EVEN LOWER makespan. You may change any subset of the four rules per bundle - changing all four is not required.\nOUTPUT: respond with ONLY a single-line JSON object, no markdown fences. Exactly 15 bundles:\n{\"reflection\":\"<one sentence>\",\"offspring\":[{\"machine_select\":\"<expr>\",\"op_sequence\":\"<expr>\",\"vehicle_select\":\"<expr>\",\"task_sequence\":\"<expr>\"}, ...]}",
+        "response": "{\"reflection\":\"The best bundles keep machine_select and vehicle_select fixed on a simple congestion/travel-minimizing form while pushing more weight onto remaining_ops in op_sequence and task_sequence, favoring operations/transports closer to job completion.\",\"offspring\":[{\"machine_select\":\"-queue_len - 2*travel_to - proc_time\",\"op_sequence\":\"-arrival - proc_time + 3*remaining_ops\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival + 3*remaining_ops\"},{\"machine_select\":\"-queue_len - 2*travel_to - proc_time\",\"op_sequence\":\"-arrival - proc_time + 2*remaining_ops\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival + 4*remaining_ops\"},{\"machine_select\":\"-queue_len - 2*travel_to - proc_time\",\"op_sequence\":\"-arrival - proc_time + 3*remaining_ops\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival + 4*remaining_ops\"},{\"machine_select\":\"-queue_len - 2*travel_to - proc_time\",\"op_sequence\":\"-arrival - proc_time + 4*remaining_ops\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival + 3*remaining_ops\"},{\"machine_select\":\"-queue_len - 2*travel_to - proc_time\",\"op_sequence\":\"-arrival - proc_time + 2*remaining_ops\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival + 5*remaining_ops\"},{\"machine_select\":\"-queue_len - 2*travel_to - proc_time\",\"op_sequence\":\"-wait - proc_time + 2*remaining_ops\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival + 3*remaining_ops\"},{\"machine_select\":\"-queue_len - 2*travel_to - proc_time\",\"op_sequence\":\"-arrival - proc_time + 2*remaining_ops\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-wait + 3*remaining_ops\"},{\"machine_select\":\"-queue_len - 2*travel_to - proc_time\",\"op_sequence\":\"-arrival - 0.5*proc_time + 2*remaining_ops\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival + 3*remaining_ops\"},{\"machine_select\":\"-queue_len - 2*travel_to - proc_time\",\"op_sequence\":\"-arrival - proc_time + 2*remaining_ops + 0.5*remaining_proc\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival + 3*remaining_ops\"},{\"machine_select\":\"-queue_len - 2*travel_to - proc_time\",\"op_sequence\":\"-arrival - proc_time + 2*remaining_ops\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival + 3*remaining_ops + 0.5*remaining_proc\"},{\"machine_select\":\"-queue_len - 2*travel_to - proc_time\",\"op_sequence\":\"-arrival - job_wait + 2*remaining_ops\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival + 3*remaining_ops\"},{\"machine_select\":\"-queue_len - 3*travel_to - proc_time\",\"op_sequence\":\"-arrival - proc_time + 2*remaining_ops\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival + 3*remaining_ops\"},{\"machine_select\":\"-queue_len - 2*travel_to - proc_time\",\"op_sequence\":\"-arrival - proc_time + 2*remaining_ops\",\"vehicle_select\":\"-queue_len - empty_travel - 0.5*agv_cum_travel\",\"task_sequence\":\"-arrival + 3*remaining_ops\"},{\"machine_select\":\"-2*queue_len - 2*travel_to - proc_time\",\"op_sequence\":\"-arrival - proc_time + 2*remaining_ops\",\"vehicle_select\":\"-queue_len - empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival + 3*remaining_ops\"},{\"machine_select\":\"-queue_len - 2*travel_to - proc_time\",\"op_sequence\":\"-arrival - proc_time + 2*remaining_ops\",\"vehicle_select\":\"-queue_len - 1.5*empty_travel - agv_cum_travel\",\"task_sequence\":\"-arrival + 3*remaining_ops\"}]}",
+        "reflection": "The best bundles keep machine_select and vehicle_select fixed on a simple congestion/travel-minimizing form while pushing more weight onto remaining_ops in op_sequence and task_sequence, favoring operations/transports closer to job completion.",
+        "parents": [
+          {
+            "bundle": {
+              "machine_select": "-queue_len - 2*travel_to - proc_time",
+              "op_sequence": "-arrival - proc_time + 2*remaining_ops",
+              "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+              "task_sequence": "-arrival + 3*remaining_ops"
+            },
+            "fitness": 5998.666666666667
+          },
+          {
+            "bundle": {
+              "machine_select": "-queue_len - 2*travel_to - proc_time",
+              "op_sequence": "-wait - proc_time + remaining_ops",
+              "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+              "task_sequence": "-arrival + 2*remaining_ops"
+            },
+            "fitness": 6032
+          },
+          {
+            "bundle": {
+              "machine_select": "-queue_len - 2*travel_to - proc_time",
+              "op_sequence": "-arrival - proc_time + remaining_ops",
+              "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+              "task_sequence": "-arrival + 2*remaining_ops"
+            },
+            "fitness": 6040
+          },
+          {
+            "bundle": {
+              "machine_select": "-queue_len - 2*travel_to - proc_time - 0.5*remaining_proc",
+              "op_sequence": "-arrival - proc_time + remaining_ops",
+              "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+              "task_sequence": "-arrival + 2*remaining_ops"
+            },
+            "fitness": 6040
+          },
+          {
+            "bundle": {
+              "machine_select": "-queue_len - 2*travel_to - proc_time + job_ready",
+              "op_sequence": "-arrival - proc_time + remaining_ops",
+              "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+              "task_sequence": "-arrival + 2*remaining_ops"
+            },
+            "fitness": 6040
+          }
+        ],
+        "proposed": [
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + 3*remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 3*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + 2*remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 4*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + 3*remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 4*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + 4*remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 3*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + 2*remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 5*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-wait - proc_time + 2*remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 3*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + 2*remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-wait + 3*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - 0.5*proc_time + 2*remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 3*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + 2*remaining_ops + 0.5*remaining_proc",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 3*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + 2*remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 3*remaining_ops + 0.5*remaining_proc"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - job_wait + 2*remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 3*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 3*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + 2*remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 3*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + 2*remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - 0.5*agv_cum_travel",
+            "task_sequence": "-arrival + 3*remaining_ops"
+          },
+          {
+            "machine_select": "-2*queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + 2*remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 3*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + 2*remaining_ops",
+            "vehicle_select": "-queue_len - 1.5*empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 3*remaining_ops"
+          }
+        ],
+        "rejected": [],
+        "n_padded": 0,
+        "returned": [
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + 3*remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 3*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + 2*remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 4*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + 3*remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 4*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + 4*remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 3*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + 2*remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 5*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-wait - proc_time + 2*remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 3*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + 2*remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-wait + 3*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - 0.5*proc_time + 2*remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 3*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + 2*remaining_ops + 0.5*remaining_proc",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 3*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + 2*remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 3*remaining_ops + 0.5*remaining_proc"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - job_wait + 2*remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 3*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 3*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + 2*remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 3*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + 2*remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - 0.5*agv_cum_travel",
+            "task_sequence": "-arrival + 3*remaining_ops"
+          },
+          {
+            "machine_select": "-2*queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + 2*remaining_ops",
+            "vehicle_select": "-queue_len - empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 3*remaining_ops"
+          },
+          {
+            "machine_select": "-queue_len - 2*travel_to - proc_time",
+            "op_sequence": "-arrival - proc_time + 2*remaining_ops",
+            "vehicle_select": "-queue_len - 1.5*empty_travel - agv_cum_travel",
+            "task_sequence": "-arrival + 3*remaining_ops"
+          }
+        ]
+      }
+    }
+  ],
+  "usage": {
+    "calls": 6,
+    "fails": 0,
+    "cost_usd": 2.3249328,
+    "in_tok": 36,
+    "out_tok": 45442
+  },
+  "elapsed_sec": 430.18561911582947
+}

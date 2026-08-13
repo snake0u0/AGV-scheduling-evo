@@ -31,7 +31,7 @@ HAND = {
 
 
 def g2_forced_replay():
-    print("G2  공표 해 강제 재현 (Deroussi 10개)")
+    print("G2  forced replay of published solutions (Deroussi, 10 instances)")
     bad = []
     for stem in DEROUSSI_STEMS:
         inst = load_deroussi(stem)
@@ -47,10 +47,10 @@ def g2_forced_replay():
         same_vseq = {k: v for k, v in built.vehicle_seq.items() if v} == \
                     {k: v for k, v in sol.vehicle_seq.items() if v}
         ok = same_assign and same_mseq and same_vseq and sched.cmax == published
-        print(f"  {stem:<8} 공표 {published:>6.0f}  builder {sched.cmax:>6}"
-              f"  배정 {'=' if same_assign else 'X'}"
-              f"  기계순서 {'=' if same_mseq else 'X'}"
-              f"  차량순서 {'=' if same_vseq else 'X'}"
+        print(f"  {stem:<8} published {published:>6.0f}  builder {sched.cmax:>6}"
+              f"  assign {'=' if same_assign else 'X'}"
+              f"  mach-seq {'=' if same_mseq else 'X'}"
+              f"  veh-seq {'=' if same_vseq else 'X'}"
               f"   {'ok' if ok else 'MISMATCH'}")
         if not ok:
             bad.append(stem)
@@ -58,7 +58,7 @@ def g2_forced_replay():
 
 
 def g1_self_check():
-    print("\nG1  자기검증 - builder 의 해를 검증된 타이밍 코어에 되먹임")
+    print("\nG1  self-check - the builder's solution fed back through the timing core")
     cases = [("deroussi", s, 2) for s in DEROUSSI_STEMS[:4]] + \
             [("dauzere", s, v) for s in ("01a", "07a", "15a", "18a") for v in (2, 4)]
     bad = []
@@ -69,7 +69,7 @@ def g1_self_check():
         ok, replay = self_check(inst, sol, sched.cmax)
         tag = "ok" if (ok and not problems) else "MISMATCH"
         print(f"  {stem+'/'+str(veh):<12} builder {sched.cmax:>6}  replay {replay:>6}"
-              f"  구조검사 {len(problems)}건   {tag}")
+              f"  {len(problems)} violations   {tag}")
         if not ok or problems:
             bad.append((stem, veh, problems))
     return bad
@@ -80,7 +80,7 @@ def main():
     bad1 = g1_self_check()
     if bad2 or bad1:
         raise SystemExit(f"FAIL - G2 {bad2}  G1 {bad1}")
-    print("\nPASS - G1 자기검증, G2 강제 재현 통과")
+    print("\nPASS - G1 self-check and G2 forced replay both passed")
 
 
 if __name__ == "__main__":

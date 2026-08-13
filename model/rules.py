@@ -1,10 +1,11 @@
-"""AGV selection rules: the slot the LLM will eventually evolve.
+"""Priority rules: the genome the LLM evolves, and the sandbox that compiles it.
 
-A rule scores candidate vehicles for one transport and the dispatcher takes the
-highest score. The two literature decodings (Han 2024) are two points in this
-same space, so they become exact ablations of an evolved rule.
+A rule scores the candidates for one decision and the dispatcher takes the highest
+score. Each of the four slots in `simulator.dispatch` sees its own feature set, listed
+in SLOT_FEATURES below. The two literature decodings (Han 2024) are two points in the
+vehicle-side space, so they serve as exact ablations of an evolved rule.
 
-Features available for a candidate vehicle v handling a transport (see evaluator):
+Vehicle-side features, for a candidate vehicle v handling one transport:
   empty_travel   vehicle current location -> pickup point
   loaded_travel  pickup point -> destination machine
   arrival        time the job would arrive at its destination with this vehicle
@@ -15,6 +16,22 @@ Features available for a candidate vehicle v handling a transport (see evaluator
   remaining_ops  operations left in this job
 """
 import ast
+
+# Feature names per slot, exactly as simulator/dispatch.py builds them (verified
+# against the four feature-dict literals there). "_all" is added by dispatch's
+# _with_all wrapper, not listed here since it is not a scalar feature name to compile
+# against - a rule references it directly as f["_all"], a list of the other candidates'
+# dicts (see rule_from_expr's function form).
+SLOT_FEATURES = {
+    "machine_select": ["proc_time", "machine_free", "travel_to", "queue_len",
+                       "job_ready", "remaining_ops", "remaining_proc"],
+    "op_sequence":    ["proc_time", "arrival", "wait", "idle", "job_wait",
+                       "queue_len", "remaining_ops", "remaining_proc"],
+    "vehicle_select": ["empty_travel", "loaded_travel", "agv_free", "agv_cum_travel",
+                       "queue_len", "ready", "machine_free", "remaining_ops"],
+    "task_sequence":  ["empty_travel", "loaded_travel", "arrival", "wait", "agv_free",
+                       "agv_cum_travel", "machine_free", "remaining_ops", "remaining_proc"],
+}
 
 
 def decoding1(f):
@@ -48,9 +65,9 @@ def rule_from_expr(expr):
 
     The expression form is the original one-liner and still works unchanged. The
     function form exists because an expression cannot branch, cannot name an
-    intermediate value, and cannot look at the other candidates - so an evolved rule
-    had the same expressive power as Han 2024's fixed decodings, and the only claimed
-    difference was that an LLM wrote it (2026-08-10 review).
+    intermediate value, and cannot look at the other candidates - which would leave an
+    evolved rule with the same expressive power as Han 2024's fixed decodings, the only
+    claimed difference being that an LLM wrote it.
 
     Inside a function the feature dict is the argument, so `f["_all"]` reaches every
     candidate's features and relative judgements ("is this vehicle the busiest in the

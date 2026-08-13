@@ -1,13 +1,11 @@
 """Shared harness for every experiment: reference values, the gap metric, the paired
 test, the protocol constants, and the parallel runner.
 
-Everything here used to be copy-pasted into each experiment script - the literature
-reference table existed in six separate files. They happened to agree when checked on
-2026-08-07, but a single typo in one copy would have silently changed that
-experiment's reported gap with no error and no warning, at effect sizes of 1-5%p.
-Three of this project's four reversals came from an assumption differing quietly
-between places, so the reference values now live in data/literature/ (with provenance
-in its SOURCE.md) and are read exactly once, here.
+The literature reference table is read from data/literature/ (provenance in its
+SOURCE.md) exactly once, here, and never retyped into an experiment script. A single
+typo in a duplicated copy would silently change that experiment's reported gap - no
+error, no warning - at effect sizes of 1-5%p, which is the size of the differences
+being measured.
 
 Import instead of retyping:
 
@@ -21,7 +19,7 @@ import time
 
 from scipy import stats
 
-# --- protocol constants (fixed 2026-07-31, do not vary per experiment) -------
+# --- protocol constants (fixed; do not vary per experiment) ------------------
 
 SEEDS = (0, 21, 42)
 WORKERS = 12                       # of 16 cores
@@ -33,11 +31,10 @@ LIT_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 def pop_for(budget_seconds):
     """GA population for a wall-clock budget.
 
-    Measured 2026-08-06 (`2026-08-06-rule-effect-vs-budget.md`): the optimum follows
-    pop ~= 20 * budget^0.6, matching the observed optima 20/70/300/1000 at
-    1/10/60/600s. Population is a U-curve with a sharp interior optimum - at 60s,
-    pop1000 scores 145.3% where pop300 scores 74.0% - so it must never be fixed to a
-    constant across budgets.
+    The optimum follows pop ~= 20 * budget^0.6, matching the measured optima
+    20/70/300/1000 at 1/10/60/600s. Population is a U-curve with a sharp interior
+    optimum - at 60s, pop1000 scores 145.3% where pop300 scores 74.0% - so it must
+    never be fixed to a constant across budgets.
     """
     return max(2, round(20 * budget_seconds ** 0.6))
 
@@ -82,7 +79,7 @@ def paired(recs, a, b, key="rule"):
     """Paired comparison of two configurations over (instance, seed).
 
     Paired because the seed-to-seed spread on the hard instances is the same size as
-    the differences being measured (2026-07-31), so unpaired tests waste the sample.
+    the differences being measured, so unpaired tests waste the sample.
     Returns (wins_for_a, ties, n, wilcoxon_p).
     """
     ka = {(r["stem"], r["veh"], r["seed"]): r["cmax"] for r in recs if r[key] == a}

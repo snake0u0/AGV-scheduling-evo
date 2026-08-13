@@ -1,10 +1,9 @@
 """Event-driven schedule builder with one rule slot per subproblem.
 
-`evaluator.decode` can only express one of the four subproblems as a rule: machine
-selection and operation sequencing come from the GA chromosome, and AGV sequencing is
-not a decision at all - each vehicle's task order simply falls out of the order OS
-happened to dispatch in. This module makes all four decisions explicit so a heuristic
-can be evolved for each.
+A schedule for this problem is fixed by four decisions, and this module makes every
+one of them an explicit, evolvable rule rather than a side effect of some encoding.
+The build is constructive: one pass, no search wrapped around it, so the rules alone
+determine the schedule.
 
 The four slots are the two resource types crossed with assignment and sequencing,
 which is symmetric and leaves no ambiguous case:
@@ -69,10 +68,9 @@ def _with_all(rule, cands, feat):
     absolute terms, which is exactly the expressive power of Han 2024's fixed
     decodings. Relative judgements - "is this the busiest vehicle in the fleet?",
     "is the travel spread small enough that load matters more?" - need the others.
-    2026-08-07 measured why that matters: textbook greedy rules (fastest machine,
-    earliest AGV) score 157.7% against 76.6% for plain load balancing, because
-    everyone crowds the same good resource. Avoiding contention is a relative
-    judgement.
+    That matters because contention is a relative property: a bundle of individually
+    reasonable greedy rules can crowd every job onto the same good resource, and only
+    a rule that can see the other candidates is able to notice and spread the load.
 
     The feature dicts are built once and shared, so this stays O(V) per decision and
     `_argmax`/`forced_slots` are untouched.

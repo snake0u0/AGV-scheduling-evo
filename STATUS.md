@@ -1,6 +1,6 @@
 # START HERE - 여기서 이어서 (resume point)
 
-최종 업데이트 **2026-08-12**. 새 세션에서 "이제 뭘 하면 돼?" -> 이 파일부터.
+최종 업데이트 **2026-08-13**. 새 세션에서 "이제 뭘 하면 돼?" -> 이 파일부터.
 
 ## 한 줄 현황
 
@@ -160,6 +160,32 @@ Berterottière 자체 확장=2·4·6대 최대), 40-50대에서는 비교할 SOT
      원인은 튜닝이 아니라 구조 - **수용률 0.002%**, 폴리셔로 써도 **8,109회 시도에 개선 0회**.
      수용이 거의 없으면 destroy를 어떻게 고르든 결과가 안 바뀌므로 **"destroy = 5번째 진화 슬롯"이라는
      LNS 채택의 유일한 명분이 소멸.** -> 슬롯은 **5개가 아니라 4개**로 확정.
+15. **[완료 2026-08-13] 4슬롯 조인트 진화 루프 - 첫 실행** -
+   `2026-08-13-bundle-evolution-first-run.md`. `ClaudeBundleProposer`/`evolve_bundle`(2026-08-12
+   작성, 그때까지 미실행)을 처음 돌림. pop20/gen6, LLM 호출 6회(세대당 1회), $2.06, 실패 0.
+   - train 3케이스: 세대0(최선 시드=MIX) 7122.0 -> 세대6 5953.7 (-16.4%).
+   - **held-out 15케이스 전부에서 evolved가 BALANCED·HAND·MIX 셋 다 이김(15/15)**. 문헌 대비
+     평균 격차 BALANCED 115.8% -> evolved **46.2%**. 단, 문헌 자체는 아직 못 이김(46.2%는 양수).
+   - LLM은 구조를 안 바꿨다: 부하분산(`-queue_len`/`-arrival`) 뼈대를 6세대 내내 유지하고
+     작은 가중치(0.003~0.05)만 얹었다 - 시스템 프롬프트에 이미 박힌 "부하분산이 이긴다" 힌트를
+     따라간 모양새. 재발견인지 받아쓰기인지 이 실행만으론 구분 안 됨.
+   - **경고: n=1, 미재현.** 아래 "다음" 1번의 "교차=슬롯단위 재조합" 연산자는 구현 안 됨(변이만 있음).
+
+16. **[완료 2026-08-13] 실험 폴더 정리 + 리팩토링 + 힌트 제거 ablation** -
+   `2026-08-13b-cleanup-refactor-and-nohint-ablation.md`.
+   - **시스템 프롬프트의 "부하분산이 이긴다" 힌트를 지웠는데도 LLM이 그 뼈대를 스스로 찾았다.**
+     최종 번들에 `-queue_len`/`-arrival`이 네 슬롯 그대로. held-out 44.7%로 오히려 더 좋음
+     (힌트 팔 46.2%). BALANCED 15/15, HAND 15/15, MIX 13/15 승.
+     -> **"LLM이 발견 vs 받아쓰기" 반론에 실측으로 답함.** 논문 방법 정당화에 직접 사용 가능.
+   - **공차 최소화 재발견**: 힌트 없는 팔이 `empty_travel`+`agv_cum_travel`+`travel_to`를
+     계수 1~3으로 얹었다. GA 시대 2x2 ablation의 주효과(공차 벌점)와 같은 것이
+     **완전히 다른 체제에서 독립 재현**된 것.
+   - **경고: 각 팔 n=1.** 44.7% vs 46.2% 차이는 노이즈 크기. "힌트 없는 쪽이 낫다"고 쓰면 안 됨.
+     정량 주장하려면 팔당 3회(회당 $2.3, 7분).
+   - **정리**: `model/` 7->4, `simulator/` 12->8 모듈. GA·LNS + 캠페인 11개 -> `archive/ga-era/`.
+     날짜·이력 주석 live 코드 26건 -> 0건, 한글 -> 영문. **결정성 게이트로 동작 보존 확인**
+     (저장 번들 재평가가 소수점까지 일치). 회귀 게이트 4종 전부 PASS.
+   - `experiments/plots.py` 신규 (gantt PNG + 비교표). 보고서는 **MD + PNG**로 확정.
 
 ## 다음 (논문화 전)
 
@@ -176,19 +202,28 @@ Berterottière 자체 확장=2·4·6대 최대), 40-50대에서는 비교할 SOT
 ## 다음 - 구성형 확정(2026-08-12) 이후의 계획
 
 **남은 것은 하나다: 4슬롯을 구성형 위에서 실제로 진화시키는 것.** solver 논쟁은 끝났다.
+**[2026-08-13] 1번의 첫 실행은 끝났다(위 15번). 재현·ablation이 남았다.**
 
-1. **[최우선] 진화 루프를 구성형 적합도로 재구성**
+1. **[완료(1회) 2026-08-13, 재현 필요] 진화 루프를 구성형 적합도로 재구성**
    - 적합도(규칙) = **학습 인스턴스 여러 개의 평균 Cmax**. 인스턴스 하나가 아니다
    - 평가 = `simulator/dispatch.build` 1회 통과. **시드도 population도 없다** -> 결정적
    - 결과: 기존 예산/population 설계가 전부 **불필요해진다**.
      `pop_for()`, 캐스케이드 2단계, "적합도 체제 = 배포 체제" 충돌 - **전부 소멸**.
      구성형은 케이스당 0.2초라 학습 6~12 인스턴스를 매 후보마다 전부 돌려도 몇 초다
    - 개체 = 슬롯 4칸(코드 + 생각) + `design_rationale`
-   - 연산자: **교차는 슬롯 단위 재조합**(LLM 불필요, 스키마 고정이라 항상 유효),
-     **변이는 LLM**(슬롯 k의 코드를 고쳐 쓴다). ReEvo 반성은 Selection 다음에 들어간다
-2. **베이스라인 확정** - 슬롯 되돌리기. **BALANCED(부하분산) 반드시 포함**
-3. **held-out 평가** - Dauzere 나머지 + Deroussi 10 (zero-shot 전이). 진화 중 절대 접근 금지
-4. ablation (슬롯 4개 x 성분: 반성 제거 / 생각 제거 / 슬롯 1개만)
+   - 연산자: **교차는 슬롯 단위 재조합**(LLM 불필요, 스키마 고정이라 항상 유효) - **미구현**,
+     **변이는 LLM**(슬롯 k의 코드를 고쳐 쓴다) - **구현·실행됨(15번)**. ReEvo 반성은 Selection
+     다음에 들어간다. **다음 재실행 전에 결정할 것: 교차 연산자를 마저 구현할지, 지금처럼
+     LLM 변이만으로 갈지.**
+   - **재현 필요**: 15·16번 모두 n=1(조건이 서로 다름). **최우선 다음 실험 = 팔당 3회씩
+     반복해 정량 주장 가능하게 만들기** (힌트 없음 x3, 힌트 있음 x3; 약 $14, 45분).
+     16번에서 질적 통찰(부하분산 뼈대)은 서로 다른 조건 2회에서 재현됐다.
+2. **베이스라인 확정** - 슬롯 되돌리기. **BALANCED(부하분산) 반드시 포함** - 15번에서 BALANCED는
+   비교 기준으로 이미 포함됐음(train/test 둘 다). 슬롯별 되돌리기 ablation은 아직.
+3. **held-out 평가** - Dauzere 나머지 + Deroussi 10 (zero-shot 전이). 진화 중 절대 접근 금지 -
+   **Dauzere 나머지 15케이스는 15번에서 완료**(15/15 승). Deroussi 10은 아직.
+4. ablation (슬롯 4개 x 성분: 반성 제거 / 생각 제거 / 슬롯 1개만) - 특히 **시스템 프롬프트의
+   "부하분산이 이긴다" 힌트 문장 제거 ablation**을 추가할 것 (15번에서 제기된 재발견 vs 받아쓰기 의문)
 5. 최종 표: 구성형 규칙 vs 문헌 규칙 vs 손규칙 + 문헌 tabu/DCGA/DCGA-CP 인용값 + **계산시간 대비**
 6. (덤, 주장의 축 아님) 구성형 해로 GA를 seed하면 어떻게 되나 - "우리 규칙은 메타휴리스틱도 개선한다"
 
@@ -205,25 +240,30 @@ Berterottière 자체 확장=2·4·6대 최대), 40-50대에서는 비교할 SOT
 **주의**: 위 자산들은 **GA 베이스라인을 돌릴 때 여전히 필요하다**(최종 표의 비교 행).
 폐기는 "우리 방법에서 안 쓴다"이지 "코드를 지운다"가 아니다.
 
-## 코드 자산 (폴더 개편 2026-07-31)
+## 코드 자산 (2026-08-13 정리)
 
 역할 기준 구조. **`simulator/`는 `model/`에 의존하지 않는다**(단방향).
+**`model/`과 `simulator/`에는 지금 방법(구성형 4슬롯 진화)을 돌리는 데 필요한 것만 둔다.**
+방법이 바뀌면 안 쓰는 것은 그때그때 `archive/`로 보낸다. GA·LNS 계열은 전부 `archive/ga-era/`.
 
-- **`simulator/`** 문제와 평가: `instance.py`(파서 3종 + 레지스트리 `load_dauzere`/`load_deroussi`),
-  `solution.py`, `timing.py`(논문 예제 검증), `evaluator.py`(decode, 자기검증 180/180), `replay.py`,
-  `agv_fms.py`(이벤트 구동 엔진 - 규칙 훅 2개 기보유), `policies.py`, `rule.py`
-- **`model/`** 방법: `rules.py`(D1/D2 + 표현식 컴파일), `ga.py`, `llm.py`(proposer),
-  `llm_backend.py`(claude CLI), `experiment.py`
-- **`experiments/`** 캠페인 스크립트 | **`data/{instances,results,papers}`** | **`archive/`** A안 자산
+- **`simulator/`** 문제와 평가: `instance.py`(파서 3종 + `load_dauzere`/`load_deroussi`),
+  `solution.py`, `timing.py`(논문 예제 검증), `dispatch.py`(4슬롯 구성형 빌더)
+- **`model/`** 방법: `rules.py`(D1/D2 + 표현식/함수 컴파일 샌드박스), `llm.py`(4슬롯 proposer),
+  `llm_backend.py`(claude CLI 백엔드), `experiment.py`(`evolve_bundle`/`evaluate_bundle`)
+- **`experiments/`** 캠페인 스크립트 + `common.py`(기준값·격차·검정) + `plots.py`(gantt·비교표)
+- **`archive/`** `a-track/`(동적 A안), `ga-era/`(GA·LNS + 그 캠페인 11개, README 있음), `demo/`, `lit/`
+- **`data/{instances,results,literature,papers}`**
 
-회귀 테스트 **6종** (무엇이든 건드린 뒤 전부 통과해야 함):
+회귀 테스트 **4종** (무엇이든 건드린 뒤 전부 통과해야 함):
 ```
 python -m simulator.test_paper_example        python -m simulator.test_replay_deroussi
-python -m simulator.test_dispatch             python -m model.test_ga_operators
-python -m model.test_decode_selfcheck         python -m experiments.test_reported_numbers
+python -m simulator.test_dispatch             python -m experiments.test_reported_numbers
 ```
-- `simulator/dispatch.py` = **4슬롯 이벤트 구동 평가기**(2026-08-07). 5슬롯 설계의 슬롯 1~4.
+구성형 진화를 건드렸으면 **결정성 게이트**도 확인한다 - 저장된 번들을 다시 평가해
+`best_train_fitness`와 정확히 일치해야 한다(리팩토링 검증에 실제로 썼다).
+- `simulator/dispatch.py` = **4슬롯 이벤트 구동 빌더**. 탐색 없음, 케이스당 약 0.2초.
 - `experiments/common.py` + `data/literature/` = 기준값·격차·검정·`pop_for()` 단일 출처.
+- **코드에는 날짜·이력 주석을 넣지 않는다**(논문 공개 대비). 이력은 이 파일과 `docs/reports/`에.
 
 ## 신뢰하면 안 되는 것
 

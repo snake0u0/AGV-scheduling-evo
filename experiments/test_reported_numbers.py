@@ -29,7 +29,7 @@ def load(name):
 
 def check(label, got, want, tol=0.05):
     ok = abs(got - want) <= tol
-    print(f"  {'ok  ' if ok else 'FAIL'} {label:<44} {got:>9.3f}   보고값 {want:>9.3f}")
+    print(f"  {'ok  ' if ok else 'FAIL'} {label:<44} {got:>9.3f}   reported {want:>9.3f}")
     if not ok:
         FAILURES.append(label)
 
@@ -41,10 +41,10 @@ def mean_gap(recs, **where):
 
 
 def main():
-    print("2026-07-31-budget-vs-structure-gate.md  (pop70 조건, 결론은 이후 기각됨)")
+    print("2026-07-31-budget-vs-structure-gate.md  (pop70; its conclusion was later rejected)")
     R = load("2026-07-31-budget_scaling_result.json")
     for b, want in [(10, 76.1), (60, 70.8), (600, 64.1)]:
-        check(f"{b}s 전체 평균 격차", mean_gap(R, budget=b), want)
+        check(f"{b}s overall mean gap", mean_gap(R, budget=b), want)
     for rn, want in [("D1", 65.35), ("D2", 65.73), ("P_main", 62.00),
                      ("P2", 60.69), ("P3", 66.70)]:
         check(f"600s {rn}", mean_gap(R, rule=rn, budget=600), want, tol=0.01)
@@ -68,42 +68,42 @@ def main():
     R = load("2026-08-01-rule_ranking_retest_result.json")
     for rn, want in [("D1", 16.73), ("D2", 16.28), ("P_main", 16.75),
                      ("P2", 17.00), ("P3", 17.72)]:
-        check(f"{rn} 평균 격차", mean_gap(R, rule=rn), want, tol=0.01)
-    check("Dauzere 평균", st.mean(gap(r) for r in R
+        check(f"{rn} mean gap", mean_gap(R, rule=rn), want, tol=0.01)
+    check("Dauzere mean", st.mean(gap(r) for r in R
                                 if r["family"] == "dauzere" and r["rule"] == "D1"), 21.08, tol=0.01)
     for a, b, w_want, p_want in [("P2", "D1", 10, 0.7088), ("P_main", "D1", 9, 0.7938),
                                  ("P3", "D1", 8, 0.0573)]:
         w, _, _, p = paired(R, a, b)
-        check(f"{a} vs {b} 승수", w, w_want, tol=0)
-        check(f"{a} vs {b} p값", p, p_want, tol=0.001)
+        check(f"{a} vs {b} wins", w, w_want, tol=0)
+        check(f"{a} vs {b} p-value", p, p_want, tol=0.001)
     # 2x2 ablation: the deadhead main effect kept its direction but lost significance
     cells = {c: mean_gap(R, rule=c) for c in ("base", "dead", "couple", "both")}
-    check("공차 주효과 (%p)",
+    check("deadhead main effect (%p)",
           (cells["base"] + cells["couple"]) / 2 - (cells["dead"] + cells["both"]) / 2,
           1.27, tol=0.01)
-    check("상호작용 (%p)",
+    check("interaction (%p)",
           cells["base"] - cells["dead"] - cells["couple"] + cells["both"], 0.02, tol=0.01)
 
     print("\n2026-08-06-rule-effect-vs-budget.md")
     R = load("2026-08-06-rule_effect_vs_budget_result.json")
     for b, p, want in [(1, 20, 158.7), (10, 70, 115.5), (60, 300, 74.0), (600, 1000, 24.3)]:
-        check(f"{b}s x pop{p} (최적)", mean_gap(R, budget=b, pop=p), want, tol=0.1)
+        check(f"{b}s x pop{p} (best)", mean_gap(R, budget=b, pop=p), want, tol=0.1)
     for b, p, rn, want in [(1, 20, "P_main", 154.6), (10, 70, "P2", 113.2),
                            (60, 300, "D1", 68.2), (600, 1000, "D1", 23.5)]:
         check(f"{b}s {rn}", mean_gap(R, budget=b, pop=p, rule=rn), want, tol=0.1)
     w, _, _, p = paired([r for r in R if r["budget"] == 1 and r["pop"] == 20], "P2", "D2")
-    check("1s P2 vs D2 승수", w, 10, tol=0)
-    check("1s P2 vs D2 p값", p, 0.016, tol=0.001)
+    check("1s P2 vs D2 wins", w, 10, tol=0)
+    check("1s P2 vs D2 p-value", p, 0.016, tol=0.001)
     w, _, _, p = paired([r for r in R if r["budget"] == 60 and r["pop"] == 300], "P3", "D2")
-    check("60s P3 vs D2 승수 (진화가 전패)", w, 0, tol=0)
+    check("60s P3 vs D2 wins (evolved lost every pair)", w, 0, tol=0)
 
-    print("\npop_for() 공식 vs 실측 최적 population")
+    print("\npop_for() formula vs measured best population")
     for b, measured in [(1, 20), (10, 70), (60, 300), (600, 1000)]:
-        print(f"  {b:>4}s   실측 pop{measured:<6} 공식 pop{pop_for(b)}")
+        print(f"  {b:>4}s   measured pop{measured:<6} formula pop{pop_for(b)}")
 
     if FAILURES:
-        raise SystemExit(f"\nFAIL - {len(FAILURES)}개 불일치: {FAILURES}")
-    print("\nPASS - 보고된 수치 전부 재현됨")
+        raise SystemExit(f"\nFAIL - {len(FAILURES)} mismatches: {FAILURES}")
+    print("\nPASS - every reported number reproduced")
 
 
 if __name__ == "__main__":
