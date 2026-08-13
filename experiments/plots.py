@@ -42,22 +42,39 @@ def _job_colour(job):
     return _JOB_COLOURS[job % len(_JOB_COLOURS)]
 
 
-def _label_if_it_fits(ax, bars, fontsize):
-    """Write each bar's label inside it, then drop the ones that do not fit.
+def _label_bars(ax, bars, fontsize, bar_height):
+    """Label every bar that can hold its text, horizontally if it fits and rotated if not.
 
-    Measured against the rendered text rather than estimated: on a real instance most
-    operations are far too short for a label, and a clipped or overflowing one is worse
-    than none. The value stays available in the result JSON either way.
+    A bar only has to be as wide as the glyph height once the text is turned on its
+    side, so rotating recovers most of the operations a horizontal label would have had
+    to skip. Only bars that carry identity may rotate - `may_rotate` is off for "empty",
+    which is already obvious from the grey fill and would otherwise crowd the vehicle
+    rows with vertical text. Fit is measured on the rendered text, never estimated, and
+    a label that still cannot fit is dropped rather than clipped or overflowed.
+
+    Returns (labelled, total) so a caller can see how much of the schedule is readable.
     """
-    ax.figure.canvas.draw()
-    renderer = ax.figure.canvas.get_renderer()
-    for x0, x1, y, text in bars:
+    fig = ax.figure
+    fig.canvas.draw()
+    renderer = fig.canvas.get_renderer()
+    px_per_row = abs(ax.transData.transform((0, 1))[1] - ax.transData.transform((0, 0))[1])
+    room_v = px_per_row * bar_height - 2          # usable height inside a bar, in pixels
+    placed = 0
+
+    for x0, x1, y, text, may_rotate in bars:
+        span = ax.transData.transform((x1, y))[0] - ax.transData.transform((x0, y))[0]
         t = ax.text((x0 + x1) / 2, y, text, ha="center", va="center",
                     fontsize=fontsize, color="#111111", zorder=4)
         bb = t.get_window_extent(renderer)
-        span = ax.transData.transform((x1, y))[0] - ax.transData.transform((x0, y))[0]
-        if bb.width + 4 > span:
-            t.remove()
+        if bb.width + 3 <= span:                  # fits lying down
+            placed += 1
+            continue
+        if may_rotate and bb.height + 2 <= span and bb.width <= room_v:   # standing up
+            t.set_rotation(90)
+            placed += 1
+            continue
+        t.remove()
+    return placed, len(bars)
 
 
 def schedule_of(bundle, stem, veh):
@@ -84,7 +101,7 @@ def gantt(bundle, stem, veh, out=None, caption=None, fig_no=None):
     n_rows = inst.n_machines + inst.n_vehicles
     fig, ax = plt.subplots(figsize=(13, 0.40 * n_rows + 1.9))
 
-    to_label = []                      # (x0, x1, y, text) resolved after the first draw
+    to_label = []                # (x0, x1, y, text, may_rotate), placed after a draw
     labels, y = [], 0
 
     for k in range(1, inst.n_machines + 1):
@@ -95,7 +112,7 @@ def gantt(bundle, stem, veh, out=None, caption=None, fig_no=None):
             x0, x1 = sched.start[g], sched.end[g]
             ax.barh(y, x1 - x0, left=x0, height=0.58, color=_job_colour(job),
                     edgecolor=_EDGE, linewidth=0.35, zorder=3)
-            to_label.append((x0, x1, y, f"J{job + 1}"))
+            to_label.append((x0, x1, y, f"J{job + 1}", True))
         labels.append(f"M{k}")
         y += 1
 
@@ -107,21 +124,25 @@ def gantt(bundle, stem, veh, out=None, caption=None, fig_no=None):
             if pickup > free:
                 ax.barh(y, pickup - free, left=free, height=0.58, color=_EMPTY_FILL,
                         edgecolor=_EDGE, linewidth=0.35, zorder=3)
-                to_label.append((free, pickup, y, "empty"))
+                to_label.append((free, pickup, y, "empty", False))
             ax.barh(y, arrive - pickup, left=pickup, height=0.58, color=_job_colour(job),
                     edgecolor=_EDGE, linewidth=0.35, zorder=3)
-            to_label.append((pickup, arrive, y, f"J{job + 1}"))
+            to_label.append((pickup, arrive, y, f"J{job + 1}", True))
             free = arrive
         labels.append(f"V{v}")
         y += 1
 
     ax.set_yticks(range(n_rows), labels, fontsize=8.5)
     ax.set_ylim(n_rows - 0.5, -0.7)                  # inverted, with headroom at the top
-    ax.set_xlim(0, sched.cmax * 1.02)
+    ax.set_xlim(-sched.cmax * 0.004, sched.cmax * 1.02)
     ax.set_xlabel("time", fontsize=9)
-    for side in ("top", "right", "left"):
+    for side in ("top", "right"):
         ax.spines[side].set_visible(False)
+    ax.spines["left"].set_position(("data", 0))      # time axis closed on the left
+    ax.spines["left"].set_linewidth(1.1)
+    ax.spines["bottom"].set_linewidth(1.1)
     ax.tick_params(axis="x", labelsize=8)
+    ax.tick_params(axis="y", length=0)
 
     # Makespan: drop a dashed line from the operation that ends last down to the axis,
     # and put the value on the axis rather than colouring the line for attention.
@@ -133,7 +154,7 @@ def gantt(bundle, stem, veh, out=None, caption=None, fig_no=None):
     ax.set_xticks(ticks + [sched.cmax])
     ax.get_xticklabels()[-1].set_fontweight("bold")
 
-    _label_if_it_fits(ax, to_label, fontsize=6.5)
+    placed, total = _label_bars(ax, to_label, fontsize=6.0, bar_height=0.58)
 
     fig.tight_layout()
 
@@ -152,7 +173,7 @@ def gantt(bundle, stem, veh, out=None, caption=None, fig_no=None):
     os.makedirs(os.path.dirname(out), exist_ok=True)
     fig.savefig(out, dpi=170, bbox_inches="tight")
     plt.close(fig)
-    return out, sched.cmax
+    return out, sched.cmax, (placed, total)
 
 
 def comparison(bundles, instances, family="dauzere"):
@@ -201,8 +222,8 @@ if __name__ == "__main__":
                            "data", "results")
         latest = sorted(f for f in os.listdir(res) if f.endswith("bundle_evolution_result.json"))[-1]
         bundle = json.load(open(os.path.join(res, latest)))["best_bundle"]
-        path, cmax = gantt(bundle, sys.argv[2], int(sys.argv[3]),
-                           sys.argv[4] if len(sys.argv) > 4 else None)
-        print(f"{path}  (Cmax {cmax}, bundle from {latest})")
+        path, cmax, (placed, total) = gantt(bundle, sys.argv[2], int(sys.argv[3]),
+                                           sys.argv[4] if len(sys.argv) > 4 else None)
+        print(f"{path}  (Cmax {cmax}, {placed}/{total} bars labelled, bundle from {latest})")
     else:
         print(__doc__)
