@@ -79,6 +79,8 @@ train, test = default_split()     # train 3개(01a/07a/13a), test 나머지 15�
    프롬프트/응답/reflection/거부된 후보 포함 - 나중에 감사 가능해야 한다).
 2. **보고서를 `docs/reports/YYYY-MM-DD-<슬러그>.md`에 두괄식으로** 작성.
    그림은 PNG로 `docs/reports/figures/`에 (`experiments/plots.py`). HTML 아님.
+   **간트차트는 인스턴스마다 전체 + 확대(앞 500 시간단위) 두 장을 함께 낸다**
+   (`plots.gantt_pair`). 전체는 형태를, 확대는 어느 job이 어디 있는지를 보여준다.
 3. `STATUS.md`에 한 항목 추가.
 4. `python -m tests.run_all` (게이트 5종, 결정성 포함) 통과 확인.
 5. 코드에는 날짜·이력 주석을 남기지 않는다. 이력은 보고서와 STATUS.md에.

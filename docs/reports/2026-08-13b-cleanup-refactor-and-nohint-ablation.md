@@ -153,13 +153,22 @@ held-out 인스턴스 09a(8기계·15job·AGV 2대)에서, 같은 문제를 두 
 
 ![09a, BALANCED 손규칙](figures/gantt-09a-2v-balanced.png)
 
-같은 인스턴스인데 **3980 vs 6861**이다. 눈에 띄는 차이는 **AGV 행(V1·V2)의 회색 빗금
-= 공차/대기 구간**으로, 손규칙 쪽이 훨씬 길다. 진화된 규칙이 `empty_travel`과
-`agv_cum_travel`에 벌점을 준 것이 그림에서 그대로 보인다.
+같은 인스턴스인데 **3980 vs 6861**이다. 눈에 띄는 차이는 **AGV 행(V1·V2)의 회색 구간
+= 공차/대기**로, 손규칙 쪽이 훨씬 길다. 진화된 규칙이 `empty_travel`과 `agv_cum_travel`에
+벌점을 준 것이 그림에서 그대로 보인다. 기계 쪽도 손규칙에서는 M5~M8이 거의 놀고 있다.
+
+전체 차트는 규모가 커서 짧은 공정에 라벨이 들어가지 않으므로, **인스턴스마다 앞 500 시간
+단위를 확대한 그림을 함께 낸다.** 확대하면 어느 job이 어디 있는지 전부 읽힌다:
+
+![09a 확대, 진화 번들](figures/gantt-09a-2v-zoom.png)
+
+![09a 확대, BALANCED 손규칙](figures/gantt-09a-2v-balanced-zoom.png)
 
 학습 인스턴스 01a:
 
 ![01a, 진화 번들 (힌트 없음)](figures/gantt-01a-2v.png)
+
+![01a 확대](figures/gantt-01a-2v-zoom.png)
 
 ## 5. 해석
 
