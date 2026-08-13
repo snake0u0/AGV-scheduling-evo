@@ -24,6 +24,14 @@ from scipy import stats
 SEEDS = (0, 21, 42)
 WORKERS = 12                       # of 16 cores
 
+# Evolution budget, sized to the AHD literature rather than to convenience. FunSearch
+# and MCTS-AHD budget T=1000 evaluated heuristics; EoH runs 20x20. Anything an order of
+# magnitude below that has not tested the regime those methods were shown to need, so a
+# null result at a smaller budget says nothing about the method.
+#   20 seeds + 65 generations x 15 children = 995 individuals over 65 LLM calls.
+EVOLVE_POP, EVOLVE_GEN = 20, 65
+MAX_CALLS = 80                     # hard cap; the proposer pads from elites past it
+
 LIT_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
                        "data", "literature")
 

@@ -1,0 +1,90 @@
+# 실험 프로토콜 - 실험을 돌릴 때 무조건 이 설정으로
+
+> **"실험 돌려줘"라고 하면 이 문서의 설정으로 돌린다.** 편의상 줄이지 않는다.
+> 코드상 단일 출처는 `experiments/common.py`의 프로토콜 상수다. 여기 숫자와 코드가
+> 어긋나면 코드가 맞다.
+
+## 0. 왜 이 문서가 있나
+
+2026-08-13에 4슬롯 진화를 **pop 20 x 6세대 = LLM 호출 6회**로 돌렸다. 이건 이 프로젝트가
+이미 "한 자릿수 부족"이라고 판정해둔 규모였다(아래 1절). 결과가 좋게 나왔어도 그 규모에서는
+**방법에 대해 아무것도 주장할 수 없다.** 같은 실수를 반복하지 않기 위해 기준을 고정한다.
+
+## 1. 진화 예산 (LLM 루프)
+
+```python
+from experiments.common import EVOLVE_POP, EVOLVE_GEN, MAX_CALLS
+EVOLVE_POP, EVOLVE_GEN = 20, 65      # 20 + 65x15 = 995 individuals, 65 LLM calls
+MAX_CALLS = 80                       # hard cap
+```
+
+**근거 = AHD 문헌이 요구하는 규모.** FunSearch와 MCTS-AHD는 T=1000 휴리스틱 평가를 예산으로
+쓰고, EoH는 20x20을 돌린다. 그보다 한 자릿수 작은 실행은 그 방법들이 필요로 한다고 보여진
+체제를 **아예 시험하지 않은 것**이라, 이기든 지든 방법에 대한 근거가 되지 못한다.
+
+- pop 20, elite = `max(2, pop//4)` = 5, 따라서 세대당 자식 15개, 세대당 LLM 호출 1회.
+- 실측 비용: 호출당 약 $0.35, 약 70초 -> **65호출 = 약 $23, 약 80분.**
+- 이보다 줄이려면 **보고서에 줄인 이유와 그래서 무엇을 주장할 수 없는지**를 반드시 적는다.
+
+### 헷갈리기 쉬운 것: "600초 / pop 1000"은 이것이 아니다
+
+프로젝트 기록에 나오는 **600초 x pop1000**은 **GA 솔버**의 예산이다. 층위가 다르다.
+
+| | 무엇의 예산인가 | 현재 상태 |
+|---|---|---|
+| **600초 x pop1000** (`pop_for()`) | GA가 **인스턴스 하나의 해**를 탐색하는 예산 | **GA와 함께 은퇴** (`archive/ga-era/`) |
+| **pop20 x 65세대 = 65호출** | LLM이 **규칙을 진화**시키는 예산 | **현재 유효. 이것이 기본값** |
+
+지금 방법은 구성형(constructive)이라 해 수준 탐색이 없다. 적합도 평가는
+`dispatch.build` 1회 통과(인스턴스당 약 0.2초)이고 **결정론적**이라 시드도 population도 없다.
+그래서 `pop_for()`는 GA 베이스라인을 돌릴 때만 쓴다.
+
+## 2. 문헌 비교 기준
+
+**절대 코드에 하드코딩하지 않는다.** 읽는 곳은 `experiments/common.py::reference()` 한 곳뿐.
+
+- 기준값: `data/literature/berterottiere2024_table8.tsv`
+  = Berterottière, Dauzère-Pérès & Yugma (2024), EJOR 312(3), 890-909, **Table 8**,
+  **iteration-stop 기준** (같은 논문의 time-stop 값과 섞지 말 것). Zotero `3XNMDN47`.
+- `data/literature/deroussi_published.tsv` = Deroussi & Norre (2010) fjsp1-10.
+  우리 시뮬레이터가 10/10 정확 재현하므로 인용값이 아니라 **검증된 값**이다.
+- 격차 = `gap(rec)` = `(우리 Cmax - 문헌) / 문헌 x 100` (%). 낮을수록 좋고, **양수면 아직 진 것.**
+- 출처·함정은 `data/literature/SOURCE.md`.
+- **인용 금지**: `Berterottiere/dpp{2,4,6}veh/` 해 파일 헤더의 Cmax (54/54 헤더 불일치).
+
+## 3. 학습 / held-out 분리
+
+```python
+from model.experiment import default_split
+train, test = default_split()     # train 3개(01a/07a/13a), test 나머지 15개, 모두 AGV 2대
+```
+
+- **진화 중 test에 절대 접근하지 않는다.** 마지막에 한 번만 채점한다.
+- 성능 주장은 **held-out에서만** 한다. train 수치는 수렴 곡선을 보여줄 때만 쓴다.
+- 같은 채점표에 **손규칙 시드 3종(BALANCED / HAND / MIX)**을 반드시 함께 올린다.
+  BALANCED(부하분산)를 빼면 약한 상대만 이기고 의미 없는 비교가 된다.
+
+## 4. 반복과 통계
+
+- **정량 주장(A가 B보다 낫다)에는 팔당 최소 3회 독립 실행이 필요하다.** LLM 샘플링이
+  유일한 무작위원이고, 1회 실행끼리의 차이는 노이즈와 구분되지 않는다.
+- 1회 실행으로 주장 가능한 것은 **질적 통찰**뿐이다(예: "부하분산 구조가 나타났다").
+- 짝지어 비교할 때는 `experiments/common.py::paired()` (Wilcoxon). 인스턴스별로 짝을 짓는다.
+- 이 프로젝트는 과거에 **n이 작은 결과가 재검정에서 뒤집힌 전례가 여러 번 있다.**
+  보고서에는 반드시 n을 적고, n=1이면 "주장할 수 없는 것"을 명시한다.
+
+## 5. 실행 후 필수 절차
+
+1. 결과 JSON을 `data/results/YYYY-MM-DD-<이름>_result.json`에 저장 (세대별 전체 population +
+   프롬프트/응답/reflection/거부된 후보 포함 - 나중에 감사 가능해야 한다).
+2. **보고서를 `docs/reports/YYYY-MM-DD-<슬러그>.md`에 두괄식으로** 작성.
+   그림은 PNG로 `docs/reports/figures/`에 (`experiments/plots.py`). HTML 아님.
+3. `STATUS.md`에 한 항목 추가.
+4. 회귀 게이트 4종 + 결정성 게이트 통과 확인.
+5. 코드에는 날짜·이력 주석을 남기지 않는다. 이력은 보고서와 STATUS.md에.
+
+## 6. 재현
+
+- 구성형 평가는 결정론적이다. 같은 번들 -> 같은 Cmax. 이것이 **리팩토링 게이트**다:
+  저장된 `best_bundle`을 다시 평가해 `best_train_fitness`와 소수점까지 일치해야 한다.
+- 진화 루프 자체는 LLM 샘플링 때문에 재현되지 않는다. 그래서 4절의 반복이 필요하다.

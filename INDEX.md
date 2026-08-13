@@ -14,6 +14,7 @@
 | **INDEX.md** | 이 지도 |
 | **STATUS.md** | 현재 상태 + 바로 다음 할 일 + 방향 결정 기록. **여기가 핵심** |
 | **CLAUDE.md** | 에이전트 작업 규칙(헌법) |
+| **docs/research/experiment_protocol.md** | **실험 예산·문헌기준·반복 규칙. "실험 돌려줘" = 이 설정으로** |
 | archive/a-track/PLAN.md | A안 실험계획 (보류, 이력 보존용) |
 
 ### 코드 (역할 기준)
