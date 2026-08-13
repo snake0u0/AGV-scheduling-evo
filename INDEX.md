@@ -26,15 +26,13 @@
 | **simulator/** | 문제와 평가. 파서 3종·travel matrix·타이밍 코어·4슬롯 구성형 빌더. **model/에 의존하지 않음** |
 | **model/** | 방법. 규칙 컴파일러(`rules.py`), 4슬롯 proposer(`llm.py`), CLI 백엔드(`llm_backend.py`), 진화 루프(`experiment.py`) |
 | **experiments/** | 캠페인 스크립트(실험 1개 = 파일 1개) + `common.py`(공용 하네스) + `plots.py`(그림·비교표) |
+| **tests/** | 게이트 5종. **단위테스트가 아니라 시뮬레이터 타당성의 증거**(공표 해 재현 등) |
 | **archive/** | 은퇴 자산. `a-track/`(동적 A안), `ga-era/`(GA·LNS 시대 + 그 캠페인 11개), `demo/`, `lit/` |
 
-회귀 테스트 4종 - 아무거나 건드린 뒤엔 이걸 돌린다:
+게이트 - 아무거나 건드린 뒤엔 **이 한 줄**을 돌린다 (결정성 게이트 포함 5종):
 ```
-python -m simulator.test_paper_example      python -m simulator.test_replay_deroussi
-python -m simulator.test_dispatch           python -m experiments.test_reported_numbers
+python -m tests.run_all
 ```
-구성형 진화를 건드렸다면 결정성도 확인한다(같은 번들 -> 같은 Cmax):
-`evaluate_bundle(best_bundle, train)` 이 저장된 `best_train_fitness` 와 정확히 일치해야 한다.
 
 ### 데이터
 | 위치 | 무엇 |

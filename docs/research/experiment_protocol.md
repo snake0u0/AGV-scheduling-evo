@@ -80,7 +80,7 @@ train, test = default_split()     # train 3개(01a/07a/13a), test 나머지 15�
 2. **보고서를 `docs/reports/YYYY-MM-DD-<슬러그>.md`에 두괄식으로** 작성.
    그림은 PNG로 `docs/reports/figures/`에 (`experiments/plots.py`). HTML 아님.
 3. `STATUS.md`에 한 항목 추가.
-4. 회귀 게이트 4종 + 결정성 게이트 통과 확인.
+4. `python -m tests.run_all` (게이트 5종, 결정성 포함) 통과 확인.
 5. 코드에는 날짜·이력 주석을 남기지 않는다. 이력은 보고서와 STATUS.md에.
 
 ## 6. 재현

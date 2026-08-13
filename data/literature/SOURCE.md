@@ -25,7 +25,7 @@ Zotero `3XNMDN47`. 18개 Dauzère-Pérès & Paulli (1997) 인스턴스 x 차량 
 **Deroussi & Norre (2010) 인스턴스 fjsp1-10의 공표 makespan.** 차량 2대 고정.
 
 - 생성 방식: `data/instances/fjspt-lucasberter/Deroussi/{stem}.txt` 해 파일 헤더에서 직접 추출
-- **우리 시뮬레이터가 이 10개를 전부 정확히 재현한다**(`simulator/test_replay_deroussi`, 10/10).
+- **우리 시뮬레이터가 이 10개를 전부 정확히 재현한다**(`tests/test_replay_deroussi.py`, 10/10).
   즉 이 값들은 인용된 숫자가 아니라 **우리가 검증한 숫자**다.
 - Berterottière et al. (2026) EJOR 332, Table 6의 fjsp1-10 값과도 일치한다:
   134, 114, 120, 114, 94, 138, 112, 178, 144, 174

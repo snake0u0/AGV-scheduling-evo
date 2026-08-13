@@ -23,9 +23,9 @@ Reading that Gantt chart off the paper gives a makespan of 13:
 
 Run:  python -m fjspt.test_paper_example
 """
-from .instance import Instance
-from .solution import Solution
-from .timing import simulate
+from simulator.instance import Instance
+from simulator.solution import Solution
+from simulator.timing import simulate
 
 EXPECTED_CMAX = 13
 

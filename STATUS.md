@@ -65,7 +65,7 @@ Berterottière 자체 확장=2·4·6대 최대), 40-50대에서는 비교할 SOT
    막혔던 원인은 시뮬레이터가 아니라 **전제 오류**였다: 이 인스턴스는 4기계가 아니라 **8기계**(유연도 2는
    기계가 짝지어져 나오는 것), 행렬은 5x5가 아니라 **9x9**. 행렬은 추측이 아니라 Han 2024가 지목한
    데이터셋 페이지의 배포 PDF Table 5에서 **전사**했다.
-   게이트: `python -m simulator.test_replay_deroussi`
+   게이트: `python -m tests.test_replay_deroussi` (또는 `python -m tests.run_all`)
    **단, Dauzere 계열(`Berterottiere/dpp*veh/`)의 해 파일은 여전히 헤더와 모순(54/54 불일치)**.
    -> 그 레포 해 파일 헤더 Cmax는 인용 금지, 논문 Table 8 값만 인용.
 4. **[완료] experiment.py + LLM 루프 연결** - `2026-07-24-llm-loop-first-campaign.md`.
@@ -262,16 +262,18 @@ Berterottière 자체 확장=2·4·6대 최대), 40-50대에서는 비교할 SOT
 - **`model/`** 방법: `rules.py`(D1/D2 + 표현식/함수 컴파일 샌드박스), `llm.py`(4슬롯 proposer),
   `llm_backend.py`(claude CLI 백엔드), `experiment.py`(`evolve_bundle`/`evaluate_bundle`)
 - **`experiments/`** 캠페인 스크립트 + `common.py`(기준값·격차·검정) + `plots.py`(gantt·비교표)
+- **`tests/`** 게이트 5종 + `run_all.py`. 실험 로직이 아니라 **검증 자산**이라 별도 폴더
 - **`archive/`** `a-track/`(동적 A안), `ga-era/`(GA·LNS + 그 캠페인 11개, README 있음), `demo/`, `lit/`
 - **`data/{instances,results,literature,papers}`**
 
-회귀 테스트 **4종** (무엇이든 건드린 뒤 전부 통과해야 함):
+게이트 **5종**, 한 줄로 (무엇이든 건드린 뒤 전부 통과해야 함):
 ```
-python -m simulator.test_paper_example        python -m simulator.test_replay_deroussi
-python -m simulator.test_dispatch             python -m experiments.test_reported_numbers
+python -m tests.run_all
 ```
-구성형 진화를 건드렸으면 **결정성 게이트**도 확인한다 - 저장된 번들을 다시 평가해
-`best_train_fitness`와 정확히 일치해야 한다(리팩토링 검증에 실제로 썼다).
+`tests/`는 단위테스트가 아니라 **시뮬레이터 타당성의 증거**다. 공표 해 10개 정확 재현,
+논문 워크드 예제 일치 - 우리가 만들지 않은 숫자로 검증되므로 논문에서 인용할 근거가 된다.
+**결정성 게이트**(저장된 번들 재평가가 `best_train_fitness`와 정확히 일치)가 여기 포함돼 있고,
+리팩토링이 동작을 바꾸지 않았음을 증명하는 것이 그것이다.
 - `simulator/dispatch.py` = **4슬롯 이벤트 구동 빌더**. 탐색 없음, 케이스당 약 0.2초.
 - `experiments/common.py` + `data/literature/` = 기준값·격차·검정·`pop_for()` 단일 출처.
 - **코드에는 날짜·이력 주석을 넣지 않는다**(논문 공개 대비). 이력은 이 파일과 `docs/reports/`에.

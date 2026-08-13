@@ -9,13 +9,13 @@ keeps guarding it if the reference files are ever edited.
 
 Add a line here whenever a report states a number worth defending.
 
-Run: python -m experiments.test_reported_numbers
+Run: python -m tests.test_reported_numbers
 """
 import json
 import os
 import statistics as st
 
-from .common import gap, paired, pop_for
+from experiments.common import gap, paired, pop_for
 
 RESULTS = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
                        "data", "results")

@@ -6,11 +6,11 @@ matrix, the operation numbering and the timing recurrence at once, against numbe
 did not produce. The travel matrix comes from the authors' dataset page
 (DeroussiNorreTravelTimes/SOURCE.md).
 
-Run: python -m simulator.test_replay_deroussi
+Run: python -m tests.test_replay_deroussi
 """
-from .instance import DEROUSSI_STEMS, load_deroussi
-from .solution import parse_solution_file
-from .timing import Params, check_consistency, simulate
+from simulator.instance import DEROUSSI_STEMS, load_deroussi
+from simulator.solution import parse_solution_file
+from simulator.timing import Params, check_consistency, simulate
 
 
 def main():

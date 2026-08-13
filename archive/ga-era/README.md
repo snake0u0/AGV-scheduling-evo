@@ -31,4 +31,4 @@ GA/LNS 시대의 코드와 캠페인 스크립트. **은퇴했지만 기록으�
 `experiments/plots.py`에 비교용 코드를 따로 쓰는 쪽**이 프로젝트 방침이다.
 
 각 실험의 결과 JSON은 여기가 아니라 `data/results/`에 그대로 있고,
-`experiments/test_reported_numbers.py`가 그 수치들을 계속 지킨다.
+`tests/test_reported_numbers.py`가 그 수치들을 계속 지킨다.

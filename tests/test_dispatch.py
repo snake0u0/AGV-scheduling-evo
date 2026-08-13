@@ -10,12 +10,12 @@ G2 forced replay  with the slots forced to follow a published solution, the buil
 G4 (the pure-constructive baseline) lives in experiments/, because simulator/
 must not depend on the experiment harness.
 
-Run: python -m simulator.test_dispatch
+Run: python -m tests.test_dispatch
 """
-from .dispatch import build, forced_slots, self_check
-from .instance import DEROUSSI_STEMS, load_dauzere, load_deroussi
-from .solution import parse_solution_file
-from .timing import Params, check_consistency, simulate
+from simulator.dispatch import build, forced_slots, self_check
+from simulator.instance import DEROUSSI_STEMS, load_dauzere, load_deroussi
+from simulator.solution import parse_solution_file
+from simulator.timing import Params, check_consistency, simulate
 
 # Hand-written slot rules, the literature defaults where one exists.
 #   SPT   shortest processing time              (machine selection)

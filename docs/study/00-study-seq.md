@@ -8,9 +8,9 @@
 simulator가 model을 전혀 import 하지 않는 구조.
 
 2) 코드 테스트
-1. simulator/test_paper_example.py  
+1. tests/test_paper_example.py  
 2. simulator/replay.py
-3. simulator/test_replay_deroussi.py
+3. tests/test_replay_deroussi.py
 
 3) 우리 방법
 1. model/rules.py ⭐
@@ -25,4 +25,4 @@ simulator가 model을 전혀 import 하지 않는 구조.
 
 5) 새 설계
 1. simulator/dispatch.py
-2. simulator/test_distpatch.py
+2. tests/test_dispatch.py
