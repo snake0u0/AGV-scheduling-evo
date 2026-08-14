@@ -27,7 +27,7 @@ from model.llm_backend import cli_available
 RESULTS = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
                        "data", "results")
 PREV = os.path.join(RESULTS, "2026-08-13-bundle_evolution_full_result.json")
-OUT = os.path.join(RESULTS, "2026-08-13-bundle_evolution_full_resumed_result.json")
+STEM = "2026-08-13-bundle_evolution_full_resumed"
 SEED_NAMES = ["BALANCED", "HAND", "MIX"]
 
 
@@ -35,6 +35,25 @@ def effective_generations(record):
     """Generations whose proposer call actually returned a reply."""
     return sum(1 for e in record
                if e["gen"] > 0 and (e.get("call", {}).get("response") or "").strip())
+
+
+def credited_generations(prev):
+    """Effective generations behind `prev`, including any it inherited.
+
+    A resume can itself be cut short, so the count has to carry forward across a chain
+    of them; reading only this file's record would credit the last link alone and ask
+    for generations that were already paid for.
+    """
+    carried = prev.get("config", {}).get("effective_generations_total")
+    return carried if carried is not None else effective_generations(prev["record"])
+
+
+def next_output_path():
+    """A fresh numbered file, so a later resume never overwrites an earlier one."""
+    n = 2
+    while os.path.exists(os.path.join(RESULTS, f"{STEM}{n}_result.json")):
+        n += 1
+    return os.path.join(RESULTS, f"{STEM}{n}_result.json")
 
 
 def main():
@@ -45,7 +64,7 @@ def main():
 
     prev_path = sys.argv[1] if len(sys.argv) > 1 else PREV
     prev = json.load(open(prev_path))
-    done = effective_generations(prev["record"])
+    done = credited_generations(prev)
     owed = EVOLVE_GEN - done
     if owed <= 0:
         raise SystemExit(f"{os.path.basename(prev_path)} already has {done} effective "
@@ -56,12 +75,13 @@ def main():
 
     print(f"resuming {os.path.basename(prev_path)}", flush=True)
     print(f"  effective generations so far : {done}/{EVOLVE_GEN}  "
-          f"(logged {len(prev['record']) - 1}, {prev['usage']['fails']} calls failed)",
-          flush=True)
+          f"(this file logged {len(prev['record']) - 1} gens, "
+          f"{prev['usage']['fails']} calls failed)", flush=True)
     print(f"  generations still owed       : {owed}", flush=True)
     print(f"  starting population          : {len(init_pop)} bundles, "
           f"best {prev['best_train_fitness']:.1f}\n", flush=True)
 
+    out_path = next_output_path()
     proposer = ClaudeBundleProposer(max_calls=MAX_CALLS, reevo=True)
     record = []
     t0 = time.time()
@@ -104,8 +124,8 @@ def main():
                   "cost_usd": proposer.cost,
                   "in_tok": proposer.in_tok, "out_tok": proposer.out_tok},
         "elapsed_sec": elapsed,
-    }, open(OUT, "w"), indent=2)
-    print("wrote", OUT, flush=True)
+    }, open(out_path, "w"), indent=2)
+    print("wrote", out_path, flush=True)
 
 
 if __name__ == "__main__":
