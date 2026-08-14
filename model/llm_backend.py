@@ -13,6 +13,7 @@ import re
 import shutil
 import subprocess
 import sys
+import time
 
 DEFAULT_MODEL = "sonnet"   # passed to `claude --model`
 
@@ -36,19 +37,23 @@ class ClaudeCliLLM:
     """
 
     def __init__(self, model: str = DEFAULT_MODEL, max_calls: int = 50,
-                 timeout: int = 180, reevo: bool = True):
+                 timeout: int = 180, reevo: bool = True,
+                 retries: int = 3, backoff: int = 60):
         self.model = model
         self.max_calls = max_calls
         self.timeout = timeout
         self.reevo = reevo      # True: show fitness + ask for reflection (ReEvo)
+        self.retries = retries  # attempts after the first, on a failed call
+        self.backoff = backoff  # seconds before the first retry, doubling after that
         self.calls = 0
         self.fails = 0
         self.cost = 0.0
         self.in_tok = 0
         self.out_tok = 0
 
-    def _complete(self, prompt: str) -> str:
-        self.calls += 1
+    def _call_once(self, prompt: str):
+        """One CLI invocation. Returns the reply text, or None if the call did not
+        produce one (timeout, non-JSON, or an error envelope such as a rate limit)."""
         proc = None
         try:
             proc = subprocess.run(
@@ -60,19 +65,38 @@ class ClaudeCliLLM:
         except Exception as e:                        # timeout / non-JSON / crash
             rc = proc.returncode if proc is not None else "n/a"
             err = (proc.stderr[:160] if proc is not None and proc.stderr else str(e)[:160])
-            sys.stderr.write(f"[ClaudeCliLLM] call {self.calls} FAILED (rc={rc}): {err}\n")
-            self.fails += 1
-            return ""
-        if env.get("is_error") or "result" not in env:    # error envelope (e.g. rate limit)
-            sys.stderr.write(f"[ClaudeCliLLM] call {self.calls} ERROR envelope: "
+            sys.stderr.write(f"[ClaudeCliLLM] call {self.calls} attempt failed (rc={rc}): {err}\n")
+            return None
+        if env.get("is_error") or "result" not in env:
+            sys.stderr.write(f"[ClaudeCliLLM] call {self.calls} error envelope: "
                              f"{str(env.get('subtype') or env.get('result'))[:160]}\n")
-            self.fails += 1
-            return ""
+            return None
         self.cost += env.get("total_cost_usd") or 0.0
         u = env.get("usage") or {}
         self.in_tok += u.get("input_tokens", 0) or 0
         self.out_tok += u.get("output_tokens", 0) or 0
         return env.get("result", "") or ""
+
+    def _complete(self, prompt: str) -> str:
+        """Reply text, retrying with backoff before giving up.
+
+        A long run hits transient refusals - a usage limit is the common one, and it
+        clears after a wait rather than immediately. Without a retry the loop keeps
+        calling, keeps failing, and burns its remaining generations recycling parents,
+        which looks like a completed run in the log but evolved nothing.
+        """
+        self.calls += 1
+        for attempt in range(self.retries + 1):
+            text = self._call_once(prompt)
+            if text:
+                return text
+            if attempt < self.retries:
+                wait = self.backoff * (2 ** attempt)
+                sys.stderr.write(f"[ClaudeCliLLM] retrying in {wait}s "
+                                 f"({attempt + 1}/{self.retries})\n")
+                time.sleep(wait)
+        self.fails += 1
+        return ""
 
     def usage(self) -> str:
         warn = f"  WARNING {self.fails}/{self.calls} CALLS FAILED (run invalid)" if self.fails else ""
