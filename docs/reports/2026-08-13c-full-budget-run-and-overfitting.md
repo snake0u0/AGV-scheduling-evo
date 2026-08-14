@@ -123,6 +123,36 @@ gen65 승수: BALANCED **15/15**, HAND **15/15**, MIX **14/15**.
 
 ![01a 전체](figures/gantt-01a-2v.png)
 
+### 수렴 곡선 - 세대별 train vs held-out vs 09a
+
+3개 실행(1차+재개1+재개2)을 이어붙여 attempt 단위(총 105회 시도, 유효 65회)로 그렸다.
+`experiments/plots.py::convergence()`.
+
+![세대별 수렴 곡선](figures/convergence-65gen.png)
+
+윗 패널의 빨간 눈금이 호출 실패 39회 - 1차 실행 후반(대략 attempt 28~65)에 몰려 있는
+것이 그대로 보인다. 아랫 패널(09a 단독)이 이 보고서의 핵심을 가장 압축해서 보여준다:
+**attempt 84 부근(재개2 진입, 41세대 이후) 최저점 3650에서 갑자기 4035로 튀어오른다.**
+이게 2절에서 설명한 과적합이 실제로 일어난 순간이다.
+
+### 이번 세션 실행 4개 비교 - held-out 평균 vs 09a 단독
+
+`experiments/plots.py::gap_bars()`. 같은 세션에서 나온 네 실행(6세대 힌트 있음/없음,
+65세대 gen40/gen65)을 손규칙 3종과 나란히.
+
+![held-out 15개 평균 격차](figures/gap-bars-heldout.png)
+
+![09a 단독 격차](figures/gap-bars-09a.png)
+
+**두 그림이 같은 이야기를 한다: 네 실행이 서로 42.8~46.2%(held-out) /
+49.1~64.8%(09a) 범위에 몰려 있고, 그 안의 순서는 세대 수와 비례하지 않는다.**
+held-out 기준으로는 40세대가 1등이고 6세대(힌트)가 꼴등이며 65세대(최종)는
+그 사이다. 09a 단독 기준도 마찬가지로 40세대가 1등, 65세대가 꼴등이다.
+**"더 많이 돌릴수록 좋아진다"는 이 실행 범위에서는 성립하지 않았다** - 대신
+41~65세대 구간에서 과적합이 우위를 깎아먹었다(2절). 네 값 모두 손규칙(105~342%)과는
+자릿수가 다르게 떨어져 있어, "진화가 손규칙을 이긴다"는 주장 자체는 네 실행 모두에서
+견고하다.
+
 ## 6. 주의 (다음 세션 필수)
 
 - **n=1이다.** 이 실행 하나로 "45.2%"를 방법의 성능이라고 못 박을 수 없다. 프로토콜상
@@ -138,5 +168,6 @@ gen65 승수: BALANCED **15/15**, HAND **15/15**, MIX **14/15**.
 
 - `experiments/2026-08-13-bundle_evolution_full.py`, `...-bundle_evolution_resume.py`
 - `data/results/2026-08-13-bundle_evolution_full{,_resumed,_resumed2}_result.json`
+- `experiments/plots.py::convergence()`, `::gap_bars()` - 이번에 추가한 그림 함수 2개
 - 직전 보고서: `2026-08-13b-cleanup-refactor-and-nohint-ablation.md` (6세대, 힌트 ablation)
 - 프로토콜: `docs/research/experiment_protocol.md`

@@ -6,6 +6,7 @@ nothing there should import matplotlib. Reports embed the PNGs this writes.
 Run standalone to regenerate a Gantt chart:
     python experiments/plots.py gantt <stem> <vehicles> <out.png>
 """
+import json
 import os
 import sys
 
@@ -241,6 +242,178 @@ def comparison_markdown(rows, baseline=None):
             line += f" {d:+.1f}% |"
         out.append(line)
     return "\n".join(out)
+
+
+def _running_best(record):
+    """(fitness, bundle) of the incumbent after each logged generation.
+
+    Recomputed from the population log rather than trusting the stored `history`
+    array, though the two agree by construction - this is what makes the bundle behind
+    each point available, which `history` (fitness only) does not carry.
+    """
+    best = None
+    out = []
+    for e in record:
+        cand = min(e["population"], key=lambda r: r["fitness"])
+        if best is None or cand["fitness"] < best["fitness"]:
+            best = cand
+        out.append((best["fitness"], best["bundle"]))
+    return out
+
+
+def _bundle_key(b):
+    return tuple(sorted(b.items()))
+
+
+def convergence(files, instances, out=None, fig_no=None, caption=None,
+                mean_label="held-out (mean)", spot_stem=None, spot_veh=2,
+                train_label="train (mean)", baseline=None):
+    """Best-so-far fitness across a chain of resumed runs, against a held-out set.
+
+    Concatenates `files` in run order (each a result JSON from evolve_bundle, resumed
+    or not), re-deriving the incumbent bundle at every logged generation - including the
+    flat stretches where a call failed and nothing evolved, since those stalls are real
+    history, not noise to smooth away. Held-out fitness is only recomputed when the
+    incumbent bundle actually changes, since evaluation is deterministic and otherwise
+    wasted; the earlier point widens into a flat run up to the next change instead.
+
+    `instances` is the held-out split to score against (mean plotted as `mean_label`).
+    Pass `spot_stem` to add a second panel tracking one instance by name (`spot_veh`
+    vehicles) - useful when a single instance's swing is the point being made and the
+    15-instance mean would average it away. `baseline` is an optional
+    {"BALANCED": bundle, ...} dict drawn as thin reference lines on both panels.
+    """
+    seq = []                                   # (attempt_index, train_fit, bundle)
+    failed_x = []                               # attempts where the proposer call failed
+    idx = 0
+    for path in files:
+        d = json.load(open(path)) if isinstance(path, str) else path
+        run = _running_best(d["record"])
+        start = 1 if seq else 0                # drop the duplicate resume-boundary gen0
+        for i, (fit, bundle) in enumerate(run[start:], start=start):
+            seq.append((idx, fit, bundle))
+            if i > 0 and not (d["record"][i].get("call", {}).get("response") or "").strip():
+                failed_x.append(idx)            # gen 0 is the seed population, not a call
+            idx += 1
+
+    seen = {}
+    def held_out_of(bundle):
+        k = _bundle_key(bundle)
+        if k not in seen:
+            seen[k] = evaluate_bundle(bundle, instances)
+        return seen[k]
+
+    def spot_of(bundle):
+        if spot_stem is None:
+            return None
+        k = ("spot", _bundle_key(bundle))
+        if k not in seen:
+            seen[k] = schedule_of(bundle, spot_stem, spot_veh)[2].cmax
+        return seen[k]
+
+    xs = [p[0] for p in seq]
+    train_y = [p[1] for p in seq]
+    held_y = [held_out_of(p[2]) for p in seq]
+    spot_y = [spot_of(p[2]) for p in seq] if spot_stem else None
+
+    n_panels = 2 if spot_stem else 1
+    fig, axes = plt.subplots(n_panels, 1, figsize=(11, 3.2 * n_panels + 0.6), sharex=True)
+    axes = [axes] if n_panels == 1 else list(axes)
+
+    ax = axes[0]
+    ax.plot(xs, train_y, color="#2a78d6", linewidth=1.6, label=train_label)
+    ax.plot(xs, held_y, color="#eb6834", linewidth=1.6, linestyle="--", label=mean_label)
+    if baseline:
+        for name, b in baseline.items():
+            ax.axhline(evaluate_bundle(b, instances), color="#b6b6b6", linewidth=0.8,
+                       linestyle=":", zorder=1)
+            ax.text(xs[-1], evaluate_bundle(b, instances), f" {name}", fontsize=7.5,
+                    color="#898781", va="center")
+    ax.set_ylabel("mean Cmax", fontsize=9)
+    if failed_x:
+        y0, y1 = ax.get_ylim()                  # fixed before adding markers, so they
+        ax.scatter(failed_x, [y0 + (y1 - y0) * 0.02] * len(failed_x), marker="|",
+                  color="#d03b3b", s=40, linewidths=0.9, zorder=5, clip_on=False,
+                  label=f"call failed (n={len(failed_x)})")
+        ax.set_ylim(y0, y1)                     # do not expand the axis themselves
+    ax.legend(fontsize=8.5, frameon=False, loc="upper right")
+    ax.grid(axis="y", color="#e3e2d9", linewidth=0.6)
+    ax.set_axisbelow(True)
+    for side in ("top", "right"):
+        ax.spines[side].set_visible(False)
+
+    if spot_stem:
+        ax2 = axes[1]
+        ax2.plot(xs, spot_y, color="#1baf7a", linewidth=1.6,
+                label=f"{spot_stem} ({spot_veh} AGVs)")
+        if baseline:
+            for name, b in baseline.items():
+                v = schedule_of(b, spot_stem, spot_veh)[2].cmax
+                ax2.axhline(v, color="#b6b6b6", linewidth=0.8, linestyle=":", zorder=1)
+                ax2.text(xs[-1], v, f" {name}", fontsize=7.5, color="#898781", va="center")
+        ax2.set_ylabel(f"{spot_stem} Cmax", fontsize=9)
+        ax2.legend(fontsize=8.5, frameon=False, loc="upper right")
+        ax2.grid(axis="y", color="#e3e2d9", linewidth=0.6)
+        ax2.set_axisbelow(True)
+        for side in ("top", "right"):
+            ax2.spines[side].set_visible(False)
+
+    axes[-1].set_xlabel("generation (attempt, chained across resumes)", fontsize=9)
+    for a in axes:
+        a.tick_params(labelsize=8)
+
+    fig.tight_layout()
+    cap = caption or "Best-so-far fitness across the run."
+    if fig_no is not None:
+        cap = f"Fig. {fig_no}.  {cap}"
+    fig.subplots_adjust(bottom=0.16 if n_panels == 1 else 0.11)
+    fig.text(0.5, 0.01, cap, ha="center", va="bottom", fontsize=9.5)
+
+    out = out or os.path.join(FIGDIR, "convergence.png")
+    fig.savefig(out, dpi=170, bbox_inches="tight")
+    plt.close(fig)
+    return out, {"n_points": len(xs), "n_unique_bundles": len(seen)}
+
+
+def gap_bars(bundles, instances, out=None, fig_no=None, caption=None, family="dauzere"):
+    """Horizontal bar chart of mean literature gap%, one bar per bundle, best on top.
+
+    `bundles` is {name: bundle_dict}. Meant to put every run this session produced -
+    different generation counts, different prompt conditions - on one scale next to the
+    hand-written seeds, since the gap% table in a report is easy to skim past and a
+    sorted bar chart is not.
+    """
+    rows = comparison(bundles, instances, family=family)
+    order = sorted(rows, key=lambda n: rows[n]["gap"])
+
+    fig, ax = plt.subplots(figsize=(9, 0.5 * len(order) + 1.2))
+    ys = range(len(order))
+    vals = [rows[n]["gap"] for n in order]
+    colours = ["#2a78d6" if "evolved" in n or "gen" in n else "#b6b6b6" for n in order]
+    ax.barh(ys, vals, height=0.6, color=colours, edgecolor="#4a4a4a", linewidth=0.4)
+    for y, n, v in zip(ys, order, vals):
+        ax.text(v + max(vals) * 0.015, y, f"{v:.1f}%", va="center", fontsize=8.5)
+    ax.set_yticks(list(ys), order, fontsize=9)
+    ax.invert_yaxis()
+    ax.set_xlabel("mean gap vs literature (%, lower is better)", fontsize=9)
+    ax.set_xlim(0, max(vals) * 1.14)
+    for side in ("top", "right", "left"):
+        ax.spines[side].set_visible(False)
+    ax.grid(axis="x", color="#e3e2d9", linewidth=0.6)
+    ax.set_axisbelow(True)
+    ax.tick_params(axis="y", length=0)
+
+    fig.tight_layout()
+    cap = caption or f"Mean gap vs literature across {len(instances)} instances."
+    if fig_no is not None:
+        cap = f"Fig. {fig_no}.  {cap}"
+    fig.subplots_adjust(bottom=0.20)
+    fig.text(0.5, 0.02, cap, ha="center", va="bottom", fontsize=9.5)
+
+    out = out or os.path.join(FIGDIR, "gap-bars.png")
+    fig.savefig(out, dpi=170, bbox_inches="tight")
+    plt.close(fig)
+    return out, rows
 
 
 if __name__ == "__main__":
