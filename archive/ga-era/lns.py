@@ -2,7 +2,7 @@
 
 2026-08-10 gate: 105.6% against the tuned GA's 16.7% over the same 8 cases, seeds and
 600s budget; 0/24 wins, p=0.0000. Report:
-`docs/reports/2026-08-10-slot-expansion-and-lns-rejection.md`.
+`experiments/006-260810-slot-expansion-and-lns-gate/report.md`.
 
 The neighbourhood is empty. 232,599 iterations accepted 4 moves on average (0.002%),
 the two hardest cases accepted none at all, and starting from a GA solution it improved

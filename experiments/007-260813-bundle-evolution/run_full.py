@@ -11,7 +11,7 @@ the result is the loop's own finding.
 Held-out instances are never touched during evolution; they are scored once at the end,
 against the same hand-written seeds the population starts from.
 
-Run:  python experiments/2026-08-13-bundle_evolution_full.py
+Run:  python experiments/007-260813-bundle-evolution/run_full.py
 """
 import json
 import os

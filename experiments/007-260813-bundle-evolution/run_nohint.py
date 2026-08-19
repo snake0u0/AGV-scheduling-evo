@@ -9,7 +9,7 @@ population, same generations, same train split.
 What to look for: whether the evolved bundle still keeps a load-balancing skeleton
 (-queue_len / -arrival) and still beats the hand-written seeds on the held-out split.
 
-Run:  python experiments/2026-08-13-bundle_evolution_nohint.py
+Run:  python experiments/007-260813-bundle-evolution/run_nohint.py
 """
 import json
 import os

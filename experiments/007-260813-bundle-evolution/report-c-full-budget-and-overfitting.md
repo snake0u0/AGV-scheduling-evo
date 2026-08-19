@@ -1,6 +1,6 @@
 # 보고서 - 문헌 규모 예산(65세대) 완주, 그리고 과적합이 잡힌 지점
 
-작성 2026-08-13. 실험 `experiments/2026-08-13-bundle_evolution_full.py` +
+작성 2026-08-13. 실험 `experiments/007-260813-bundle-evolution/run_full.py` +
 `...-bundle_evolution_resume.py`(2회). 결과
 `data/results/2026-08-13-bundle_evolution_full{,_resumed,_resumed2}_result.json`.
 LLM 호출 105회(그중 유효 65회), 총 $21.22.
@@ -166,8 +166,8 @@ held-out 기준으로는 40세대가 1등이고 6세대(힌트)가 꼴등이며 
 
 ## 관련 파일
 
-- `experiments/2026-08-13-bundle_evolution_full.py`, `...-bundle_evolution_resume.py`
+- `experiments/007-260813-bundle-evolution/run_full.py`, `...-bundle_evolution_resume.py`
 - `data/results/2026-08-13-bundle_evolution_full{,_resumed,_resumed2}_result.json`
 - `experiments/plots.py::convergence()`, `::gap_bars()` - 이번에 추가한 그림 함수 2개
 - 직전 보고서: `2026-08-13b-cleanup-refactor-and-nohint-ablation.md` (6세대, 힌트 ablation)
-- 프로토콜: `docs/research/experiment_protocol.md`
+- 프로토콜: `docs/experiment_protocol.md`

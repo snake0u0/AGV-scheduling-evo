@@ -1,9 +1,13 @@
 # 보고서 - 슬롯 확장 3단계 완료, LNS는 게이트에서 기각
 
-작성 2026-08-10. 계획·진행 = `docs/reports/2026-08-10-five-slot-lns-plan.md`.
+> **[RETIRED]** GA 시대 실험이다. 방법(GA/LNS)은 은퇴했고 이 폴더의 스크립트는
+> `archive/ga-era/`의 공용 모듈에 의존해 지금은 돌지 않는다. 결과 수치는
+> `tests/test_reported_numbers.py`가 계속 지킨다.
+
+작성 2026-08-10. 계획·진행 = `experiments/006-260810-slot-expansion-and-lns-gate/plan.md`.
 코드 `model/llm.py` `model/experiment.py` `model/rules.py` `model/lns.py`
-`simulator/dispatch.py`, 실험 `experiments/2026-08-10-{population_log,lns_gate}.py`,
-결과 `data/results/2026-08-10-{population_log,lns_gate}_result.json`.
+`simulator/dispatch.py`, 실험 `experiments/006-260810-slot-expansion-and-lns-gate/run_{population_log,lns_gate}.py`,
+결과 `experiments/006-260810-slot-expansion-and-lns-gate/result_{population_log,lns_gate}.json`.
 
 ## 결론
 

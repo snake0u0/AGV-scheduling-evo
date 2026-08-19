@@ -33,5 +33,5 @@
 
 ## 관련 파일
 - 코드: `sim/agv_fms.py`, `sim/agv_fms_salabim.py`, `sim/configs.py`, `sim/crosscheck_salabim.py`, `sim/viz.py`, `ahd/loop.py`, `ahd/llm.py`, `ahd/run.py`
-- 문서: `docs/research/execution_roadmap.md`, `benchmark_anchor_notes.md`
+- 문서: `archive/a-track/execution_roadmap.md`, `benchmark_anchor_notes.md`
 - 그림: `docs/research/figures/` (layout/timeseries/anim/evolution)

@@ -84,17 +84,22 @@ train, test = default_split()     # train 3개(01a/07a/13a), test 나머지 15�
 
 - `ClaudeCliLLM`이 실패를 재시도한다(기본 3회, 60초부터 2배씩 백오프).
 - `evolve_bundle`은 **연속 3세대 무응답이면 중단**한다. 부족분이 세대 수로 드러난다.
-- `experiments/2026-08-13-bundle_evolution_resume.py`로 **이어서 돌린다.**
+- `experiments/007-260813-bundle-evolution/run_resume.py`로 **이어서 돌린다.**
   유효 세대(모델이 실제로 답한 세대)만 인정하며, 누적치는 결과 JSON의
   `config.effective_generations_total`로 체인을 따라 전달된다.
 - **보고서에는 로그 세대가 아니라 유효 세대를 적는다.**
 
 ## 5. 실행 후 필수 절차
 
-1. 결과 JSON을 `data/results/YYYY-MM-DD-<이름>_result.json`에 저장 (세대별 전체 population +
-   프롬프트/응답/reflection/거부된 후보 포함 - 나중에 감사 가능해야 한다).
-2. **보고서를 `docs/reports/YYYY-MM-DD-<슬러그>.md`에 두괄식으로** 작성.
-   그림은 PNG로 `docs/reports/figures/`에 (`experiments/plots.py`). HTML 아님.
+0. 실험 폴더를 `experiments/NNN-YYMMDD-<슬러그>/`로 만든다 (NNN = 다음 번호, 날짜순).
+   그 실험의 스크립트·결과·그림·보고서는 **전부 이 폴더 안에** 둔다.
+   같은 날 같은 계열의 후속 실행은 새 폴더가 아니라 같은 폴더의 새 파일이다.
+1. 실행 스크립트는 `run.py`(여러 개면 `run_<변형>.py`), 결과 JSON은 `result.json`
+   (여러 개면 `result_<변형>.json`)에 저장 - 세대별 전체 population +
+   프롬프트/응답/reflection/거부된 후보 포함, 나중에 감사 가능해야 한다.
+2. **보고서를 같은 폴더의 `report.md`에 두괄식으로** 작성(한 폴더에 여러 개면
+   `report-a-<슬러그>.md`, `report-b-…`). 그림은 PNG로 같은 폴더의 `figures/`에
+   (`experiments/plots.py`). HTML 아님.
    **간트차트: 보고서의 핵심 결과(보통 진화 번들)는 전체 + 확대(앞 500 시간단위) 두 장**
    (`plots.gantt_pair`) - 전체는 형태를, 확대는 어느 job이 어디 있는지를 보여준다.
    **비교 대상(베이스라인)은 전체 한 장이면 보통 충분**하다 - 결론이 이미 전체 차트의

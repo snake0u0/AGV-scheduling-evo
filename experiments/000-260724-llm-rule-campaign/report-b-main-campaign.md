@@ -1,5 +1,9 @@
 # 보고서 - 본 캠페인: LLM 진화 규칙이 held-out에서 D1/D2를 유의미하게 이김
 
+> **[RETIRED]** GA 시대 실험이다. 방법(GA/LNS)은 은퇴했고 이 폴더의 스크립트는
+> `archive/ga-era/`의 공용 모듈에 의존해 지금은 돌지 않는다. 결과 수치는
+> `tests/test_reported_numbers.py`가 계속 지킨다.
+
 > **[무효화 2026-08-01] 이 보고서의 규칙 비교 결론은 population 70에서만 성립한다.**
 > `2026-08-01b-rule-advantage-does-not-survive-a-tuned-solver.md`가 같은 8케이스·같은 시드를
 > 튜닝된 설정(600초 x pop1000)에서 재측정한 결과, 진화 규칙이 D1/D2를 이기지 못한다
@@ -13,7 +17,7 @@
 > **[중요 정정 2026-07-24] 이 보고서의 headline은 후속 재현성 캠페인에서 하향 조정됐다.**
 > 여기서 얻은 "P가 D1·D2를 양쪽 다 p<0.01로 이김"은 **독립 진화 3회 중 1회만 재현**됐다(D2는 비교적
 > 안정적으로 이기나 D1은 1/3만 유의). 이 P는 운 좋은 단일 run이었다. 반드시
-> `docs/reports/2026-07-24-reproducibility-campaign.md`와 함께 읽을 것. 아래 본문은 당시 기록으로 보존.
+> `experiments/000-260724-llm-rule-campaign/report-c-reproducibility-campaign.md`와 함께 읽을 것. 아래 본문은 당시 기록으로 보존.
 
 ## 결론 (한눈에)
 

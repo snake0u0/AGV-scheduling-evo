@@ -12,7 +12,7 @@
 
 ```
 research-agent  (연구 작업장 - 양 많고 회전 빠름)
-  docs/research/cards/     LLM 논문 카드     <- /dh-paper-review
+  docs/cards/     LLM 논문 카드     <- /dh-paper-review
   docs/reports/            실험 보고서
   docs/discussions/        문답 기록          <- /dh-discuss
 
@@ -82,7 +82,7 @@ SecondBrain-hub  (LLM wiki)
 
 - **입력**: Zotero에 이미 있는 논문 (citekey / 제목 / Zotero 키)
 - **동작**: zotero-mcp로 full-text 읽기 -> 카드 1장 생성
-- **출력**: `docs/research/cards/<citekey>.md`
+- **출력**: `docs/cards/<citekey>.md`
 - Zotero에 없으면 중단한다. 웹 초록으로 대충 채우면 카드의 가치인 "전문 근거"가 사라진다.
 - `novelty_sweep.md`는 건드리지 않는다. 경쟁논문 판단은 사용자 몫이다.
 - **카드 스키마**: `archive/lit/prompts/knowledge-card.md`의 옛 스펙이 아니라 **실제 10장의 진화형**.

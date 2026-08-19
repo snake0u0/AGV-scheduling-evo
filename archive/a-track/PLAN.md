@@ -7,12 +7,12 @@
 
 연구: **LLM-Evolved Interpretable Joint Dispatching Rules for Integrated Machine-and-AGV Dynamic FJSP.**
 타깃: KIIE 학술대회(~3개월) → SCIE 저널. 이 문서 = 실험계획 개요.
-상세 설계 = `docs/research/research_plan.md`, 실행 순서·기간 = `docs/research/execution_roadmap.md`.
+상세 설계 = `docs/research/research_plan.md`, 실행 순서·기간 = `archive/a-track/execution_roadmap.md`.
 
 ## 목표 / 컨트리뷰션
 - 동적 FJSP+AGV에서 **기계 시퀀싱 규칙 + AGV 디스패칭 규칙을 LLM-AHD로 동시(joint) 진화** → 해석가능·전이가능 규칙 자동 생성 (N1).
 - 차별점: 기존 LLM-AHD는 기계만(DSevolve/EvoDR) 또는 차량만(MRE/VRPAgent); 통합 LLM-AHD는 빈칸(통합은 DRL D3QN뿐·비해석).
-- 규모: **40–50 AGV 대규모 + 혼잡** (KIIE부터). 기성 벤치마크 없음 → 고전 FJSP+운반 벤치마크(Bilge-Ulusoy→Dauzère-Pérès) 혈통 위에서 스케일업 + 혼잡-지연. 근거: `docs/research/benchmark_anchor_notes.md`.
+- 규모: **40–50 AGV 대규모 + 혼잡** (KIIE부터). 기성 벤치마크 없음 → 고전 FJSP+운반 벤치마크(Bilge-Ulusoy→Dauzère-Pérès) 혈통 위에서 스케일업 + 혼잡-지연. 근거: `docs/benchmark_anchor_notes.md`.
 
 ## 실험 설계 (요약; 상세 research_plan.md §5)
 - **목적함수**: 평균 tardiness(주), makespan·throughput·flowtime(부); 해석성(규칙 복잡도)·전이.

@@ -1,7 +1,11 @@
 # 보고서 - population은 크면 좋은 게 아니라 U자다. 그리고 예산에 맞추면 예산이 듣는다
 
+> **[RETIRED]** GA 시대 실험이다. 방법(GA/LNS)은 은퇴했고 이 폴더의 스크립트는
+> `archive/ga-era/`의 공용 모듈에 의존해 지금은 돌지 않는다. 결과 수치는
+> `tests/test_reported_numbers.py`가 계속 지킨다.
+
 작성 2026-08-01. 스크립트 `experiments/2026-08-01-ga_tuning.py`,
-결과 `data/results/2026-08-01-ga_tuning_result.json`.
+결과 `experiments/003-260801-ga-tuning-and-rule-retest/result_ga_tuning.json`.
 168 runs / 14.2 CPU-시간 / 12코어 / 실측 4,317초. LLM 호출 없음.
 
 **이 보고서는 `2026-07-31-budget-vs-structure-gate.md`의 결론 1을 두 번째로, 더 강하게 정정한다.**

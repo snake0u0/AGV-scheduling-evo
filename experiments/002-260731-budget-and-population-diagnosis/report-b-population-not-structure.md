@@ -1,7 +1,11 @@
 # 보고서 - 격차의 주원인은 population 크기였다 (앞 보고서 결론 정정)
 
+> **[RETIRED]** GA 시대 실험이다. 방법(GA/LNS)은 은퇴했고 이 폴더의 스크립트는
+> `archive/ga-era/`의 공용 모듈에 의존해 지금은 돌지 않는다. 결과 수치는
+> `tests/test_reported_numbers.py`가 계속 지킨다.
+
 작성 2026-07-31. 스크립트 `experiments/2026-07-31-ga_diagnosis.py`,
-결과 `data/results/2026-07-31-ga_diagnosis_result.json`.
+결과 `experiments/002-260731-budget-and-population-diagnosis/result_ga_diagnosis.json`.
 75 runs / 12.5 CPU-시간 / 12코어 / 실측 4,201초. LLM 호출 없음.
 
 **이 보고서는 같은 날 `2026-07-31-budget-vs-structure-gate.md`의 결론 1·2를 정정한다.**
@@ -138,5 +142,5 @@ Dauzere가 그 모습이 **아니었음**을 확인해준다.
 ## 관련 파일
 
 - 스크립트 `experiments/2026-07-31-ga_diagnosis.py`
-- 결과 `data/results/2026-07-31-ga_diagnosis_result.json`
+- 결과 `experiments/002-260731-budget-and-population-diagnosis/result_ga_diagnosis.json`
 - `model/ga.py`에 추가: `ms_init` 파라미터, `n_evals`(정확한 평가 횟수), `last_improve_gen`

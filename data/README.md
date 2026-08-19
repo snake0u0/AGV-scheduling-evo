@@ -28,6 +28,6 @@
 | Meng2025_TSMC_CP-DCGA-CP_SOTA.pdf | Meng et al. 2025 (IEEE TSMC) | CP + CP-보조 메타휴리스틱(DCGA-CP) | 현 SOTA (35 신규 최적 + 32 best-known 갱신) |
 
 ## 메모
-- 각 논문 요약 카드: `docs/research/cards/` (kumar2011, ham2020, han2024, meng2025, homayouni2023)
+- 각 논문 요약 카드: `docs/cards/` (kumar2011, ham2020, han2024, meng2025, homayouni2023)
 - 데이터셋 계보·비교 보고서: `docs/reports/2026-07-12-benchmark-dataset-source-comparison.md`
 - 정식 인용 시 blog가 아니라 위 "원 출처" 논문을 인용할 것.

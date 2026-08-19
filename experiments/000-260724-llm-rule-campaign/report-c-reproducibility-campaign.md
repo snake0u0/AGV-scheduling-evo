@@ -1,12 +1,16 @@
 # 보고서 - 재현성 캠페인: 통찰은 재현되나 "양쪽 다 유의하게 이김"은 재현 안 됨
 
+> **[RETIRED]** GA 시대 실험이다. 방법(GA/LNS)은 은퇴했고 이 폴더의 스크립트는
+> `archive/ga-era/`의 공용 모듈에 의존해 지금은 돌지 않는다. 결과 수치는
+> `tests/test_reported_numbers.py`가 계속 지킨다.
+
 작성 2026-07-24. 선행: `2026-07-24-main-campaign.md`(단일 진화가 D1/D2를 유의하게 이김).
 원칙 유지: 데이터 변형 금지, **결과 부풀리지 않음(특히 자기 이전 결과에 대해서도)**.
 
 > **[중요 정정 2026-07-24 후속] 이 보고서의 비관적 양적 결론("D1 우위 재현 안 됨, 양쪽 다 1/3")은
 > 교란이었다.** 여기서 쓴 가벼운 평가 예산(GA 60x60/시드2)의 노이즈 탓. 동일 규칙들을 적정 예산
 > (70x70/시드3)으로 재평가하니 **4개 중 3개가 D1·D2를 양쪽 다 p<0.01로 이김**. 반드시
-> `docs/reports/2026-07-24-confound-removal-reeval.md`와 함께 읽을 것. 양적 결론은 그 보고서로 대체됨.
+> `experiments/000-260724-llm-rule-campaign/report-d-confound-removal-reeval.md`와 함께 읽을 것. 양적 결론은 그 보고서로 대체됨.
 > **단 질적 발견(machine_free 3/3 재현, max-결합 2/3)은 그대로 유효.**
 
 ## 결론 (한눈에)
@@ -100,5 +104,5 @@ K=5~10회, 진화 pop/세대 확대. P가 D1을 이기는 비율의 실제 분�
 
 ## 관련 파일
 
-- 선행: `docs/reports/2026-07-24-main-campaign.md`(이 보고서가 그 headline을 하향 조정함)
+- 선행: `experiments/000-260724-llm-rule-campaign/report-b-main-campaign.md`(이 보고서가 그 headline을 하향 조정함)
 - 구현: `fjspt/` (커밋 a26db95, 9e7720f)

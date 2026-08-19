@@ -1,5 +1,9 @@
 # 보고서 - 교란 제거 재평가: 재현성은 사실 좋았다(예산 노이즈였음) + 깨끗한 2요소 발견
 
+> **[RETIRED]** GA 시대 실험이다. 방법(GA/LNS)은 은퇴했고 이 폴더의 스크립트는
+> `archive/ga-era/`의 공용 모듈에 의존해 지금은 돌지 않는다. 결과 수치는
+> `tests/test_reported_numbers.py`가 계속 지킨다.
+
 > **[무효화 2026-08-01] 이 보고서의 규칙 비교 결론은 population 70에서만 성립한다.**
 > `2026-08-01b-rule-advantage-does-not-survive-a-tuned-solver.md`가 같은 8케이스·같은 시드를
 > 튜닝된 설정(600초 x pop1000)에서 재측정한 결과, 진화 규칙이 D1/D2를 이기지 못한다
@@ -14,7 +18,7 @@
 > 두 성분은 대등하지 않다: **공차(empty_travel) 벌점이 주효과**(단독으로 D1 이김, p=0.017)이고,
 > **기계가용 결합은 단독으론 무효**(p=0.62)이며 공차와의 **상승작용**으로만 기여(interaction p=0.018).
 > P3가 진 것은 맞지만 이유는 "결합 통찰만으론 성능이 안 난다 + 주역인 공차가 없다"이다. 성분 귀속은
-> `docs/reports/2026-07-24-ablation-two-ingredients.md`가 최종. 아래 승패/유의성 수치 자체는 유효.
+> `experiments/000-260724-llm-rule-campaign/report-e-ablation-two-ingredients.md`가 최종. 아래 승패/유의성 수치 자체는 유효.
 
 ## 결론 (한눈에)
 
@@ -103,5 +107,5 @@ P3 = `-max(arrival, machine_free) - wait/(remaining_ops+1)`. **정확한 결합 
 
 ## 관련 파일
 
-- 선행(이 보고서가 뒤집음): `docs/reports/2026-07-24-reproducibility-campaign.md`
-- 선행: `docs/reports/2026-07-24-main-campaign.md`
+- 선행(이 보고서가 뒤집음): `experiments/000-260724-llm-rule-campaign/report-c-reproducibility-campaign.md`
+- 선행: `experiments/000-260724-llm-rule-campaign/report-b-main-campaign.md`

@@ -1,6 +1,6 @@
 # Han et al. (2024) DCGA — 문제 정식화 · 디코딩 정리 (우리말)
 
-출처: `docs/data/papers/Han2024_SwarmEvolComput_DCGA.pdf`
+출처: `data/papers/Han2024_SwarmEvolComput_DCGA.pdf`
 용도: (1) 변수·제약 이해, (2) evaluator(스케줄→makespan) 설계도
 주의: 논문을 읽으며 대조 확인할 것. 특히 제약식의 정확한 형태는 원문 (1)~(16)을 볼 것.
 
@@ -122,7 +122,7 @@
 ## 7. 우리 프로젝트 관점 메모
 
 - evaluator 구현 시 위 디코딩 절차를 그대로 따르면 됨. 입력 = (MS, OS) + 인스턴스 + 이동시간 행렬, 출력 = makespan.
-- 검증: `docs/data/instances/fjspt-lucasberter/DeroussiNorre/fjsp1.txt`에서 문헌 최적값 134가 나오는지 확인.
+- 검증: `data/instances/fjspt-lucasberter/DeroussiNorre/fjsp1.txt`에서 문헌 최적값 134가 나오는지 확인.
 - **주의**: 이동시간 행렬이 비대칭이므로 `Tr[k][k']`의 순서를 뒤집지 말 것 (행=출발, 열=도착).
 - Han은 subproblem을 3개(기계선택·AGV선택·공정순서)로 봄. Meng 2025은 AGV 운반순서를 분리해 4개. 우리 DRAFT는 4개(최신) 기준.
 - **LLM이 진화시킬 후보로서의 함의**: Decoding1/Decoding2처럼 "AGV 선택 규칙"이 성능을 가르는데 어느 것도 항상 우월하지 않다는 건, 바로 이 지점이 **LLM이 더 나은 규칙을 발견할 여지가 있는 곳**이라는 뜻. 우리 방법의 진입점으로 유력함.

@@ -32,4 +32,4 @@ Dual-population(이질적 디코딩) + collaboration 연산 설계, MILP 신규�
 makespan 단일목적, AGV 2대 고정, 혼잡/충돌 모델 없음(자유이동 가정), non-LLM 메타휴리스틱(해석불가 - 파라미터화된 GA 인코딩).
 
 ## 우리 프로젝트 관련성
-**MKT/Dataset5 실제 데이터의 진짜 원출처가 Homayouni & Fontes(2021)임을 확정**, 그리고 **모든 데이터의 실제 다운로드 링크를 논문 텍스트에서 직접 확보**(2026-07-12 데이터셋 비교 보고서 참고). Leilei Meng 그룹(=`docs/research/execution_roadmap.md` 앵커 Meng 2023과 동일 계보)의 non-LLM SOTA joint FJSP-AGV 알고리즘 - `novelty_sweep.md`에 "왜 LLM-AHD가 필요한가"의 비교대상(해석성 없는 파라미터화 GA)으로 인용 가치.
+**MKT/Dataset5 실제 데이터의 진짜 원출처가 Homayouni & Fontes(2021)임을 확정**, 그리고 **모든 데이터의 실제 다운로드 링크를 논문 텍스트에서 직접 확보**(2026-07-12 데이터셋 비교 보고서 참고). Leilei Meng 그룹(=`archive/a-track/execution_roadmap.md` 앵커 Meng 2023과 동일 계보)의 non-LLM SOTA joint FJSP-AGV 알고리즘 - `novelty_sweep.md`에 "왜 LLM-AHD가 필요한가"의 비교대상(해석성 없는 파라미터화 GA)으로 인용 가치.

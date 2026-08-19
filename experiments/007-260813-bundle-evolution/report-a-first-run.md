@@ -3,7 +3,7 @@
 작성 2026-08-13. 코드 `model/llm.py`(`ClaudeBundleProposer`)·`model/experiment.py`(`evolve_bundle`,
 `evaluate_bundle`) - 둘 다 2026-08-12에 작성됐고 커밋 전이었으며, 이번이 **첫 실행**이었다(그 전엔
 스모크 테스트조차 없었음). 실행 전 `LocalBundleProposer`(LLM 없음)로 구조만 먼저 확인, 에러 없음.
-결과 `data/results/2026-08-13-bundle_evolution_result.json`. LLM 호출 6회(세대당 1회),
+결과 `experiments/007-260813-bundle-evolution/result_first_run.json`. LLM 호출 6회(세대당 1회),
 `claude -p --model sonnet`, 총 비용 $2.06, 실패 0/6.
 
 ## 결론
@@ -64,7 +64,7 @@ task_sequence:  -arrival + 0.045*remaining_proc + 0.01*wait
 | HAND | 9939.2 | 205.8% | 15/15 |
 
 15개 인스턴스 전부에서 `evolved < BALANCED, MIX, HAND` (개별 인스턴스 값은
-`data/results/2026-08-13-bundle_evolution_result.json`에 전부 있음).
+`experiments/007-260813-bundle-evolution/result_first_run.json`에 전부 있음).
 
 ## 4. 해석
 
@@ -93,5 +93,5 @@ task_sequence:  -arrival + 0.045*remaining_proc + 0.01*wait
 
 - `model/llm.py` (`ClaudeBundleProposer`, `_SEEDS_BUNDLE`, `_SYSTEM_BUNDLE`) - 미커밋
 - `model/experiment.py` (`evolve_bundle`, `evaluate_bundle`) - 미커밋
-- `data/results/2026-08-13-bundle_evolution_result.json` - 세대별 전체 로그
+- `experiments/007-260813-bundle-evolution/result_first_run.json` - 세대별 전체 로그
   (부모/프롬프트/응답/반성/거부된 후보 포함)

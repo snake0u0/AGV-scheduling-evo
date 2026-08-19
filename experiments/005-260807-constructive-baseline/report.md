@@ -1,8 +1,8 @@
 # 보고서 - 4슬롯 이벤트 구동 평가기 완성, 그리고 탐색 없는 기준선의 충격
 
 작성 2026-08-07. 코드 `simulator/dispatch.py`, 게이트 `simulator/test_dispatch.py`,
-실험 `experiments/2026-08-07-constructive_baseline.py`,
-결과 `data/results/2026-08-07-constructive_baseline_result.json`. LLM 호출 없음.
+실험 `experiments/005-260807-constructive-baseline/run.py`,
+결과 `experiments/005-260807-constructive-baseline/result.json`. LLM 호출 없음.
 
 ## 결론
 
@@ -152,7 +152,7 @@ GA 전 구간(특히 저예산)이 개선될 가능성이 높다. **다음 실�
 
 - `simulator/dispatch.py` - `build`, `forced_slots`, `self_check`, `-inf` 유휴 규약
 - `simulator/test_dispatch.py` - G1(12/12), G2(10/10)
-- `experiments/2026-08-07-constructive_baseline.py` - G4
+- `experiments/005-260807-constructive-baseline/run.py` - G4
 - 회귀 테스트 6종:
   `simulator.test_paper_example` / `test_replay_deroussi` / **`test_dispatch`** /
   `model.test_ga_operators` / `test_decode_selfcheck` / `experiments.test_reported_numbers`
