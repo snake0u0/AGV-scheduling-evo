@@ -17,14 +17,16 @@ import statistics as st
 
 from experiments.common import gap, paired, pop_for
 
-RESULTS = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-                       "data", "results")
+EXPERIMENTS = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                           "experiments")
 
 FAILURES = []
 
 
-def load(name):
-    return json.load(open(os.path.join(RESULTS, name)))["runs"]
+def load(rel):
+    """rel is <experiment folder>/<result file>, so a reported number names the
+    experiment it came from."""
+    return json.load(open(os.path.join(EXPERIMENTS, rel)))["runs"]
 
 
 def check(label, got, want, tol=0.05):
@@ -42,7 +44,7 @@ def mean_gap(recs, **where):
 
 def main():
     print("2026-07-31-budget-vs-structure-gate.md  (pop70; its conclusion was later rejected)")
-    R = load("2026-07-31-budget_scaling_result.json")
+    R = load("002-260731-budget-and-population-diagnosis/result_budget_scaling.json")
     for b, want in [(10, 76.1), (60, 70.8), (600, 64.1)]:
         check(f"{b}s overall mean gap", mean_gap(R, budget=b), want)
     for rn, want in [("D1", 65.35), ("D2", 65.73), ("P_main", 62.00),
@@ -50,13 +52,13 @@ def main():
         check(f"600s {rn}", mean_gap(R, rule=rn, budget=600), want, tol=0.01)
 
     print("\n2026-07-31b-ga-diagnosis-population-not-structure.md")
-    R = load("2026-07-31-ga_diagnosis_result.json")
+    R = load("002-260731-budget-and-population-diagnosis/result_ga_diagnosis.json")
     for c, want in [("pop70", 94.5), ("pop300", 37.5), ("pop1000", 24.1),
                     ("restart10x60", 87.8), ("greedyMS", 102.0)]:
         check(f"Dauzere {c}", mean_gap(R, config=c, family="dauzere"), want, tol=0.1)
 
     print("\n2026-08-01-ga-tuning-population-generations-tradeoff.md")
-    R = load("2026-08-01-ga_tuning_result.json")
+    R = load("003-260801-ga-tuning-and-rule-retest/result_ga_tuning.json")
     for c, want in [("pop70", 94.5), ("pop1000", 24.0), ("pop3000", 92.8),
                     ("pop10000", 144.9), ("pop70_elite1", 61.9),
                     ("pop1000_elite143", 23.9), ("pop70_pm05", 72.6)]:
@@ -65,7 +67,7 @@ def main():
         check(f"10s {c}", mean_gap(R, config=c, budget=10), want, tol=0.1)
 
     print("\n2026-08-01b-rule-advantage-does-not-survive-a-tuned-solver.md")
-    R = load("2026-08-01-rule_ranking_retest_result.json")
+    R = load("003-260801-ga-tuning-and-rule-retest/result_rule_retest.json")
     for rn, want in [("D1", 16.73), ("D2", 16.28), ("P_main", 16.75),
                      ("P2", 17.00), ("P3", 17.72)]:
         check(f"{rn} mean gap", mean_gap(R, rule=rn), want, tol=0.01)
@@ -85,7 +87,7 @@ def main():
           cells["base"] - cells["dead"] - cells["couple"] + cells["both"], 0.02, tol=0.01)
 
     print("\n2026-08-06-rule-effect-vs-budget.md")
-    R = load("2026-08-06-rule_effect_vs_budget_result.json")
+    R = load("004-260806-rule-effect-vs-budget/result.json")
     for b, p, want in [(1, 20, 158.7), (10, 70, 115.5), (60, 300, 74.0), (600, 1000, 24.3)]:
         check(f"{b}s x pop{p} (best)", mean_gap(R, budget=b, pop=p), want, tol=0.1)
     for b, p, rn, want in [(1, 20, "P_main", 154.6), (10, 70, "P2", 113.2),

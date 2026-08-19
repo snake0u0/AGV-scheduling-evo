@@ -17,6 +17,7 @@ not just the code.
 
 Run:  python -m tests.run_all
 """
+import glob
 import json
 import os
 import sys
@@ -29,7 +30,7 @@ from model.experiment import default_split, evaluate_bundle
 from tests import (test_dispatch, test_paper_example, test_replay_deroussi,
                    test_reported_numbers)
 
-RESULTS = os.path.join(ROOT, "data", "results")
+EXPERIMENTS = os.path.join(ROOT, "experiments")
 
 
 def determinism():
@@ -38,23 +39,25 @@ def determinism():
     Constructive evaluation has no seeds and no search, so this is an exact equality,
     not a tolerance - any drift means the evaluator changed.
     """
-    files = sorted(f for f in os.listdir(RESULTS) if f.endswith("_result.json")
-                   and "bundle_evolution" in f)
-    if not files:
+    stored = []
+    for path in sorted(glob.glob(os.path.join(EXPERIMENTS, "*", "result*.json"))):
+        r = json.load(open(path))
+        if "best_bundle" in r:                    # a bundle run, not a GA campaign
+            stored.append((os.path.relpath(path, EXPERIMENTS), r))
+    if not stored:
         print("  no stored bundle runs to check")
         return
     train, test = default_split()
-    for f in files:
-        r = json.load(open(os.path.join(RESULTS, f)))
+    for f, r in stored:
         got_train = evaluate_bundle(r["best_bundle"], train)
         got_test = evaluate_bundle(r["best_bundle"], test)
         ok = (got_train == r["best_train_fitness"]
               and got_test == r["held_out"]["evolved"])
-        print(f"  {f:<52} train {got_train:.4f}  test {got_test:.4f}  "
+        print(f"  {f:<58} train {got_train:.4f}  test {got_test:.4f}  "
               f"{'ok' if ok else 'MISMATCH'}")
         if not ok:
             raise SystemExit(f"FAIL - {f} does not reproduce its stored fitness")
-    print(f"PASS - {len(files)} stored run(s) reproduce their fitness exactly")
+    print(f"PASS - {len(stored)} stored run(s) reproduce their fitness exactly")
 
 
 GATES = [
