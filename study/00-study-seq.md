@@ -26,3 +26,20 @@ simulator가 model을 전혀 import 하지 않는 구조.
 5) 새 설계
 1. simulator/dispatch.py
 2. tests/test_dispatch.py
+
+---
+
+코드 볼 순서
+
+6) simulator/instance.py
+2) simulator/solution.py
+8) simulator/dispatch.py
+3) simulator/timing.py
+
+1) model/experiment.py
+4) model/llm.py
+7) model/llm-backend.py
+5) model/rule.py
+
+
+
