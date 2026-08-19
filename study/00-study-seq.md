@@ -1,4 +1,4 @@
-## 코드 볼 순서
+## 코드 볼 순서 - 20260810
 
 1) 문제 관련
 1. simulator/instance.py    #
@@ -29,17 +29,19 @@ simulator가 model을 전혀 import 하지 않는 구조.
 
 ---
 
-코드 볼 순서
+## 코드 볼 순서 - 20260819
 
-6) simulator/instance.py
-2) simulator/solution.py
-8) simulator/dispatch.py
-3) simulator/timing.py
+1) simulator/instance.py - 문제입력
+2) simulator/solution.py - 해표현
+3) simulator/timing.py - 해(Cmax)
+4) model/rules.py- 규칙 표현
 
-1) model/experiment.py
-4) model/llm.py
-7) model/llm-backend.py
-5) model/rule.py
+5) simulator/dispatch.py - 규칙 4개로 해를 만드는 빌더(디코더)
+6) model/llm_backend.py - claude CLI 통신계층
+7) model/llm.py - 프롬프트 설계
+8) model/experiment.py - 적합도 계산 + 세대 진화 루프
 
+9) experiments/common.py - 문헌 기준값, 격차, 예산 상수 파라미터
+10) experiments/007/run.py - 위 전부 호출해서 65세대 실험 하나 완성
 
-
+---

@@ -19,10 +19,10 @@ Do NOT re-litigate the topic, novelty, benchmark, or evaluator — they are sett
 ## Commands
 
 ```bash
-python -m tests.run_all                                  # gate x5. run after touching anything
-python experiments/007-260813-bundle-evolution/run_full.py    # the evolution loop (~$23, ~80 min)
+python -m tests.run_all                                       # gate x5. run after touching anything
+python experiments/007-260813-bundle-evolution/run.py         # the evolution loop (~$23, ~80 min)
 python experiments/007-260813-bundle-evolution/run_resume.py  # continue a run cut short by a usage limit
-python experiments/plots.py gantt 09a 2 out.png          # figures
+python experiments/plots.py gantt 09a 2 out.png               # figures
 ```
 
 Gates are not unit tests — they are the evidence the simulator is valid (10/10 published solutions
