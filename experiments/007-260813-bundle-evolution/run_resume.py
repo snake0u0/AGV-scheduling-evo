@@ -10,24 +10,24 @@ It counts an earlier generation as *effective* only if the model actually replie
 run that coasted for thirty generations is credited with the ones that evolved, not the
 ones that were logged.
 
-Run:  python experiments/2026-08-13-bundle_evolution_resume.py [previous_result.json]
+Run:  python experiments/007-260813-bundle-evolution/run_resume.py [previous_result.json]
 """
 import json
 import os
 import sys
 import time
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(
+    os.path.dirname(os.path.abspath(__file__)))))
 
 from experiments.common import EVOLVE_GEN, EVOLVE_POP, MAX_CALLS
 from model.experiment import default_split, evaluate_bundle, evolve_bundle
 from model.llm import _SEEDS_BUNDLE, _SYSTEM_BUNDLE, ClaudeBundleProposer
 from model.llm_backend import cli_available
 
-RESULTS = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-                       "data", "results")
-PREV = os.path.join(RESULTS, "2026-08-13-bundle_evolution_full_result.json")
-STEM = "2026-08-13-bundle_evolution_full_resumed"
+HERE = os.path.dirname(os.path.abspath(__file__))
+PREV = os.path.join(HERE, "result_full.json")
+STEM = "result_full_resumed"
 SEED_NAMES = ["BALANCED", "HAND", "MIX"]
 
 
@@ -51,9 +51,9 @@ def credited_generations(prev):
 def next_output_path():
     """A fresh numbered file, so a later resume never overwrites an earlier one."""
     n = 2
-    while os.path.exists(os.path.join(RESULTS, f"{STEM}{n}_result.json")):
+    while os.path.exists(os.path.join(HERE, f"{STEM}{n}.json")):
         n += 1
-    return os.path.join(RESULTS, f"{STEM}{n}_result.json")
+    return os.path.join(HERE, f"{STEM}{n}.json")
 
 
 def main():

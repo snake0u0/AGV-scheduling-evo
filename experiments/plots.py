@@ -6,6 +6,7 @@ nothing there should import matplotlib. Reports embed the PNGs this writes.
 Run standalone to regenerate a Gantt chart:
     python experiments/plots.py gantt <stem> <vehicles> <out.png>
 """
+import glob
 import json
 import os
 import sys
@@ -23,8 +24,21 @@ from simulator.instance import load_dauzere
 
 from experiments.common import gap
 
-FIGDIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-                      "docs", "reports", "figures")
+EXPERIMENTS = os.path.dirname(os.path.abspath(__file__))
+
+# Figures belong to the experiment that produced them, so the default output is
+# figures/ under whatever directory the caller is working in - normally the
+# experiment folder itself. Pass `out` to place a figure anywhere else.
+FIGDIR = os.path.join(os.getcwd(), "figures")
+
+
+def latest_bundle_result():
+    """Newest stored bundle run across the experiment folders."""
+    paths = [p for p in glob.glob(os.path.join(EXPERIMENTS, "*", "result*.json"))
+             if "best_bundle" in json.load(open(p))]
+    if not paths:
+        raise SystemExit("no stored bundle run found under experiments/*/")
+    return max(paths, key=os.path.getmtime)
 
 # Light fills so a job label printed inside the bar stays legible in black. Bars carry
 # a thin dark edge instead of a pattern - the figure is read by its labels, not by hue,
@@ -370,6 +384,7 @@ def convergence(files, instances, out=None, fig_no=None, caption=None,
     fig.text(0.5, 0.01, cap, ha="center", va="bottom", fontsize=9.5)
 
     out = out or os.path.join(FIGDIR, "convergence.png")
+    os.makedirs(os.path.dirname(out), exist_ok=True)
     fig.savefig(out, dpi=170, bbox_inches="tight")
     plt.close(fig)
     return out, {"n_points": len(xs), "n_unique_bundles": len(seen)}
@@ -411,6 +426,7 @@ def gap_bars(bundles, instances, out=None, fig_no=None, caption=None, family="da
     fig.text(0.5, 0.02, cap, ha="center", va="bottom", fontsize=9.5)
 
     out = out or os.path.join(FIGDIR, "gap-bars.png")
+    os.makedirs(os.path.dirname(out), exist_ok=True)
     fig.savefig(out, dpi=170, bbox_inches="tight")
     plt.close(fig)
     return out, rows
@@ -418,13 +434,11 @@ def gap_bars(bundles, instances, out=None, fig_no=None, caption=None, family="da
 
 if __name__ == "__main__":
     if len(sys.argv) >= 4 and sys.argv[1] == "gantt":
-        import json
-        res = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-                           "data", "results")
-        latest = sorted(f for f in os.listdir(res) if f.endswith("bundle_evolution_result.json"))[-1]
-        bundle = json.load(open(os.path.join(res, latest)))["best_bundle"]
+        latest = latest_bundle_result()
+        bundle = json.load(open(latest))["best_bundle"]
         path, cmax, (placed, total) = gantt(bundle, sys.argv[2], int(sys.argv[3]),
                                            sys.argv[4] if len(sys.argv) > 4 else None)
-        print(f"{path}  (Cmax {cmax}, {placed}/{total} bars labelled, bundle from {latest})")
+        print(f"{path}  (Cmax {cmax}, {placed}/{total} bars labelled, "
+              f"bundle from {os.path.relpath(latest, EXPERIMENTS)})")
     else:
         print(__doc__)

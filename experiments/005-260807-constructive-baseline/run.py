@@ -21,7 +21,8 @@ import statistics as st
 import sys
 import time
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(
+    os.path.dirname(os.path.abspath(__file__)))))
 
 from experiments.common import gap, reference
 from simulator.dispatch import build
@@ -120,8 +121,7 @@ def main():
     print(f"  {'GA 1초 (pop20)':<34} Dauzere  158.7%   [2026-08-06]")
     print(f"  {'GA 600초 (pop1000)':<34} Dauzere   21.1%   [2026-08-01b]")
     import json
-    out = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-                       "data", "results", "2026-08-07-constructive_baseline_result.json")
+    out = os.path.join(os.path.dirname(os.path.abspath(__file__)), "result.json")
     json.dump({"cases": len(CASES), "configs": store}, open(out, "w"), indent=1)
     print(f"\nwrote {out}")
     print(f"{time.time()-t0:.1f}초 소요")

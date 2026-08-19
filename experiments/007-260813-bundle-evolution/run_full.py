@@ -18,7 +18,8 @@ import os
 import sys
 import time
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(
+    os.path.dirname(os.path.abspath(__file__)))))
 
 from experiments.common import EVOLVE_GEN, EVOLVE_POP, MAX_CALLS
 from model.experiment import default_split, evaluate_bundle, evolve_bundle
@@ -26,8 +27,7 @@ from model.llm import _SEEDS_BUNDLE, _SYSTEM_BUNDLE, ClaudeBundleProposer
 from model.llm_backend import cli_available
 
 SEED_NAMES = ["BALANCED", "HAND", "MIX"]
-OUT = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-                   "data", "results", "2026-08-13-bundle_evolution_full_result.json")
+OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "result_full.json")
 
 
 def main():

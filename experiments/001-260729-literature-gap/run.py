@@ -10,7 +10,8 @@ import os
 import statistics as st
 import sys
 
-sys.path.insert(0, "/home/dohyung/project/research-agent")
+sys.path.insert(0, os.path.dirname(os.path.dirname(
+    os.path.dirname(os.path.abspath(__file__)))))
 from simulator.instance import BASE, parse_format_b
 
 # 문헌 기준값은 experiments/common.py -> data/literature/ 에서 온다 (2026-08-07 통합).
@@ -21,8 +22,9 @@ LABEL = {"D1": "빠른도착 규칙(문헌)", "D2": "부하분산 규칙(문헌)
          "P_main": "진화 규칙 P_main", "P1": "진화 규칙 P1",
          "P2": "진화 규칙 P2", "P3": "진화 규칙 P3"}
 
-T = os.path.expanduser("~/.claude/jobs/a367775e/tmp/")
-res = json.load(open(T + "confound_eval_result.json"))
+SOURCE = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                      "000-260724-llm-rule-campaign", "result_confound.json")
+res = json.load(open(SOURCE))
 per = res["per_instance"]
 
 flex = {}
@@ -76,6 +78,6 @@ print(f"유연도 높음(>=2.0) {len(hi)}개: 평균 격차 {st.mean(x[6] for x 
 
 out["flexibility"] = {k: {"avg_eligible_machines": round(v[0], 2), "machines": v[1]}
                       for k, v in flex.items()}
-p = os.path.expanduser("~/.claude/jobs/a367775e/tmp/literature_gap_result.json")
+p = os.path.join(os.path.dirname(os.path.abspath(__file__)), "result.json")
 json.dump(out, open(p, "w"), ensure_ascii=False, indent=2)
 print("\n->", p)
