@@ -96,7 +96,7 @@ KIIE 학술대회 → SCIE 저널. 경쟁 위협 1순위는 HUST(Gao Liang / Li 
 - **VRPAgent (arXiv:2510.07073)** - 저장소 코드 확인 결과 진화 슬롯이 정확히 2개:
   `select_by_llm_1`(LNS destroy) + `sort_by_llm_1`(repair 순서). **우리 옵션 D와 같은 패러다임**이고
   CPU 코어 1개로 VRP SOTA를 갱신했다. `novelty_sweep.md`에 "LLM 연산자+GA"로 적혀 있던 한 줄은
-  부정확했고 정정했다. 카드 = `docs/research/cards/vrpagent.md`.
+  부정확했고 정정했다. 카드 = `docs/cards/vrpagent.md`.
 
 ---
 

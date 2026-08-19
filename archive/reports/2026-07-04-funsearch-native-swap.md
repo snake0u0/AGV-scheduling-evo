@@ -45,4 +45,4 @@
 ## 관련 파일
 - `demo/bpp.py`(FunSearch 실제 evaluator/skeleton 이식), `demo/funsearch_data.json`(그들 OR3/Weibull5k 데이터, CC-BY).
 - 원본: github.com/google-deepmind/funsearch, 논문 `demo/02. Mathematical discoveries ...pdf`.
-- 이전 단계 기록: `docs/reports/2026-07-02-funsearch-obp-demo.md`(자체 evaluator판·수정·Fig6 비교).
+- 이전 단계 기록: `archive/reports/2026-07-02-funsearch-obp-demo.md`(자체 evaluator판·수정·Fig6 비교).

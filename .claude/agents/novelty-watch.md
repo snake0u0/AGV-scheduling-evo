@@ -46,7 +46,7 @@ producing **interpretable** rules. Machine-only and vehicle-only LLM-AHD already
 - **GREEN**: nothing matching.
 
 ## Output
-Write a dated report to `research-agent/docs/research/novelty_watch_<YYYYMMDD>.md`:
+Write a dated report to `research-agent/docs/novelty_watch_<YYYYMMDD>.md`:
 - Verdict line (GREEN / YELLOW / RED) + one-sentence summary.
 - Table of notable new hits: title | venue/arXiv | date | why it matters | flag.
 - If YELLOW/RED: concrete recommended action (e.g., accelerate KIIE submission, or pivot framing to A/B/C in `contribution.md §3`).

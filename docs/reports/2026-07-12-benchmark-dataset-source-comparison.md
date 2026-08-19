@@ -20,7 +20,7 @@
 - **AGV 대수는 이 문헌 계보 전체에서 2대 고정**(Karimi 2017만 예외). 즉 이 데이터들은 job/machine/operation
   규모 다양성(소→대)은 주지만, **우리 40-50 AGV 목표는 문헌 어디에도 없음** - 이건 여전히 우리 자체 기여.
 - 5편의 논문(Kumar 2011, Ham 2020, Han 2024, Meng 2025, Homayouni 2023 BRKGA)을 Zotero(`agv-llm-heuristic`)에
-  아카이빙 + `docs/research/cards/`에 요약카드 작성 완료(파일명은 §관련 파일 참고).
+  아카이빙 + `docs/cards/`에 요약카드 작성 완료(파일명은 §관련 파일 참고).
 - §1(최초 조사, GitHub 리포 3개 + movingai.com + Young Jae Jang 팔로업)의 결론은 **이제 참고용**으로만 남김 -
   Aihong-Sun 리포는 더 이상 채택 안 함.
 
@@ -47,7 +47,7 @@
 4. 사용자가 같은 파일들을 직접 받아 재확인 요청 → 파일 크기·페이지수 바이트 단위로 대조, 전부 일치 확인.
    추가로 `Homayouni, Fontes & Gonçalves (2023) ITOR`(BRKGA 원논문)도 함께 확보됨.
 5. 5개 논문(Kumar 2011 / Ham 2020 / Han 2024 / Meng 2025 / Homayouni 2023) 전문을 읽고 Zotero collection
-   `agv-llm-heuristic`(JIREF4BS)에 아카이빙 + 메타데이터 정리(DOI/저자/권호 보정) + `docs/research/cards/`에
+   `agv-llm-heuristic`(JIREF4BS)에 아카이빙 + 메타데이터 정리(DOI/저자/권호 보정) + `docs/cards/`에
    요약카드 5개 작성.
 
 ### 결과 - 확보한 원본 다운로드 링크
@@ -69,11 +69,11 @@
 ### 읽은 5개 논문 중 향후 레퍼런스로 삼을 것
 | 논문 | 읽을 가치 | 이유 |
 |---|---|---|
-| **Kumar et al. 2011** | ★★★ 계속 참조 | Table 4(원본 job set)+Fig 3(travel matrix)를 직접 전사할 1차 데이터 소스. `docs/research/cards/kumar2011-fjsp-agv-alt-routing.md` |
-| **Han et al. 2024 (DCGA)** | ★★★ 계속 참조 | 데이터 다운로드처를 알려준 논문 + non-LLM SOTA 성능표(5개 데이터셋 전체) + 우리 `research_plan.md` 앵커 저자(Meng)와 동일 계보. `docs/research/cards/han2024-dcga.md` |
-| **Meng et al. 2025 (TSMC)** | ★★☆ 관련연구용 | 최신 CP+메타휴리스틱 SOTA, 단 objective가 makespan(우리는 tardiness 주목적)이라 직접 수치비교는 주의. `docs/research/cards/meng2025-cp-dcga-cp.md` |
-| **Ham 2020** | ★★☆ 방법 참고용 | FJSPT1-10 진짜 원출처 확인 + "고전 FJSP + 자체 travel matrix 생성" 전략의 선례(T/P 비율 설계 참고 가능). `docs/research/cards/ham2020-transbot-cp.md` |
-| **Homayouni et al. 2023 (BRKGA)** | ⬜ 아직 전문 미독 | Dataset3/4/5의 진짜 원저자 그룹 논문으로 추정되나, 이번 세션엔 서지 확인만 함 - **다음 세션에서 전문 읽기 우선순위 높음**(Dataset3 MFJST의 정확한 생성 규칙 확인 필요). `docs/research/cards/homayouni2023-brkga.md` |
+| **Kumar et al. 2011** | ★★★ 계속 참조 | Table 4(원본 job set)+Fig 3(travel matrix)를 직접 전사할 1차 데이터 소스. `docs/cards/kumar2011-fjsp-agv-alt-routing.md` |
+| **Han et al. 2024 (DCGA)** | ★★★ 계속 참조 | 데이터 다운로드처를 알려준 논문 + non-LLM SOTA 성능표(5개 데이터셋 전체) + 우리 `research_plan.md` 앵커 저자(Meng)와 동일 계보. `docs/cards/han2024-dcga.md` |
+| **Meng et al. 2025 (TSMC)** | ★★☆ 관련연구용 | 최신 CP+메타휴리스틱 SOTA, 단 objective가 makespan(우리는 tardiness 주목적)이라 직접 수치비교는 주의. `docs/cards/meng2025-cp-dcga-cp.md` |
+| **Ham 2020** | ★★☆ 방법 참고용 | FJSPT1-10 진짜 원출처 확인 + "고전 FJSP + 자체 travel matrix 생성" 전략의 선례(T/P 비율 설계 참고 가능). `docs/cards/ham2020-transbot-cp.md` |
+| **Homayouni et al. 2023 (BRKGA)** | ⬜ 아직 전문 미독 | Dataset3/4/5의 진짜 원저자 그룹 논문으로 추정되나, 이번 세션엔 서지 확인만 함 - **다음 세션에서 전문 읽기 우선순위 높음**(Dataset3 MFJST의 정확한 생성 규칙 확인 필요). `docs/cards/homayouni2023-brkga.md` |
 
 ### 한계 / 다음
 - 7개 데이터 PDF는 아직 우리 `sim/` 포맷으로 전사 안 됨 - 다음 세션 작업.
@@ -115,13 +115,13 @@ fjsp-instances`(MIT, AGV 없는 순수 FJSP 336개) 및 `movingai.com`(MAPF 전�
 - **1차 출처(§2, 최종 채택)**: `https://fastmanufacturingproject.wordpress.com/2019/04/11/fjspt-instances/`
   (7개 PDF, 위 표 참고)
 - **읽은 논문 5편(Zotero `agv-llm-heuristic`/JIREF4BS에 아카이빙, 키는 카드 참고)**:
-  `docs/research/cards/kumar2011-fjsp-agv-alt-routing.md`, `docs/research/cards/ham2020-transbot-cp.md`,
-  `docs/research/cards/han2024-dcga.md`, `docs/research/cards/meng2025-cp-dcga-cp.md`,
-  `docs/research/cards/homayouni2023-brkga.md`
+  `docs/cards/kumar2011-fjsp-agv-alt-routing.md`, `docs/cards/ham2020-transbot-cp.md`,
+  `docs/cards/han2024-dcga.md`, `docs/cards/meng2025-cp-dcga-cp.md`,
+  `docs/cards/homayouni2023-brkga.md`
 - **§1 GitHub 리포(더 이상 채택 안 함, 참고용)**: github.com/Aihong-Sun/GA-heuristic-approach_to_simultaneous_-scheduling_or_AGV_and_machine,
   github.com/Aihong-Sun/FJSP_AGV-Machine_Instances, github.com/SchedulingLab/fjsp-instances
 - 참고(미채택): movingai.com/benchmarks/mapf.html
 - 검증에 쓴 임시 스크립트/다운로드 파일: `$CLAUDE_JOB_DIR/tmp/` (세션 종료 시 정리됨, 저장소에 커밋 안 함).
-  PDF 원본은 `docs/research/pdfs/`에 두지 않음(gitignore 대상, Zotero가 원문 저장소 역할).
+  PDF 원본은 `docs/pdfs/`에 두지 않음(gitignore 대상, Zotero가 원문 저장소 역할).
 - 관련 이전 보고서: `docs/reports/2026-07-10-project-status-and-problem-design-review.md`(소규모 문헌 재현
   갭을 최초 지목)

@@ -1,3 +1,22 @@
+# A안 (동적 FJSP+AGV) — 은퇴 자산
+
+**보류 상태다. 지금 트랙은 B안**(정적 문헌 벤치마크 + 구성형 4슬롯 진화, makespan)이고
+살아있는 코드는 `model/`·`simulator/`·`experiments/`에 있다. 여기 것은 삭제하지 않고 보존만 한다.
+
+이 폴더에 있는 것:
+
+- **코드**: 아래 설명대로의 DES 시뮬레이터 + salabim 트윈 + crosscheck + LLM-AHD 루프(`loop.py`,
+  `run.py`, `campaign.py`, `gp.py`)
+- **설계문서**: `research_plan.md`(마스터), `PLAN.md`, `contribution.md`, `simulator_spec.md`,
+  `execution_roadmap.md`
+- **산출물**: `figures/`(layout·evolution·timeseries·anim), `results/`(L1.csv, R3.csv)
+- **스킬**: `ahd-loop-skill.md` — 이 루프를 돌리던 `/ahd-loop` 스킬. 죽은 경로를 가리켜
+  `.claude/skills/`에서 뺐다
+
+아래는 은퇴 당시의 원래 README다.
+
+---
+
 # sim/ — 동적 FJSP+AGV 시뮬레이터 (v0)
 
 순수 파이썬 이산사건(DES) 시뮬레이터. 동적 FJSP+AGV 디스패칭 연구용. 외부 의존 없음.

@@ -1,8 +1,8 @@
 # 보고서 - 실험 폴더 정리·리팩토링, 그리고 힌트 제거 ablation
 
 작성 2026-08-13. 코드 `model/`·`simulator/`(정리 후), `experiments/plots.py`(신규),
-실험 `experiments/2026-08-13-bundle_evolution_nohint.py`,
-결과 `data/results/2026-08-13-bundle_evolution_nohint_result.json`.
+실험 `experiments/007-260813-bundle-evolution/run_nohint.py`,
+결과 `experiments/007-260813-bundle-evolution/result_nohint.json`.
 LLM 호출 6회, 실패 0, $2.32, 7분 10초.
 
 ## 결론
@@ -193,10 +193,10 @@ BALANCED 쪽은 전체 차트에서 이미 M5~M8 유휴가 명확해서 확대�
 
 ## 관련 파일
 
-- `experiments/2026-08-13-bundle_evolution_nohint.py` - 이번 실행 (프롬프트에 힌트가
+- `experiments/007-260813-bundle-evolution/run_nohint.py` - 이번 실행 (프롬프트에 힌트가
   남아 있으면 assert로 죽는다)
 - `experiments/plots.py` - `gantt()`, `comparison()`, `comparison_markdown()`
-- `data/results/2026-08-13-bundle_evolution_nohint_result.json` - 세대별 전체 로그 +
+- `experiments/007-260813-bundle-evolution/result_nohint.json` - 세대별 전체 로그 +
   이번에 쓴 시스템 프롬프트 원문
 - `archive/ga-era/README.md` - 은퇴 자산 목록과 복구 방법
 - 직전 보고서: `2026-08-13-bundle-evolution-first-run.md` (힌트 있는 팔)

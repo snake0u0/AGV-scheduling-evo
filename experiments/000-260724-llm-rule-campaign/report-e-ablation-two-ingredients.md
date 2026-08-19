@@ -1,5 +1,9 @@
 # 보고서 - 통제 2x2 ablation: 공차 벌점이 주효과, 결합 통찰은 상승작용(단독으론 무효)
 
+> **[RETIRED]** GA 시대 실험이다. 방법(GA/LNS)은 은퇴했고 이 폴더의 스크립트는
+> `archive/ga-era/`의 공용 모듈에 의존해 지금은 돌지 않는다. 결과 수치는
+> `tests/test_reported_numbers.py`가 계속 지킨다.
+
 > **[무효화 2026-08-01] 이 보고서의 규칙 비교 결론은 population 70에서만 성립한다.**
 > `2026-08-01b-rule-advantage-does-not-survive-a-tuned-solver.md`가 같은 8케이스·같은 시드를
 > 튜닝된 설정(600초 x pop1000)에서 재측정한 결과, 진화 규칙이 D1/D2를 이기지 못한다
@@ -115,4 +119,4 @@ c=0.3~0.7 전부 D1(4941)보다 좋음. c≈0.5 최적. **결과는 계수에 ro
 
 ## 관련 파일
 
-- 선행(이 보고서가 성분 귀속을 정정): `docs/reports/2026-07-24-confound-removal-reeval.md`
+- 선행(이 보고서가 성분 귀속을 정정): `experiments/000-260724-llm-rule-campaign/report-d-confound-removal-reeval.md`

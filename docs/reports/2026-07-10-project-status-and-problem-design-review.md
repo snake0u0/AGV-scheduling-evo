@@ -151,7 +151,7 @@ tool로 직접 열어볼 유인도 더 큼** — 오염 방향(과대평가/과�
 움직임을 확인해 두는 게 좋음(투고 직전까지 미루면 손 쓰기 늦을 수 있음). STATUS.md 날짜 스탬프도 갱신 필요.
 
 ## 관련 파일
-- 문제/연구설계: `docs/research/research_plan.md`, `docs/research/execution_roadmap.md`, `docs/research/simulator_spec.md`, `docs/research/novelty_sweep.md`
+- 문제/연구설계: `archive/a-track/research_plan.md`, `archive/a-track/execution_roadmap.md`, `archive/a-track/simulator_spec.md`, `docs/novelty_sweep.md`
 - 시뮬/루프 코드: `sim/agv_fms.py`, `sim/configs.py`, `ahd/llm.py`(`_CLASSICAL_EXPR`, `seed_population`, `ClaudeCliLLM._complete`), `ahd/campaign.py`
-- tool-contamination 발견/수정: commit `3a8ad01`, `demo/bpp.py`, `docs/reports/2026-07-04-demo-presentation.md §6-7`
-- 재검증 필요한 기존 결과: `docs/reports/2026-06-30-campaign-L1.md`, `docs/reports/2026-06-30-reevo-vs-rankonly-comparison.md`
+- tool-contamination 발견/수정: commit `3a8ad01`, `demo/bpp.py`, `archive/reports/2026-07-04-demo-presentation.md §6-7`
+- 재검증 필요한 기존 결과: `archive/reports/2026-06-30-campaign-L1.md`, `archive/reports/2026-06-30-reevo-vs-rankonly-comparison.md`

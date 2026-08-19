@@ -1,5 +1,9 @@
 # 계획 - 5슬롯 LNS 전환 (진행 추적)
 
+> **[RETIRED]** GA 시대 실험이다. 방법(GA/LNS)은 은퇴했고 이 폴더의 스크립트는
+> `archive/ga-era/`의 공용 모듈에 의존해 지금은 돌지 않는다. 결과 수치는
+> `tests/test_reported_numbers.py`가 계속 지킨다.
+
 작성 2026-08-10. 이 문서는 결과 보고서가 아니라 **진행 추적용 계획서**다.
 각 단계가 끝나면 체크하고 게이트 통과를 기록한다. 전체 완료 후 별도 보고서를 쓴다.
 
@@ -123,8 +127,8 @@
 LNS 명분이 성능이 아니므로 "비기면 통과". 단 **크게 뒤지면 재검토**(그 위에 5슬롯을 얹으면
 최종 수치가 나빠짐). 그 경우 GA + 경량 지역탐색으로 선회.
 
-> **결과: 실패 (2026-08-10).** 실험 `experiments/2026-08-10-lns_gate.py`,
-> 결과 `data/results/2026-08-10-lns_gate_result.json`. 8케이스 x 시드3 x 600초, 8/1b와 동일 프로토콜.
+> **결과: 실패 (2026-08-10).** 실험 `experiments/006-260810-slot-expansion-and-lns-gate/run_lns_gate.py`,
+> 결과 `experiments/006-260810-slot-expansion-and-lns-gate/result_lns_gate.json`. 8케이스 x 시드3 x 600초, 8/1b와 동일 프로토콜.
 >
 > | | LNS | GA(D1) |
 > |---|---|---|

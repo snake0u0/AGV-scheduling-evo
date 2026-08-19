@@ -1,7 +1,11 @@
 # 보고서 - 규칙은 "저예산에서 중요"한 게 아니라 "훈련된 체제에서만" 유리하다
 
+> **[RETIRED]** GA 시대 실험이다. 방법(GA/LNS)은 은퇴했고 이 폴더의 스크립트는
+> `archive/ga-era/`의 공용 모듈에 의존해 지금은 돌지 않는다. 결과 수치는
+> `tests/test_reported_numbers.py`가 계속 지킨다.
+
 작성 2026-08-06. 스크립트 `experiments/2026-08-06-rule_effect_vs_budget.py`,
-결과 `data/results/2026-08-06-rule_effect_vs_budget_result.json`.
+결과 `experiments/004-260806-rule-effect-vs-budget/result.json`.
 660 runs / 23.6 CPU-시간 / 12코어 / 실측 7,083초. LLM 호출 없음.
 
 ## 결론

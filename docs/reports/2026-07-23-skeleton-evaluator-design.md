@@ -370,6 +370,6 @@ STATUS.md에 이미 기록된 업스트림 데이터 오류. **원 출처에서 
 
 - 검증 스크립트 3종(replay 가능성 / 운반 생략 규약 / travel matrix 가설)은 `$CLAUDE_JOB_DIR/tmp`에 있음.
   1번 단계 구현 시 `fjspt/` 테스트로 옮길 것.
-- 규약 근거: `docs/research/berterottiere2025_ttt_formulation_notes.md`(§1a 정정 반영 필요),
-  `docs/research/han2024_formulation_notes.md`(디코딩 절차 원본).
+- 규약 근거: `docs/berterottiere2025_ttt_formulation_notes.md`(§1a 정정 반영 필요),
+  `docs/han2024_formulation_notes.md`(디코딩 절차 원본).
 - 데이터 주의사항: `docs/data/instances/fjspt-lucasberter/_OUR_NOTES.md`.

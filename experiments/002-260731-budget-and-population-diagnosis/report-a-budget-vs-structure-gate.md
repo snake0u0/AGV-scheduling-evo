@@ -1,5 +1,9 @@
 # 보고서 - 65% 격차는 예산 문제가 아니라 구조 문제다 (LNS 착수 판정)
 
+> **[RETIRED]** GA 시대 실험이다. 방법(GA/LNS)은 은퇴했고 이 폴더의 스크립트는
+> `archive/ga-era/`의 공용 모듈에 의존해 지금은 돌지 않는다. 결과 수치는
+> `tests/test_reported_numbers.py`가 계속 지킨다.
+
 > **[정정 2026-07-31 후속] 이 보고서의 결론 1·2는 `2026-07-31b-ga-diagnosis-population-not-structure.md`
 > 가 뒤집었다.** 여기 실험은 전부 **population 70**에서 돌렸고, 같은 600초·같은 평가 횟수에서
 > population만 1000으로 올리면 Dauzere 격차가 **94.5% -> 24.1%**로 떨어진다(18a는 140% -> 34%).
@@ -11,8 +15,8 @@
 > **111.9% -> 23.9% (88.1%p 감소)**한다. pop70 고정 시의 17.9%p는 **예산이 커질수록 점점 더 틀린
 > population을 고정한 탓**이었다. "예산으로는 안 닫힌다"는 성립하지 않는다.
 
-작성 2026-07-31. 스크립트 `experiments/2026-07-31-budget_scaling.py`,
-결과 `data/results/2026-07-31-budget_scaling_result.json`. LLM 호출 없음, 비용 $0.
+작성 2026-07-31. 스크립트 `experiments/002-260731-budget-and-population-diagnosis/run_budget_scaling.py`,
+결과 `experiments/002-260731-budget-and-population-diagnosis/result_budget_scaling.json`. LLM 호출 없음, 비용 $0.
 360 runs / 22.3 CPU-시간 / 12코어 병렬 / 실측 6,832초.
 
 ## 결론

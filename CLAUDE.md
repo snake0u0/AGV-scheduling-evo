@@ -1,63 +1,77 @@
 # research-agent — Project Guide
 
-This subproject is an ACTIVE research project, not a blank workspace.
-**Read `INDEX.md` then `STATUS.md` before doing anything.** Past sessions wasted effort
-re-deriving decisions that are already settled below.
+An ACTIVE research project, not a blank workspace.
+**Read `INDEX.md` (map) then `STATUS.md` (state + next) before doing anything.**
+Do NOT re-litigate the topic, novelty, benchmark, or evaluator — they are settled. Build forward.
 
-## Resume protocol
-1. Read `INDEX.md` (project map) → `STATUS.md` (current status + next) → then `docs/research/research_plan.md` (master experiment design).
-2. Do NOT re-litigate the topic, novelty, simulator, or competitor analysis — they are settled. Build forward.
+## Confirmed framing
 
-## Confirmed framing (settled 2026-06-09)
-- **Title**: *LLM-Evolved Interpretable Joint Dispatching Rules for Integrated Machine-and-AGV Dynamic FJSP.*
-- **Novelty (N1)**: jointly evolve a machine sequencing rule + an AGV dispatching rule via LLM-AHD.
-  White space: machine-only (DSevolve/EvoDR/SeEvo) or vehicle-only (MRE/VRPAgent) exist;
-  joint + interpretable is open (DRL D3QN does joint but is non-interpretable).
-- **Objective**: mean tardiness (primary); makespan, throughput, flowtime (secondary).
-- **Target**: KIIE conference (~3 months) → SCIE journal. #1 competitor: **HUST (Liang Gao / Xinyu Li)** — speed matters (KIIE first).
-- Key docs (under `docs/research/`): `contribution.md` §8, `novelty_sweep.md`, `simulator_spec.md`.
+- **Title**: *LLM-Evolved Interpretable Joint Dispatching Rules for Integrated Machine-and-AGV FJSP.*
+- **Novelty (N1)**: jointly evolve the machine-side and AGV-side rules via LLM-AHD.
+  Machine-only (DSevolve/EvoDR/SeEvo) and vehicle-only (MRE/VRPAgent) exist; joint + interpretable
+  is open (DRL D3QN is joint but not interpretable).
+- **Track (settled 2026-07-23)**: **B안 = static literature benchmark, objective makespan.**
+  A안 (self-generated dynamic FMS, mean tardiness) is on hold in `archive/a-track/`.
+  Anything describing `sim/`, `ahd/`, congestion features or 40–50 AGVs belongs to A안.
+- **Target**: KIIE conference → SCIE journal. #1 competitor: **HUST (Liang Gao / Xinyu Li)** — speed matters.
+- Positioning docs: `docs/proposal_kiie.md`, `docs/novelty_sweep.md`.
 
-## Simulator (engine decision 2026-06-29)
-- **Interface (engine-agnostic — this is what the LLM evolves)**:
-  `policy(features)->score` for AGV dispatching + `machine_policy(features)->score` for machine sequencing.
-  The dispatcher greedily matches the highest-scoring (idle AGV, ready task) pair.
-- **Engines (both carry the v1 features — congestion-delay + FJSP flexibility — as of 2026-06-30)**:
-  - `sim/agv_fms.py` — custom pure-Python DES. **Fast; the ACTIVE engine used for the evolutionary loop.**
-  - `sim/agv_fms_salabim.py` — salabim port (same interface). Cross-validation + animation twin.
-  - `sim/crosscheck_salabim.py` — proves the two agree on **rule rankings (3/3 configs incl. a
-    congested-fjsp config)**; abs values diverge 3–7% because congestion depends on instantaneous
-    busy-count. Cite as simulator-validity evidence. (The earlier "frozen oracle" framing is retired.)
-- **AGV features**: `travel_time, task_wait, slack, downstream_load, congestion, deadhead, battery_soc`.
-- **Machine features**: `proc_time, slack, job_wait, remaining_ops, remaining_proc, downstream_load`.
-- salabim is ~2.5–3× slower → the loop uses the custom engine; salabim is for animation + cross-check.
-  Further v1 physics (failure/battery/charging) = SCIE-tier, later.
+## Commands
 
-## LLM-AHD loop
-- `sim/ahd_stub.py`, `sim/joint_demo.py` — inner-loop harness (static candidate rules; no LLM needed).
-- `ahd/` — the evolutionary loop. Real proposer = `ClaudeCliLLM` (logged-in `claude` CLI, no API key)
-  with ReEvo signal (fitness+reflection); `MockLLM` is the no-LLM fallback. Run: `python -m ahd.run`
-  (env `AHD_REGIME` / `AHD_GEN` / `AHD_TRAIN_N` / `AHD_REEVO`). See skill `ahd-loop`.
+```bash
+python -m tests.run_all                                  # gate x5. run after touching anything
+python experiments/007-260813-bundle-evolution/run_full.py    # the evolution loop (~$23, ~80 min)
+python experiments/007-260813-bundle-evolution/run_resume.py  # continue a run cut short by a usage limit
+python experiments/plots.py gantt 09a 2 out.png          # figures
+```
 
-## Tools (MCP + skills)
-- **Zotero MCP** (`mcp__zotero__*`): archiving + full-text PDF reading. Collection `agv-llm-heuristic` (key `JIREF4BS`, 40 papers).
-- **`paper-lookup`** skill: 10-DB literature search (OpenAlex / Semantic Scholar / arXiv / Crossref / Unpaywall …).
-  Semantic Scholar rate-limits hard without a key → prefer OpenAlex/arXiv, or `curl` with `--retry` backoff.
-- **`literature-review`** skill: screening / synthesis.
-- Custom **agent `novelty-watch`** (scoop detection) and **skill `ahd-loop`** (run the joint experiment).
+Gates are not unit tests — they are the evidence the simulator is valid (10/10 published solutions
+replayed exactly, a paper's worked example matched, stored bundles re-evaluating to the same fitness).
 
-## Scale & engine decisions (settled 2026-06-29)
-- **SCALE = 40–50 AGV from KIIE** (NOT a SCIE stretch — earlier framing was wrong). k≤6 was only a
-  loop-verification practice run. This is the confirmed target.
-- This requires (critical path, see `docs/research/execution_roadmap.md` §1–2): a **congestion-delay model**
-  (travel_time inflates with local AGV density — anchored on AMHS congestion lit, C&IE 2014
-  doi:10.1016/j.cie.2014.02.002) + a **scaled instance generator** anchored on the FJSP+transport
-  benchmark lineage **Bilge & Ulusoy 1995** (Zotero GP6HQQSG) → **Berterottière/Dauzère-Pérès 2024**
-  (Zotero 3XNMDN47) → **Meng 2023 Multi-AGV FJSP** (2JMVT7DP). No off-the-shelf 40–50-AGV FJSP+AGV
-  benchmark exists; we scale up the classic one + open-source it.
-- **LLM = Sonnet-4-6 via the logged-in `claude` CLI** (no API key; `ahd/llm.py::ClaudeCliLLM`). DONE.
+## Architecture
 
-## Open TODOs
-- **M1.5 sim large-scale-ification DONE** (congestion S1 + FJSP S2 + large regimes S2b + crosscheck S3b).
-  Remaining S3 follow-up: exact Bilge-Ulusoy number-matching (needs static mode + travel matrix + data).
-- **Next = M2/M3**: B1 best-classical-joint + B2 GP(DEAP) baselines → campaign (P vs B1/B2/B5/B6 on L1/R) →
-  stats → KIIE write-up. GP/DRL (B3/B4) + v1 disturbances (failure/battery) = SCIE. See `docs/research/execution_roadmap.md`.
+| Folder | What |
+|---|---|
+| `simulator/` | Problem and evaluation: parsers, timing core, `dispatch.py` (4-slot constructive builder). **Does not import `model/`** |
+| `model/` | Method: `rules.py` (expression sandbox), `llm.py` (`ClaudeBundleProposer`), `llm_backend.py` (claude CLI), `experiment.py` (`evolve_bundle`/`evaluate_bundle`) |
+| `experiments/` | One experiment = one folder `NNN-YYMMDD-slug` holding its code, results, figures and reports. Index: `experiments/README.md` |
+| `tests/` | The five gates |
+| `docs/` | Research documents. Index: `docs/README.md` |
+| `archive/` | Retired assets. Nothing is deleted; it moves here |
+
+`model/` and `simulator/` hold only what runs the current method. When the method changes, the
+unused part moves to `archive/` the same day.
+
+## Running an experiment
+
+**`docs/experiment_protocol.md` is the contract.** "실험 돌려줘" means the documented budget —
+pop 20 x 65 generations = 995 individuals over 65 LLM calls — never a convenience-sized run.
+Create `experiments/NNN-YYMMDD-slug/`, write `run.py` / `result.json` / `report.md` inside it,
+add a STATUS.md entry, and pass the gates.
+
+Reports are conclusion-first Korean markdown with PNG figures (`_TEMPLATE.md`), one per step.
+
+## Gotchas
+
+- **Literature reference values come from `experiments/common.py` only** (which reads
+  `data/literature/`). Retyping a number into an experiment silently changes its reported gap
+  at exactly the effect size being measured.
+- **No dates, changelogs or history in code comments** (the code will be published). History
+  belongs in the reports.
+- **The 2026-06-30 campaign numbers are not citable** — generated before the tool-contamination
+  fix, with the model able to run the evaluator itself.
+- **The GA-era claim "evolved rules beat the literature hand rules" was invalidated** by
+  experiment 003: it held at population 70 and vanished under a tuned solver.
+- Evolution overfits: at 65 generations train improved while held-out got worse (experiment 007).
+  Held-out separation caught it; there is still **no validation split** in the protocol.
+- Data ready to run: Dauzere 54 cases (18 x 2/4/6 vehicles) + DeroussiNorre 10.
+  fattahi and Homayouni_Brandimarte are blocked on a missing travel matrix.
+
+## Tools
+
+- **Zotero MCP** (`mcp__zotero__*`): collection `agv-llm-heuristic` (key `JIREF4BS`, 91 papers).
+  Many entries are `linked_url` with no file — the local PDFs in `docs/pdfs/` are the only copy.
+- **`paper-lookup`** skill: 10-DB literature search. Semantic Scholar rate-limits hard without a
+  key → prefer OpenAlex/arXiv, or `curl` with `--retry` backoff.
+- **`literature-review`** skill (screening/synthesis), **`/dh-paper-review`** (writes `docs/cards/`),
+  **`/dh-discuss`** (Q&A record), agent **`novelty-watch`** (scoop detection).
