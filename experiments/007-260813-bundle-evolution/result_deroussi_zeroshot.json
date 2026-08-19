@@ -1,0 +1,71 @@
+{
+  "instances": [
+    "fjsp1",
+    "fjsp2",
+    "fjsp3",
+    "fjsp4",
+    "fjsp5",
+    "fjsp6",
+    "fjsp7",
+    "fjsp8",
+    "fjsp9",
+    "fjsp10"
+  ],
+  "per_instance": {
+    "evolved (gen65)": {
+      "fjsp1": 214,
+      "fjsp2": 168,
+      "fjsp3": 160,
+      "fjsp4": 172,
+      "fjsp5": 114,
+      "fjsp6": 210,
+      "fjsp7": 178,
+      "fjsp8": 316,
+      "fjsp9": 190,
+      "fjsp10": 230
+    },
+    "BALANCED": {
+      "fjsp1": 192,
+      "fjsp2": 166,
+      "fjsp3": 216,
+      "fjsp4": 182,
+      "fjsp5": 108,
+      "fjsp6": 232,
+      "fjsp7": 182,
+      "fjsp8": 236,
+      "fjsp9": 196,
+      "fjsp10": 240
+    },
+    "MIX": {
+      "fjsp1": 192,
+      "fjsp2": 168,
+      "fjsp3": 198,
+      "fjsp4": 164,
+      "fjsp5": 108,
+      "fjsp6": 194,
+      "fjsp7": 194,
+      "fjsp8": 256,
+      "fjsp9": 216,
+      "fjsp10": 238
+    },
+    "HAND": {
+      "fjsp1": 262,
+      "fjsp2": 200,
+      "fjsp3": 212,
+      "fjsp4": 218,
+      "fjsp5": 172,
+      "fjsp6": 212,
+      "fjsp7": 232,
+      "fjsp8": 278,
+      "fjsp9": 278,
+      "fjsp10": 254
+    }
+  },
+  "mean_gap": {
+    "evolved (gen65)": 46.531596250052694,
+    "BALANCED": 48.06827142913423,
+    "MIX": 45.88010990599841,
+    "HAND": 77.78128326766517
+  },
+  "source": "Deroussi & Norre (2010); cross-validated against Berterottiere et al. (2026) EJOR 332 Table 6; our simulator replays it exactly (tests/test_replay_deroussi.py, 10/10) - not a cited number, a verified one."
+}

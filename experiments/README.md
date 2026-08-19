@@ -16,7 +16,7 @@
 | 004 | `004-260806-rule-effect-vs-budget` | 규칙은 저예산일수록 중요한가 | 아니다. **훈련된 체제에서만** 유리하다 | RETIRED |
 | 005 | `005-260807-constructive-baseline` | 탐색 없는 4슬롯 구성형 기준선은 얼마나 가나 | 예상보다 훨씬 강하다 | 유효 |
 | 006 | `006-260810-slot-expansion-and-lns-gate` | 슬롯을 5개로 늘리고 solver를 LNS로 바꿀까 | 확장은 통과, **LNS는 게이트에서 기각** | RETIRED |
-| 007 | `007-260813-bundle-evolution` | 4슬롯을 문헌 규모 예산(65세대)으로 동시 진화시키면 | held-out 45.2%, 손규칙 전부 이김. **41~65세대에서 과적합** | 유효 |
+| 007 | `007-260813-bundle-evolution` | 4슬롯을 문헌 규모 예산(65세대)으로 동시 진화시키면, 다른 벤치마크로 옮겨가나 | Dauzere held-out 45.2%(41~65세대 과적합). **Deroussi zero-shot은 BALANCED와 거의 동률** - 우위가 계열 특정적 | 유효 |
 
 `RETIRED` = GA/LNS 시대 실험. 스크립트가 `archive/ga-era/`의 공용 모듈에 의존해 지금은 돌지 않는다.
 코드는 그때 돌린 그대로 두었다. 수치는 `tests/test_reported_numbers.py`가 계속 지킨다.

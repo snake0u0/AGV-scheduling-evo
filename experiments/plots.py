@@ -10,6 +10,7 @@ import glob
 import json
 import os
 import sys
+import textwrap
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -20,9 +21,9 @@ import matplotlib.pyplot as plt
 from model.experiment import evaluate_bundle
 from model.rules import rule_from_expr
 from simulator.dispatch import build as dispatch_build
-from simulator.instance import load_dauzere
+from simulator.instance import load_dauzere, load_deroussi
 
-from experiments.common import gap
+from experiments.common import gap, reference
 
 EXPERIMENTS = os.path.dirname(os.path.abspath(__file__))
 
@@ -430,6 +431,76 @@ def gap_bars(bundles, instances, out=None, fig_no=None, caption=None, family="da
     fig.savefig(out, dpi=170, bbox_inches="tight")
     plt.close(fig)
     return out, rows
+
+
+def benchmark_bars(evolved, baseline, instances, family, source, out=None, fig_no=None,
+                   caption=None, baseline_label="BALANCED"):
+    """Grouped bars per instance: literature Cmax, one hand-seed baseline, our bundle.
+
+    Absolute Cmax rather than gap%, so the literature number is visible on the chart
+    itself and not just implied by a percentage. `source` is printed as a citation line
+    under the axis, not in the legend - a citation is not a series name, and putting a
+    full reference into a legend entry blows out the legend box and starves the plot
+    area, which is the mistake this function exists to avoid making twice.
+    """
+    stems = [s for s, _v in instances]
+    veh = instances[0][1]
+    lit = [reference(family, s, veh) for s in stems]
+
+    def cmax_of(bundle, stem):
+        slots = {slot: rule_from_expr(expr) for slot, expr in bundle.items()}
+        inst = (load_dauzere if family == "dauzere" else load_deroussi)(stem, veh)
+        return dispatch_build(inst, slots)[1].cmax
+
+    base_v = [cmax_of(baseline, s) for s in stems]
+    ours_v = [cmax_of(evolved, s) for s in stems]
+
+    x = range(len(stems))
+    w = 0.27
+    fig, ax = plt.subplots(figsize=(max(9, 0.72 * len(stems)), 4.8))
+    ax.bar([i - w for i in x], lit, width=w, color="#4a4a4a", label="literature")
+    ax.bar([i for i in x], base_v, width=w, color="#b6b6b6", label=baseline_label)
+    ax.bar([i + w for i in x], ours_v, width=w, color="#2a78d6", label="evolved (ours)")
+
+    ax.set_xticks(list(x), stems, fontsize=9)
+    ax.set_ylabel("Cmax", fontsize=9)
+    ax.legend(fontsize=9, frameon=False, loc="upper left", ncol=3,
+             bbox_to_anchor=(0.0, 1.10))
+    ax.grid(axis="y", color="#e3e2d9", linewidth=0.6)
+    ax.set_axisbelow(True)
+    for side in ("top", "right"):
+        ax.spines[side].set_visible(False)
+    ax.tick_params(labelsize=8)
+
+    mean_gap_base = sum((b - l) / l for b, l in zip(base_v, lit)) / len(lit) * 100
+    mean_gap_ours = sum((o - l) / l for o, l in zip(ours_v, lit)) / len(lit) * 100
+    cap = caption or (f"{family} x{veh}, zero-shot. Mean gap vs literature: "
+                      f"{baseline_label} {mean_gap_base:.1f}%, ours {mean_gap_ours:.1f}%.")
+    if fig_no is not None:
+        cap = f"Fig. {fig_no}.  {cap}"
+
+    # Wrap both blocks to the figure's own width, in characters - never trust a caller
+    # not to hand back a source string inside `caption`, since that one long unwrapped
+    # line is exactly what forces savefig's tight bbox to balloon the whole canvas.
+    chars_wide = int(len(stems) * 11)
+    cap_lines = textwrap.wrap(cap, width=chars_wide)
+    src_lines = textwrap.wrap(f"Source: {source}", width=chars_wide)
+    top = 0.10 + 0.030 * (len(cap_lines) + len(src_lines))
+    fig.tight_layout(rect=(0, top, 1, 0.94))
+    y = top - 0.035
+    for line in cap_lines:
+        fig.text(0.5, y, line, ha="center", va="top", fontsize=9.5)
+        y -= 0.030
+    y -= 0.010
+    for line in src_lines:
+        fig.text(0.5, y, line, ha="center", va="top", fontsize=7.5, color="#6a6a6a")
+        y -= 0.026
+
+    out = out or os.path.join(FIGDIR, f"benchmark-{family}.png")
+    fig.savefig(out, dpi=170, bbox_inches="tight")
+    plt.close(fig)
+    return out, {"lit": lit, "baseline": base_v, "ours": ours_v,
+                 "mean_gap_baseline": mean_gap_base, "mean_gap_ours": mean_gap_ours}
 
 
 if __name__ == "__main__":
