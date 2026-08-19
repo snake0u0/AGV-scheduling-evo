@@ -7,7 +7,7 @@ __pycache__/
 .env
 
 # copyrighted paper PDFs (do not redistribute)
-docs/research/pdfs/
+docs/pdfs/
 data/papers/
 data/instances/*.pdf
 
